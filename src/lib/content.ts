@@ -2,7 +2,9 @@ import {
   HeartHandshake,
   ShieldCheck,
   Sparkles,
-  Leaf,
+  CalendarClock,
+  Activity,
+  Phone,
   MessageCircle,
   CalendarHeart,
   ClipboardList,
@@ -42,13 +44,17 @@ export const homeFaqs = [
   },
 ];
 
-/** Selos de confiança imediata (logo abaixo do hero). */
-export const trustBadges: { icon: LucideIcon; title: string; description: string }[] = [
-  { icon: HeartHandshake, title: "Atendimento humanizado", description: "Tempo, escuta e cuidado em cada etapa." },
-  { icon: ClipboardList, title: "Planejamento individual", description: "Um plano feito para a sua história." },
-  { icon: Leaf, title: "Foco em naturalidade", description: "Resultados que respeitam o seu sorriso." },
-  { icon: ShieldCheck, title: "Segurança clínica", description: "Protocolos e cuidado em primeiro lugar." },
-  { icon: Sparkles, title: "Ambiente acolhedor", description: "Um espaço pensado para o seu conforto." },
+/**
+ * "Como podemos ajudar você" — cenários/necessidades (ajuda o visitante a se
+ * identificar e direciona à avaliação). Conteúdo ético, sem promessa de resultado.
+ */
+export const careNeeds: { icon: LucideIcon; title: string; description: string }[] = [
+  { icon: CalendarClock, title: "Faz tempo desde a última consulta", description: "Retome os cuidados com calma e sem julgamentos, a partir de uma avaliação completa." },
+  { icon: Activity, title: "Sente dor, sensibilidade ou incômodo", description: "Vamos entender a causa juntos e definir o melhor caminho, com explicações claras." },
+  { icon: Sparkles, title: "Quer um sorriso mais bonito", description: "Estética com saúde: clareamento e ajustes pensados para um resultado natural." },
+  { icon: Stethoscope, title: "Precisa avaliar os sisos ou cirurgia oral", description: "Avaliação cuidadosa e orientação segura sobre cirurgia oral, no seu tempo." },
+  { icon: ShieldCheck, title: "Quer manter a saúde bucal em dia", description: "Acompanhamento preventivo e limpezas para evitar problemas antes que apareçam." },
+  { icon: Phone, title: "Teve uma urgência odontológica", description: "Fale pelo WhatsApp para receber orientação e o cuidado adequado com agilidade." },
 ];
 
 /** Diferenciais (seção dedicada). */

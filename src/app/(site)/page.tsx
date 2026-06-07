@@ -4,7 +4,7 @@ import { buildMetadata, faqSchema } from "@/lib/seo";
 import { homeFaqs } from "@/lib/content";
 import { JsonLd } from "@/components/seo/json-ld";
 import { Hero } from "@/components/sections/hero";
-import { TrustBar } from "@/components/sections/trust-bar";
+import { CareNeeds } from "@/components/sections/care-needs";
 import { TreatmentsSection } from "@/components/sections/treatments-section";
 import { AboutPreview } from "@/components/sections/about-preview";
 import { HowItWorks } from "@/components/sections/how-it-works";
@@ -33,7 +33,7 @@ export default function HomePage() {
     <>
       <JsonLd data={faqSchema(homeFaqs)} />
       <Hero />
-      <TrustBar />
+      <CareNeeds />
       <TreatmentsSection />
       <AboutPreview />
       <HowItWorks />

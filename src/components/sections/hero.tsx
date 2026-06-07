@@ -1,4 +1,4 @@
-import { ArrowRight, ShieldCheck, MapPin, HeartHandshake } from "lucide-react";
+import { ArrowRight, ShieldCheck, MapPin, HeartHandshake, CalendarCheck } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
 import { ButtonLink } from "@/components/ui/button";
 import { PhotoPlaceholder } from "@/components/ui/photo-placeholder";
@@ -94,6 +94,16 @@ export function Hero() {
               label="Foto da Dra. Ana Beatriz"
               className="relative aspect-[4/5] shadow-lift"
             />
+
+            {/* chip flutuante superior */}
+            <div className="surface absolute -top-4 right-4 hidden items-center gap-2.5 rounded-2xl px-4 py-2.5 sm:flex lg:-right-5">
+              <span className="flex size-9 items-center justify-center rounded-full bg-brand-gold/15 text-brand-gold-ink">
+                <CalendarCheck className="size-4" strokeWidth={1.8} />
+              </span>
+              <span className="text-sm font-medium text-brand-green">
+                Avaliação sem compromisso
+              </span>
+            </div>
 
             {/* chip credencial */}
             <div className="surface absolute -bottom-5 left-4 right-4 mx-auto flex max-w-xs items-center gap-3 rounded-2xl px-4 py-3 sm:-left-6 sm:right-auto">

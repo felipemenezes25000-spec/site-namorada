@@ -1,4 +1,4 @@
-import { ArrowRight, Quote, HeartHandshake } from "lucide-react";
+import { ArrowRight, Quote, HeartHandshake, Check } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
 import { ButtonLink } from "@/components/ui/button";
 import { PhotoPlaceholder } from "@/components/ui/photo-placeholder";
@@ -54,6 +54,23 @@ export function AboutPreview() {
               tomada com segurança e transparência sobre o que cada etapa pode
               oferecer — no seu tempo, sem pressa.
             </p>
+          </Reveal>
+
+          {/* destaques rápidos */}
+          <Reveal delay={0.18}>
+            <ul className="mt-7 grid gap-3 sm:grid-cols-2">
+              {[
+                "Avaliação completa e diagnóstico claro",
+                "Plano de cuidado individual, no seu tempo",
+                "Explicação de cada etapa antes de começar",
+                "Acompanhamento próximo, do início ao fim",
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-2.5 text-sm text-brand-ink/75">
+                  <Check className="mt-0.5 size-4 shrink-0 text-brand-green" strokeWidth={2.2} />
+                  {item}
+                </li>
+              ))}
+            </ul>
           </Reveal>
 
           {/* citação institucional */}
