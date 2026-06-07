@@ -1,0 +1,147 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-cormorant: "Cormorant Garamond", Georgia, serif;
+    --font-montserrat: "Montserrat", system-ui, sans-serif;
+    --brand-green: #22513a;
+    --brand-gold: #b69050;
+    --brand-bone: #fcfcfc;
+  }
+
+  * {
+    border-color: rgba(35, 48, 42, 0.1);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    @apply bg-brand-bone text-brand-ink font-sans antialiased;
+    font-feature-settings: "kern", "liga", "calt";
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display text-brand-green;
+    font-weight: 500;
+  }
+
+  ::selection {
+    background: rgba(34, 81, 58, 0.92);
+    color: #fcfcfc;
+  }
+
+  /* Visible, on-brand focus ring for keyboard users only */
+  :focus-visible {
+    outline: 2px solid var(--brand-gold);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Custom scrollbar (desktop) */
+  @media (pointer: fine) {
+    ::-webkit-scrollbar {
+      width: 11px;
+      height: 11px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1efe9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #c9cdbf;
+      border-radius: 999px;
+      border: 3px solid #f1efe9;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #b69050;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Eyebrow / kicker label — small tracked uppercase Montserrat.
+     Cor padrão = dourado escurecido (AA sobre fundo claro). Em fundos
+     escuros, sobrescreva com `text-brand-gold-bright`. */
+  .eyebrow {
+    @apply font-sans text-[0.72rem] font-semibold uppercase tracking-eyebrow text-brand-gold-ink;
+  }
+
+  /* Editorial body copy */
+  .lede {
+    @apply font-sans text-lg leading-relaxed text-brand-ink/80;
+  }
+
+  /* Thin gold rule used as a refined divider */
+  .gold-rule {
+    @apply h-px w-12 bg-brand-gold/70;
+  }
+
+  /* Decorative diamond separator from the brand wordmark */
+  .gold-diamond::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    transform: rotate(45deg);
+    background: var(--brand-gold);
+    margin: 0 0.75rem;
+    vertical-align: middle;
+  }
+
+  /* Surface card */
+  .surface {
+    @apply rounded-3xl border border-brand-ink/[0.07] bg-white shadow-card;
+  }
+
+  /* Subtle paper texture for green sections */
+  .texture-grain {
+    position: relative;
+  }
+  .texture-grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: theme("backgroundImage.grain");
+    opacity: 0.025;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+  /* Section vertical rhythm */
+  .section-y {
+    @apply py-20 sm:py-24 lg:py-32;
+  }
+  /* Hide scrollbar where intentional (mobile nav) */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
