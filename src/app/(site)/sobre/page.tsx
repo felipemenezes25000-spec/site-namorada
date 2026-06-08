@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Award, GraduationCap, HeartHandshake, Stethoscope, ArrowRight, MessageCircle } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
@@ -7,7 +8,6 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { PageHero } from "@/components/sections/page-hero";
 import { Differentials } from "@/components/sections/differentials";
 import { CTASection } from "@/components/sections/cta-section";
-import { PhotoPlaceholder } from "@/components/ui/photo-placeholder";
 import { Reveal } from "@/components/ui/reveal";
 import { ButtonLink } from "@/components/ui/button";
 
@@ -18,28 +18,15 @@ export const metadata: Metadata = buildMetadata({
   keywords: [`dentista em ${siteConfig.city}`, `cirurgiã-dentista ${siteConfig.neighborhood}`],
 });
 
-/** Credenciais — PLACEHOLDERS editáveis. Não invente títulos: edite com os reais. */
+/** Credenciais reais da Dra. Ana Beatriz. */
 const credentials = [
-  { icon: GraduationCap, label: "[Graduação em Odontologia — Instituição]" },
-  { icon: Award, label: "[Pós-graduação / Especialização — Área]" },
-  { icon: Stethoscope, label: "[Cursos e atualizações relevantes]" },
+  { icon: GraduationCap, label: "Graduação em Odontologia — Centro Universitário Estácio de Brasília" },
+  { icon: Award, label: "Aperfeiçoamento em Cirurgia Oral Menor — São Leopoldo Mandic" },
+  { icon: Stethoscope, label: "Curso “Rumo à Residência” em CTBMF (Cirurgia e Traumatologia Buco-Maxilo-Facial)" },
   { icon: HeartHandshake, label: `Registro profissional ativo — ${siteConfig.cro}` },
 ];
 
-const philosophy = [
-  {
-    title: "Escuta antes de tudo",
-    text: "Cada atendimento começa por entender a sua história, sua rotina e o que te trouxe até aqui.",
-  },
-  {
-    title: "Clareza em cada etapa",
-    text: "Você entende o que será feito e por quê, sempre em linguagem simples e sem termos confusos.",
-  },
-  {
-    title: "Decisões sem pressa",
-    text: "Nada é decidido no impulso. O plano respeita o seu tempo, suas prioridades e o seu conforto.",
-  },
-];
+const lattesUrl = "https://lattes.cnpq.br/3767606004982701";
 
 export default function SobrePage() {
   return (
@@ -67,7 +54,15 @@ export default function SobrePage() {
         <div className="container grid items-start gap-14 lg:grid-cols-12 lg:gap-16">
           <Reveal className="lg:col-span-5" y={28}>
             <div className="relative mx-auto max-w-sm lg:sticky lg:top-28 lg:max-w-none">
-              <PhotoPlaceholder tone="green" label="Foto da Dra. Ana Beatriz" className="aspect-[4/5] shadow-lift" />
+              <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-brand-green/5 shadow-lift">
+                <Image
+                  src="/dra-ana-trajetoria.jpg"
+                  alt={`${siteConfig.doctorName} durante sua jornada na Odontologia`}
+                  fill
+                  sizes="(min-width: 1024px) 28rem, (min-width: 640px) 22rem, 90vw"
+                  className="object-cover object-center"
+                />
+              </div>
               <div className="surface mt-4 flex items-center gap-4 rounded-2xl p-5">
                 <span className="flex size-12 items-center justify-center rounded-full bg-brand-green/10 text-brand-green">
                   <Stethoscope className="size-6" strokeWidth={1.5} />
@@ -88,30 +83,36 @@ export default function SobrePage() {
             </Reveal>
             <Reveal delay={0.05}>
               <h2 className="mt-5 text-display-md text-balance">
-                Dedicação à saúde bucal, com olhar humano
+                Conheça a {siteConfig.doctorName}
               </h2>
             </Reveal>
             <div className="mt-6 space-y-5 text-pretty leading-relaxed text-brand-ink/75">
               <Reveal delay={0.1}>
                 <p>
-                  {siteConfig.doctorName} é {siteConfig.title.toLowerCase()} ({siteConfig.cro})
-                  e dedica sua atuação a uma odontologia próxima, segura e centrada
-                  na pessoa. Para ela, tratar bem vai muito além da técnica: passa
-                  por acolher, explicar e construir confiança.
+                  A vocação da {siteConfig.doctorName} para a área da saúde nunca
+                  foi uma escolha ao acaso; foi um destino traçado pelo seu
+                  propósito genuíno de cuidar do próximo. Sempre atenta ao
+                  bem-estar coletivo, ela encontrou na Odontologia a junção
+                  perfeita entre o rigor da prática clínica e a profundidade do
+                  cuidado humano.
                 </p>
               </Reveal>
               <Reveal delay={0.15}>
                 <p>
-                  Seu foco está em {siteConfig.focus.toLowerCase()} Cada plano de
-                  tratamento nasce de uma escuta atenta e de uma avaliação cuidadosa,
-                  para que as decisões sejam tomadas com clareza e no tempo de cada
-                  paciente.
+                  Para a Dra. Ana Beatriz, a Odontologia vai muito além do dente:
+                  ela trata a identidade, restabelece a função e devolve a
+                  confiança, reconectando a pessoa consigo mesma. Querendo ou
+                  não, o nosso sorriso está presente em todas as esferas da
+                  vida — desde o ato vital de se alimentar e falar com clareza,
+                  até o resgate da autoestima e da estética. Cuidar do sorriso
+                  é, essencialmente, cuidar da engrenagem que move o seu
+                  bem-estar todos os dias.
                 </p>
               </Reveal>
               <Reveal delay={0.2}>
                 <p className="rounded-2xl border-l-2 border-brand-gold/60 bg-brand-beige/30 p-5 font-display text-xl leading-snug text-brand-green">
-                  “Quando o paciente entende e participa do próprio cuidado, o
-                  resultado é mais natural — e a relação, mais duradoura.”
+                  O grande objetivo da doutora é fazer com que seus pacientes
+                  alcancem uma longevidade de vida próspera, saudável e feliz.
                 </p>
               </Reveal>
             </div>
@@ -120,9 +121,6 @@ export default function SobrePage() {
             <Reveal delay={0.1}>
               <div className="mt-10">
                 <h3 className="font-display text-2xl text-brand-green">Formação e credenciais</h3>
-                <p className="mt-1 text-sm text-brand-ink/55">
-                  As informações abaixo são editáveis — substitua pelos dados reais.
-                </p>
                 <ul className="mt-5 grid gap-3 sm:grid-cols-2">
                   {credentials.map(({ icon: Icon, label }) => (
                     <li key={label} className="flex items-start gap-3 rounded-2xl border border-brand-ink/[0.07] bg-white p-4 shadow-sm">
@@ -133,33 +131,17 @@ export default function SobrePage() {
                     </li>
                   ))}
                 </ul>
+                <a
+                  href={lattesUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-brand-green underline decoration-brand-gold/50 underline-offset-4 transition hover:decoration-brand-gold"
+                >
+                  Conheça o currículo completo da Dra. no Lattes
+                  <ArrowRight className="size-4" strokeWidth={1.7} aria-hidden />
+                </a>
               </div>
             </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* Filosofia */}
-      <section className="section-y bg-gradient-to-b from-brand-beige/40 to-brand-bone">
-        <div className="container">
-          <div className="max-w-2xl">
-            <p className="eyebrow flex items-center gap-3">
-              <span className="inline-block h-px w-7 bg-brand-gold/70" /> Filosofia de atendimento
-            </p>
-            <h2 className="mt-5 text-display-md text-balance">
-              Três princípios que guiam cada consulta
-            </h2>
-          </div>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {philosophy.map((p, i) => (
-              <Reveal key={p.title} delay={i * 0.08}>
-                <div className="surface h-full p-7">
-                  <span className="font-display text-4xl text-brand-gold/70">0{i + 1}</span>
-                  <h3 className="mt-3 font-display text-2xl text-brand-green">{p.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-brand-ink/70">{p.text}</p>
-                </div>
-              </Reveal>
-            ))}
           </div>
         </div>
       </section>
@@ -184,7 +166,7 @@ export default function SobrePage() {
               </div>
               <div className="lg:col-span-4 lg:justify-self-end">
                 <ButtonLink href="/agendamento" variant="gold" size="lg">
-                  Quero agendar minha avaliação
+                  Quero agendar minha consulta
                   <ArrowRight className="size-4" strokeWidth={1.7} />
                 </ButtonLink>
               </div>

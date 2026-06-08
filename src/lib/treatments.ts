@@ -13,7 +13,7 @@ export type TreatmentIcon =
   | "whitening"
   | "restoration"
   | "prevention"
-  | "aesthetics";
+  | "surgery";
 
 export interface TreatmentFAQ {
   q: string;
@@ -51,7 +51,7 @@ export const treatments: Treatment[] = [
     shortName: "Avaliação",
     icon: "evaluation",
     excerpt:
-      "Uma conversa cuidadosa e um exame completo para entender a sua saúde bucal antes de qualquer decisão.",
+      "Uma conversa cuidadosa e com exames complementares para entender as suas necessidades e avaliar sua saúde bucal antes de qualquer decisão.",
     intro:
       "Toda jornada começa por aqui. A avaliação é o momento de olhar com calma para a sua saúde bucal, ouvir o que te trouxe até o consultório e construir, junto com você, um plano que faça sentido para a sua vida — sem pressa e sem etapas desnecessárias.",
     what:
@@ -90,7 +90,7 @@ export const treatments: Treatment[] = [
     shortName: "Limpeza",
     icon: "cleaning",
     excerpt:
-      "Remoção de placa e tártaro com técnica delicada, devolvendo frescor e saúde às gengivas.",
+      "A famosa limpeza. Remoção de placa e cálculo dental com técnicas focadas em garantir o seu conforto e a ausência de dor.",
     intro:
       "A limpeza profissional é um dos cuidados mais simples e, ao mesmo tempo, mais importantes para manter a boca saudável. Feita com técnica e gentileza, ela remove o que a escova não alcança e ajuda a prevenir problemas antes que eles apareçam.",
     what:
@@ -168,7 +168,7 @@ export const treatments: Treatment[] = [
     shortName: "Restaurações",
     icon: "restoration",
     excerpt:
-      "Devolvendo forma, função e estética ao dente com materiais que imitam o natural.",
+      "Devolvendo estética e função ao dente com materiais de alta qualidade que preservam a naturalidade do seu sorriso.",
     intro:
       "Quando um dente é afetado por cárie, desgaste ou uma pequena fratura, a restauração devolve o que foi perdido. O cuidado aqui é técnico e estético ao mesmo tempo: recuperar a função sem que o reparo se note.",
     what:
@@ -241,43 +241,43 @@ export const treatments: Treatment[] = [
     keywords: ["prevenção odontológica em [cidade]", "dentista preventivo [bairro]", "check-up odontológico [cidade]"],
   },
   {
-    slug: "estetica-do-sorriso",
-    name: "Estética do sorriso",
-    shortName: "Estética",
-    icon: "aesthetics",
+    slug: "cirurgia-oral",
+    name: "Cirurgia oral",
+    shortName: "Cirurgia",
+    icon: "surgery",
     excerpt:
-      "Harmonia entre saúde e beleza, respeitando as características naturais do seu rosto.",
+      "Procedimentos cirúrgicos seguros e precisos, como a remoção de dentes, realizados com máxima segurança, técnica, cuidado e foco em uma recuperação tranquila.",
     intro:
-      "Um sorriso bonito é, antes de tudo, um sorriso saudável. A odontologia estética trabalha a harmonia do conjunto — cor, forma e proporção — sempre partindo da saúde e respeitando o que torna o seu sorriso único.",
+      "Procedimentos cirúrgicos pedem técnica, planejamento e cuidado em cada detalhe. Aqui, a cirurgia oral é conduzida com calma, com informação clara sobre o que será feito e com atenção integral à sua experiência — antes, durante e depois.",
     what:
-      "Reúne procedimentos voltados à aparência do sorriso, como clareamento, ajustes de forma e melhorias em restaurações visíveis. Cada plano é desenhado de maneira individual, com foco em um resultado natural e equilibrado.",
+      "Reúne procedimentos cirúrgicos de pequeno e médio porte realizados em consultório, como remoção de dentes (inclusive sisos) e outras intervenções nos tecidos da boca. O foco é unir segurança, precisão técnica e conforto, sempre a partir de uma avaliação criteriosa para confirmar a indicação correta.",
     forWhom: [
-      "Quem deseja melhorar a aparência do sorriso com naturalidade",
-      "Quem se incomoda com a cor, a forma ou pequenos detalhes dos dentes",
-      "Quem busca um planejamento estético seguro, sem exageros",
-      "Quem quer harmonizar o sorriso preservando a saúde bucal",
+      "Quem precisa avaliar a indicação de extração dos sisos",
+      "Quem tem um dente comprometido e precisa de remoção segura",
+      "Quem foi orientado por outro profissional a realizar uma cirurgia oral",
+      "Quem busca uma segunda opinião antes de decidir pelo procedimento",
     ],
     benefits: [
-      "Planejamento individual, pensado para o seu rosto",
-      "Prioridade ao resultado natural e equilibrado",
-      "Decisões tomadas com clareza e sem pressão",
-      "Integração entre estética e saúde bucal",
+      "Avaliação criteriosa antes de qualquer indicação cirúrgica",
+      "Técnica focada em conforto e ausência de dor durante o procedimento",
+      "Orientação completa sobre cuidados pré e pós-operatórios",
+      "Acompanhamento próximo durante toda a recuperação",
     ],
     steps: [
-      { title: "Escuta e avaliação", description: "Entendimento do que você gostaria de mudar e da saúde do seu sorriso." },
-      { title: "Planejamento", description: "Definição das etapas estéticas mais adequadas ao seu caso." },
-      { title: "Execução cuidadosa", description: "Realização dos procedimentos com atenção aos detalhes e à naturalidade." },
-      { title: "Acompanhamento", description: "Orientação para manter o resultado bonito e saudável por mais tempo." },
+      { title: "Avaliação clínica", description: "Exame detalhado e análise de imagens (radiografias ou tomografias) para confirmar a indicação cirúrgica." },
+      { title: "Planejamento", description: "Explicação clara do procedimento, das opções, dos riscos e dos benefícios — para decidirmos juntos, com sua autonomia preservada." },
+      { title: "Cirurgia com segurança", description: "Procedimento realizado com técnica precisa e protocolo de anestesia ajustado ao seu conforto." },
+      { title: "Pós-operatório", description: "Orientações claras de cuidado, retornos para acompanhar a cicatrização e canal aberto para qualquer dúvida." },
     ],
     faqs: [
-      { q: "O resultado fica artificial?", a: "O objetivo é justamente o contrário: valorizar o seu sorriso respeitando suas características naturais, para um resultado harmônico." },
-      { q: "Estética e saúde andam juntas?", a: "Sempre. Qualquer planejamento estético parte da saúde bucal — por isso a avaliação vem primeiro." },
-      { q: "Preciso fazer vários procedimentos?", a: "Não necessariamente. O plano é individual e pode envolver desde um único ajuste até etapas combinadas, conforme o seu objetivo." },
+      { q: "A cirurgia dói?", a: "O procedimento é realizado sob anestesia, sem dor durante. No pós-operatório pode haver desconforto, controlado com a medicação orientada para o seu caso e acompanhado de perto." },
+      { q: "Quanto tempo leva a recuperação?", a: "Depende do procedimento e do seu organismo. A maioria das pessoas retoma a rotina em poucos dias, e a recuperação completa é acompanhada até o final." },
+      { q: "Como saber se realmente preciso da cirurgia?", a: "A indicação é definida na avaliação, com base no exame clínico e em imagens. Quando existem alternativas, elas são apresentadas — e a decisão é tomada junto com você, considerando riscos e benefícios." },
     ],
-    metaTitle: "Estética do sorriso em [Cidade] — Dra. Ana Beatriz Lemos Souza",
+    metaTitle: "Cirurgia oral em [Cidade] — Dra. Ana Beatriz Lemos Souza",
     metaDescription:
-      "Estética do sorriso com planejamento individual em [Cidade]. Harmonia entre saúde e beleza, com resultado natural, ao lado da Dra. Ana Beatriz Lemos Souza.",
-    keywords: ["estética do sorriso em [cidade]", "odontologia estética [bairro]", "harmonização do sorriso [cidade]"],
+      "Cirurgia oral de pequeno e médio porte em [Cidade]: remoção de sisos e outros procedimentos com avaliação criteriosa, técnica precisa e acompanhamento próximo, com a Dra. Ana Beatriz Lemos Souza.",
+    keywords: ["cirurgia oral em [cidade]", "extração de siso [bairro]", "dentista cirurgião em [cidade]"],
   },
 ];
 

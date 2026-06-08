@@ -1,16 +1,13 @@
-import { MessageCircle, CalendarDays } from "lucide-react";
-import { whatsappLink, waMessages } from "@/lib/whatsapp";
+import { CalendarDays } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
 
 export function CTASection({
   title = "Seu sorriso merece um cuidado planejado, seguro e acolhedor.",
-  description = "Dê o primeiro passo hoje. A avaliação é uma conversa tranquila para entender o que você precisa — sem compromisso e no seu tempo.",
-  whatsappMessage = waMessages.default,
+  description = "Dê o primeiro passo hoje. A avaliação é uma conversa tranquila para entender o que você precisa.",
 }: {
   title?: string;
   description?: string;
-  whatsappMessage?: string;
 }) {
   return (
     <section className="bg-brand-bone pb-20 pt-8 sm:pb-24 sm:pt-12 lg:pt-16">
@@ -41,11 +38,7 @@ export function CTASection({
             </p>
           </Reveal>
           <Reveal delay={0.18}>
-            <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <ButtonLink href={whatsappLink(whatsappMessage)} external variant="gold" size="lg">
-                <MessageCircle className="size-5" strokeWidth={1.7} />
-                Agendar avaliação agora
-              </ButtonLink>
+            <div className="mt-9 flex items-center justify-center">
               <ButtonLink href="/agendamento" variant="light" size="lg">
                 <CalendarDays className="size-5" strokeWidth={1.7} />
                 Preencher formulário

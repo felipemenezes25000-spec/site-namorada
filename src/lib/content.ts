@@ -7,7 +7,7 @@ import {
   Phone,
   MessageCircle,
   CalendarHeart,
-  ClipboardList,
+  Smile,
   Stethoscope,
   type LucideIcon,
 } from "lucide-react";
@@ -15,32 +15,28 @@ import {
 /** Perguntas frequentes da home. */
 export const homeFaqs = [
   {
-    q: "Como agendo uma avaliação?",
-    a: "Pelo WhatsApp, em poucos toques, ou pelo formulário de agendamento aqui no site. A Dra. Ana confirma com você o melhor dia e horário.",
+    q: "A Dra. Ana atende convênios ou planos de saúde?",
+    a: "Não. Os atendimentos são realizados exclusivamente de forma particular.",
   },
   {
-    q: "O atendimento é particular?",
-    a: "Sim, o atendimento é particular. Na avaliação você recebe uma estimativa transparente das etapas e do investimento, sem surpresas.",
+    q: "Quais são as formas de pagamento?",
+    a: "Aceitamos PIX, cartão de crédito e cartão de débito.",
   },
   {
-    q: "Posso tirar dúvidas pelo WhatsApp antes de marcar?",
-    a: "Pode, sim. O WhatsApp está disponível para esclarecer dúvidas com tranquilidade, no seu tempo, antes de qualquer decisão.",
+    q: "A Dra. Ana atende crianças?",
+    a: "Sim. O atendimento é realizado para crianças a partir de 7 anos de idade.",
   },
   {
-    q: "Clareamento dental dói?",
-    a: "A maioria das pessoas sente, no máximo, uma sensibilidade leve e passageira. O protocolo é sempre ajustado para deixar a experiência confortável.",
+    q: "Quais são as áreas de atuação da Dra. Ana?",
+    a: "A Dra. Ana atua nas seguintes áreas: dentística, restaurações, clareamento dental, cirurgias odontológicas, prevenção e profilaxia (limpeza dental).",
   },
   {
-    q: "Com que frequência devo fazer limpeza?",
-    a: "Em geral, a cada seis meses — mas o intervalo ideal é definido na avaliação, conforme a sua saúde bucal e seus hábitos.",
+    q: "A Dra. Ana realiza atendimentos de urgência?",
+    a: "Sim. Entre em contato para verificar a disponibilidade e receber orientações sobre o atendimento de urgência.",
   },
   {
-    q: "O que acontece na primeira avaliação?",
-    a: "Uma conversa para entender o que te trouxe, um exame clínico completo e um plano de cuidado individual, explicado em linguagem simples.",
-  },
-  {
-    q: "Quais formas de pagamento são aceitas?",
-    a: "As condições e formas de pagamento são apresentadas de forma transparente durante a avaliação, conforme o seu plano de tratamento. Fale com a recepção pelo WhatsApp para conhecer as opções disponíveis.",
+    q: "É possível receber um orçamento antes da consulta?",
+    a: "Não. Cada paciente possui necessidades específicas que só podem ser avaliadas adequadamente durante a consulta odontológica. Por se tratar de um atendimento relacionado à saúde, não é possível fornecer valores ou orçamentos prévios sem uma avaliação profissional. Após a consulta e o diagnóstico, a Dra. Ana apresenta o plano de tratamento completo e o respectivo orçamento de forma transparente.",
   },
 ];
 
@@ -50,18 +46,18 @@ export const homeFaqs = [
  */
 export const careNeeds: { icon: LucideIcon; title: string; description: string }[] = [
   { icon: CalendarClock, title: "Faz tempo desde a última consulta", description: "Retome os cuidados com calma e sem julgamentos, a partir de uma avaliação completa." },
-  { icon: Activity, title: "Sente dor, sensibilidade ou incômodo", description: "Vamos entender a causa juntos e definir o melhor caminho, com explicações claras." },
+  { icon: Activity, title: "Sente dor, sensibilidade ou incômodo? Sua gengiva sangra?", description: "Vamos entender a causa juntos e definir o melhor caminho, com explicações claras." },
   { icon: Sparkles, title: "Quer um sorriso mais bonito", description: "Estética com saúde: clareamento e ajustes pensados para um resultado natural." },
-  { icon: Stethoscope, title: "Precisa avaliar os sisos ou cirurgia oral", description: "Avaliação cuidadosa e orientação segura sobre cirurgia oral, no seu tempo." },
+  { icon: Stethoscope, title: "Precisa avaliar os sisos ou cirurgia oral", description: "Avaliação cuidadosa e orientação segura sobre cirurgia oral, dentro da sua necessidade." },
   { icon: ShieldCheck, title: "Quer manter a saúde bucal em dia", description: "Acompanhamento preventivo e limpezas para evitar problemas antes que apareçam." },
-  { icon: Phone, title: "Teve uma urgência odontológica", description: "Fale pelo WhatsApp para receber orientação e o cuidado adequado com agilidade." },
+  { icon: Phone, title: "Teve uma urgência odontológica", description: "Fale pelo WhatsApp para receber orientação e o cuidado adequado com agilidade. Consulte nossa disponibilidade de horários especiais." },
 ];
 
 /** Diferenciais (seção dedicada). */
 export const differentials: { icon: LucideIcon; title: string; description: string }[] = [
-  { icon: Stethoscope, title: "Atendimento sem pressa", description: "Cada consulta tem o tempo que você precisa — sem linha de produção." },
+  { icon: Stethoscope, title: "Atendimento individualizado", description: "Cada consulta tem o tempo que você precisa, com atenção e dedicação exclusivas, do início ao fim." },
   { icon: MessageCircle, title: "Explicação clara antes de tudo", description: "Você entende cada etapa antes de qualquer procedimento, sem termos confusos." },
-  { icon: ClipboardList, title: "Planejamento individualizado", description: "Nada de pacotes prontos: o plano nasce da sua realidade e das suas prioridades." },
+  { icon: Smile, title: "Odontologia sem dor", description: "Priorizamos o seu bem-estar com técnicas que garantem uma experiência odontológica segura e, acima de tudo, livre de dor. A Dra. Ana preza por uma Odontologia com o mínimo de desconforto, assegurando o seu conforto em cada etapa." },
   { icon: Sparkles, title: "Estética com saúde", description: "Beleza e bem-estar caminham juntos, sempre partindo da saúde bucal." },
   { icon: HeartHandshake, title: "Experiência acolhedora", description: "Um ambiente tranquilo, do primeiro contato ao acompanhamento." },
   { icon: CalendarHeart, title: "Comunicação simples", description: "Dúvidas, agendamentos e retornos resolvidos com facilidade pelo WhatsApp." },

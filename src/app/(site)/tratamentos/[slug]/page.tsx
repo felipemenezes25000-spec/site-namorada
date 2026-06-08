@@ -205,7 +205,7 @@ export default async function TreatmentPage({ params }: { params: Params }) {
         </div>
       </section>
 
-      <CTASection whatsappMessage={waMessages.treatment(t.name.toLowerCase())} />
+      <CTASection />
     </>
   );
 }

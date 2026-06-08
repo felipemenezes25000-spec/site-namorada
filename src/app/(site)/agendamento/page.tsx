@@ -60,7 +60,7 @@ export default function AgendamentoPage() {
                   </h2>
                   <p className="mt-3 text-sm leading-relaxed text-brand-bone/75">
                     Tire dúvidas ou agende diretamente com a Dra. Ana. Resposta com
-                    atenção e sem compromisso.
+                    atenção e sem pressão.
                   </p>
                   <ButtonLink
                     href={whatsappLink(waMessages.default)}

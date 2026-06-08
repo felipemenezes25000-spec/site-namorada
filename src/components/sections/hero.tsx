@@ -1,7 +1,7 @@
-import { ArrowRight, ShieldCheck, MapPin, HeartHandshake, CalendarCheck } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight, ShieldCheck, MapPin, HeartHandshake, CalendarCheck, Sparkles } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
 import { ButtonLink } from "@/components/ui/button";
-import { PhotoPlaceholder } from "@/components/ui/photo-placeholder";
 import { HeroWhatsAppButton } from "./hero-whatsapp-button";
 
 /**
@@ -30,18 +30,18 @@ export function Hero() {
 
           {/* H1 estático = LCP imediato (sem animação que atrase o paint) */}
           <h1 className="mt-6 text-display-xl text-balance">
-            Cuidado odontológico humanizado para um sorriso{" "}
-            <span className="whitespace-nowrap italic text-brand-gold-ink">natural</span>,
-            saudável e seguro.
+            Cuidado odontológico{" "}
+            <span className="whitespace-nowrap italic text-brand-gold-ink">sem dor</span>:
+            a união entre saúde, estética e bem-estar.
           </h1>
 
           <p
             className="mt-6 max-w-prose2 text-pretty text-base leading-relaxed text-brand-ink/75 animate-fade-up sm:text-lg"
             style={{ animationDelay: "0.14s" }}
           >
-            Atendimento personalizado com foco em saúde bucal, estética do sorriso
-            e bem-estar em cada etapa da sua jornada — com escuta, planejamento e
-            explicações claras, no seu tempo.
+            Atendimento personalizado com foco em saúde bucal, estética do sorriso,
+            prevenção e bem-estar em cada etapa da jornada — com escuta, planejamento
+            e explicações claras, no seu tempo.
           </p>
 
           <div
@@ -89,11 +89,16 @@ export function Hero() {
               <path d="M40 120 C 40 300, 360 300, 360 120" fill="none" stroke="currentColor" strokeWidth="1.5" />
             </svg>
 
-            <PhotoPlaceholder
-              tone="green"
-              label="Foto da Dra. Ana Beatriz"
-              className="relative aspect-[4/5] shadow-lift"
-            />
+            <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-brand-green/5 shadow-lift">
+              <Image
+                src="/dra-ana.webp"
+                alt={`Foto profissional da ${siteConfig.doctorName}`}
+                fill
+                priority
+                sizes="(min-width: 1024px) 36rem, (min-width: 640px) 28rem, 90vw"
+                className="object-cover"
+              />
+            </div>
 
             {/* chip flutuante superior */}
             <div className="surface absolute -top-4 right-4 hidden items-center gap-2.5 rounded-2xl px-4 py-2.5 sm:flex lg:-right-5">
@@ -101,7 +106,17 @@ export function Hero() {
                 <CalendarCheck className="size-4" strokeWidth={1.8} />
               </span>
               <span className="text-sm font-medium text-brand-green">
-                Avaliação sem compromisso
+                Avaliação sem pressão
+              </span>
+            </div>
+
+            {/* chip "odontologia sem dor" — destaque lateral esquerdo */}
+            <div className="surface absolute top-1/2 left-4 hidden -translate-y-1/2 items-center gap-2.5 rounded-2xl px-4 py-2.5 sm:flex lg:-left-6">
+              <span className="flex size-9 items-center justify-center rounded-full bg-brand-green/10 text-brand-green">
+                <Sparkles className="size-4" strokeWidth={1.8} />
+              </span>
+              <span className="text-sm font-medium text-brand-green">
+                Odontologia sem dor
               </span>
             </div>
 

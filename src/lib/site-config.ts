@@ -16,7 +16,7 @@ export const siteConfig = {
   doctorName: "Dra. Ana Beatriz Lemos Souza",
   doctorFirstName: "Dra. Ana Beatriz",
   /** Registro no Conselho Regional de Odontologia. */
-  cro: "CRO-SP [000000]",
+  cro: "CRO-SP 177801",
   title: "Cirurgiã-Dentista",
   /** Foco de atuação — usado em textos e SEO. */
   focus:
@@ -34,7 +34,7 @@ export const siteConfig = {
   whatsappDisplay: "[(00) 00000-0000]",
   phone: "5500000000000",
   phoneDisplay: "[(00) 00000-0000]",
-  email: "[contato@draanabeatriz.com.br]",
+  email: "draanabeatrizodontologia@gmail.com",
   instagram: "[@dra.anabeatrizlemos]",
   instagramUrl: "https://instagram.com/[dra.anabeatrizlemos]",
 

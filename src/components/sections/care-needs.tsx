@@ -17,7 +17,7 @@ export function CareNeeds() {
         <SectionHeading
           eyebrow="Por onde começar"
           title="Como podemos cuidar de você"
-          description="Cada pessoa chega por um motivo diferente. Veja onde a Dra. Ana pode ajudar — a avaliação é sempre o primeiro passo, sem compromisso."
+          description="Cada pessoa chega por um motivo diferente. Veja onde a Dra. Ana pode ajudar — a avaliação é sempre o primeiro passo."
         />
 
         <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
