@@ -35,7 +35,7 @@ const config: Config = {
           "gold-ink": "#7A5E28",
           // Dourado clareado para TEXTO sobre verde escuro (>=4.5:1 AA — ~5.06:1).
           "gold-bright": "#D8BE8C",
-          bone: "#FCFCFC",
+          bone: "#FBF8F1",
           beige: "#EFE7DA",
           mint: "#DDE8E1",
           gray: "#6F6F6F",
