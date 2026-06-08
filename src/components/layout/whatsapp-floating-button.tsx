@@ -49,7 +49,7 @@ export function WhatsAppFloatingButton() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 24, scale: 0.9 }}
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed bottom-5 right-4 z-40 sm:bottom-6 sm:right-6"
+          className="fixed bottom-5 right-4 z-40 hidden sm:bottom-6 sm:right-6 md:block"
         >
           <a
             href={whatsappLink(waMessages.default)}

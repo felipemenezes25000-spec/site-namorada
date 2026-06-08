@@ -3,6 +3,7 @@ import { dentistSchema, websiteSchema } from "@/lib/seo";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { WhatsAppFloatingButton } from "@/components/layout/whatsapp-floating-button";
+import { MobileActionBar } from "@/components/layout/mobile-action-bar";
 import { JsonLd } from "@/components/seo/json-ld";
 
 /**
@@ -45,7 +46,10 @@ export default function SiteLayout({
       <Header />
       <main id="conteudo">{children}</main>
       <Footer />
+      {/* Espaçador para o conteúdo não ficar sob a barra fixa de ações (mobile). */}
+      <div aria-hidden className="h-[60px] md:hidden" />
       <WhatsAppFloatingButton />
+      <MobileActionBar />
     </>
   );
 }

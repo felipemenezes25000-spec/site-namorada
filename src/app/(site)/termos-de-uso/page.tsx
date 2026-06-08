@@ -93,8 +93,9 @@ export default function TermosPage() {
             </p>
 
             <p className="mt-10 rounded-2xl border border-brand-ink/[0.07] bg-brand-beige/30 p-5 text-sm">
-              <strong>Aviso:</strong> documento-modelo inicial. Recomenda-se revisão
-              jurídica antes da publicação definitiva.
+              <strong>Dúvidas?</strong> Fale com a gente pelo e-mail{" "}
+              <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a> ou pelo
+              WhatsApp. Teremos prazer em esclarecer qualquer ponto destes termos.
             </p>
           </LegalShell>
         </div>

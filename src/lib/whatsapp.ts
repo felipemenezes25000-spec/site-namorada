@@ -27,4 +27,12 @@ export const waMessages = {
   /** Dúvidas gerais sobre atendimento. */
   questions:
     "Olá, Dra. Ana! Vim pelo site e gostaria de tirar algumas dúvidas sobre o atendimento.",
+
+  /** Atendimento de urgência. */
+  urgency:
+    "Olá, Dra. Ana! Estou com uma urgência odontológica e gostaria de receber orientação e atendimento o quanto antes.",
+
+  /** Primeira consulta / quem está há tempos sem ir ao dentista. */
+  firstVisit:
+    "Olá, Dra. Ana! Faz um tempo que não vou ao dentista e gostaria de agendar uma primeira consulta com tranquilidade.",
 } as const;

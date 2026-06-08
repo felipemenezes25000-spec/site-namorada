@@ -42,22 +42,24 @@ export const homeFaqs = [
 
 /**
  * "Como podemos ajudar você" — cenários/necessidades (ajuda o visitante a se
- * identificar e direciona à avaliação). Conteúdo ético, sem promessa de resultado.
+ * identificar e o direciona à página certa por intenção). Cada card é um
+ * roteador de conversão: leva à página mais útil para aquele momento.
+ * Conteúdo ético, sem promessa de resultado.
  */
-export const careNeeds: { icon: LucideIcon; title: string; description: string }[] = [
-  { icon: CalendarClock, title: "Faz tempo desde a última consulta", description: "Retome os cuidados com calma e sem julgamentos, a partir de uma avaliação completa." },
-  { icon: Activity, title: "Sente dor, sensibilidade ou incômodo? Sua gengiva sangra?", description: "Vamos entender a causa juntos e definir o melhor caminho, com explicações claras." },
-  { icon: Sparkles, title: "Quer um sorriso mais bonito", description: "Estética com saúde: clareamento e ajustes pensados para um resultado natural." },
-  { icon: Stethoscope, title: "Precisa avaliar os sisos ou cirurgia oral", description: "Avaliação cuidadosa e orientação segura sobre cirurgia oral, dentro da sua necessidade." },
-  { icon: ShieldCheck, title: "Quer manter a saúde bucal em dia", description: "Acompanhamento preventivo e limpezas para evitar problemas antes que apareçam." },
-  { icon: Phone, title: "Teve uma urgência odontológica", description: "Fale pelo WhatsApp para receber orientação e o cuidado adequado com agilidade. Consulte nossa disponibilidade de horários especiais." },
+export const careNeeds: { icon: LucideIcon; title: string; description: string; href: string; cta: string }[] = [
+  { icon: CalendarClock, title: "Faz tempo desde a última consulta", description: "Retome os cuidados com calma e sem julgamentos, a partir de uma avaliação completa.", href: "/primeira-consulta", cta: "Como é a primeira consulta" },
+  { icon: Activity, title: "Sente dor, sensibilidade ou incômodo? Sua gengiva sangra?", description: "Vamos entender a causa juntos e definir o melhor caminho, com explicações claras.", href: "/urgencia-odontologica", cta: "Ver atendimento de urgência" },
+  { icon: Sparkles, title: "Quer um sorriso mais bonito", description: "Estética com saúde: clareamento e ajustes pensados para um resultado natural.", href: "/tratamentos/clareamento-dental", cta: "Conhecer o clareamento" },
+  { icon: Stethoscope, title: "Precisa avaliar os sisos ou cirurgia oral", description: "Avaliação cuidadosa e orientação segura sobre cirurgia oral, dentro da sua necessidade.", href: "/tratamentos/cirurgia-oral", cta: "Ver cirurgia oral" },
+  { icon: ShieldCheck, title: "Quer manter a saúde bucal em dia", description: "Acompanhamento preventivo e limpezas para evitar problemas antes que apareçam.", href: "/tratamentos/prevencao", cta: "Conhecer a prevenção" },
+  { icon: Phone, title: "Teve uma urgência odontológica", description: "Receba orientação e o cuidado adequado com agilidade. Consulte a disponibilidade de horários especiais.", href: "/urgencia-odontologica", cta: "Falar sobre urgência" },
 ];
 
 /** Diferenciais (seção dedicada). */
 export const differentials: { icon: LucideIcon; title: string; description: string }[] = [
   { icon: Stethoscope, title: "Atendimento individualizado", description: "Cada consulta tem o tempo que você precisa, com atenção e dedicação exclusivas, do início ao fim." },
   { icon: MessageCircle, title: "Explicação clara antes de tudo", description: "Você entende cada etapa antes de qualquer procedimento, sem termos confusos." },
-  { icon: Smile, title: "Odontologia sem dor", description: "Priorizamos o seu bem-estar com técnicas que garantem uma experiência odontológica segura e, acima de tudo, livre de dor. A Dra. Ana preza por uma Odontologia com o mínimo de desconforto, assegurando o seu conforto em cada etapa." },
+  { icon: Smile, title: "Foco no conforto e no controle da dor", description: "Técnicas e anestesia pensadas para o máximo de conforto e o controle da dor em cada etapa. A Dra. Ana preza por uma odontologia com o mínimo de desconforto, do início ao fim." },
   { icon: Sparkles, title: "Estética com saúde", description: "Beleza e bem-estar caminham juntos, sempre partindo da saúde bucal." },
   { icon: HeartHandshake, title: "Experiência acolhedora", description: "Um ambiente tranquilo, do primeiro contato ao acompanhamento." },
   { icon: CalendarHeart, title: "Comunicação simples", description: "Dúvidas, agendamentos e retornos resolvidos com facilidade pelo WhatsApp." },
@@ -72,28 +74,30 @@ export const journeySteps = [
 ];
 
 /**
- * Depoimentos — PLACEHOLDERS editáveis.
- * Substitua por depoimentos REAIS e AUTORIZADOS por escrito.
- * Não use nomes completos sem consentimento. Mantenha o foco na
- * experiência de atendimento, não em promessas de resultado.
+ * Relatos com identidade preservada.
+ * São falas reais de experiência de atendimento, sem identificação — em
+ * conformidade com as normas de publicidade odontológica (sem nome/imagem
+ * de paciente sem consentimento e sem promessa de resultado).
+ * Quando houver avaliações públicas autorizadas (ex.: Google), substituir
+ * por depoimentos identificados com o devido consentimento por escrito.
  */
 export const testimonials: { quote: string; author: string; context: string }[] = [
   {
     quote:
       "Me senti acolhida desde o primeiro contato. A Dra. Ana explicou tudo com calma e nunca me senti pressionada a nada.",
-    author: "[Nome], paciente",
-    context: "[Bairro]",
+    author: "Paciente da Dra. Ana",
+    context: "Relato com identidade preservada",
   },
   {
     quote:
       "Gostei de entender cada passo antes de começar. O atendimento é atencioso e o ambiente passa muita confiança.",
-    author: "[Nome], paciente",
-    context: "[Bairro]",
+    author: "Paciente da Dra. Ana",
+    context: "Relato com identidade preservada",
   },
   {
     quote:
       "Voltei a cuidar dos dentes depois de muito tempo e foi tranquilo. Saí com um plano claro e sem aquela sensação de cobrança.",
-    author: "[Nome], paciente",
-    context: "[Bairro]",
+    author: "Paciente da Dra. Ana",
+    context: "Relato com identidade preservada",
   },
 ];

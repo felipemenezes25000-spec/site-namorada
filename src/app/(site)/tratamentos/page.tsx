@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ArrowRight, Check, MessageCircle } from "lucide-react";
 import { treatments } from "@/lib/treatments";
 import { siteConfig } from "@/lib/site-config";
-import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { buildMetadata, breadcrumbSchema, servicesSchema } from "@/lib/seo";
 import { whatsappLink, waMessages } from "@/lib/whatsapp";
 import { JsonLd } from "@/components/seo/json-ld";
 import { PageHero } from "@/components/sections/page-hero";
@@ -29,10 +29,15 @@ export default function TratamentosPage() {
   return (
     <>
       <JsonLd
-        data={breadcrumbSchema([
-          { name: "Início", path: "/" },
-          { name: "Tratamentos", path: "/tratamentos" },
-        ])}
+        data={[
+          breadcrumbSchema([
+            { name: "Início", path: "/" },
+            { name: "Tratamentos", path: "/tratamentos" },
+          ]),
+          servicesSchema(
+            treatments.map((t) => ({ name: t.name, slug: t.slug, excerpt: t.excerpt })),
+          ),
+        ]}
       />
       <PageHero
         eyebrow="Tratamentos"

@@ -39,9 +39,9 @@ export function Hero() {
             className="mt-6 max-w-prose2 text-pretty text-base leading-relaxed text-brand-ink/75 animate-fade-up sm:text-lg"
             style={{ animationDelay: "0.14s" }}
           >
-            Atendimento personalizado com foco em saúde bucal, estética do sorriso,
-            prevenção e bem-estar em cada etapa da jornada — com escuta, planejamento
-            e explicações claras, no seu tempo.
+            Avaliação, limpeza, clareamento, restaurações, prevenção, cirurgia oral
+            e urgências. Atendimento particular com escuta, planejamento e
+            explicações claras antes de cada procedimento.
           </p>
 
           <div
@@ -71,6 +71,26 @@ export function Hero() {
               <MapPin className="size-4 text-brand-green" strokeWidth={1.6} />
               {siteConfig.region}
             </li>
+          </ul>
+
+          {/* Microprovas — respostas rápidas às primeiras dúvidas do paciente */}
+          <ul
+            className="mt-6 flex flex-wrap gap-2 text-xs font-medium text-brand-green animate-fade-up"
+            style={{ animationDelay: "0.36s" }}
+          >
+            {[
+              siteConfig.cro,
+              "Atendimento particular",
+              "Crianças a partir de 7 anos",
+              "Pix, débito e crédito",
+            ].map((item) => (
+              <li
+                key={item}
+                className="rounded-full border border-brand-gold/30 bg-brand-gold/[0.06] px-3 py-1"
+              >
+                {item}
+              </li>
+            ))}
           </ul>
         </div>
 

@@ -10,6 +10,13 @@ const legal = [
   { label: "Termos de Uso", href: "/termos-de-uso" },
 ];
 
+/** Páginas de apoio ao paciente (atalhos no rodapé). */
+const supportNav = [
+  { label: "Urgência odontológica", href: "/urgencia-odontologica" },
+  { label: "Primeira consulta", href: "/primeira-consulta" },
+  { label: "Medo de dentista", href: "/medo-de-dentista" },
+];
+
 export function Footer() {
   const year = 2026; // fixo para build determinístico; edite se necessário.
   return (
@@ -45,6 +52,22 @@ export function Footer() {
             </h3>
             <ul className="mt-5 space-y-3 text-sm">
               {mainNav.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-brand-bone/75 transition-colors hover:text-brand-bone"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            <h3 className="mt-8 text-xs font-semibold uppercase tracking-eyebrow text-brand-gold-soft">
+              Para você
+            </h3>
+            <ul className="mt-5 space-y-3 text-sm">
+              {supportNav.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}

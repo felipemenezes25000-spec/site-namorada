@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Award, GraduationCap, HeartHandshake, Stethoscope, ArrowRight, MessageCircle } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
-import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { buildMetadata, breadcrumbSchema, personSchema } from "@/lib/seo";
 import { whatsappLink, waMessages } from "@/lib/whatsapp";
 import { JsonLd } from "@/components/seo/json-ld";
 import { PageHero } from "@/components/sections/page-hero";
@@ -31,10 +31,19 @@ export default function SobrePage() {
   return (
     <>
       <JsonLd
-        data={breadcrumbSchema([
-          { name: "Início", path: "/" },
-          { name: "Sobre", path: "/sobre" },
-        ])}
+        data={[
+          breadcrumbSchema([
+            { name: "Início", path: "/" },
+            { name: "Sobre", path: "/sobre" },
+          ]),
+          personSchema({
+            sameAs: [lattesUrl],
+            alumniOf: [
+              "Centro Universitário Estácio de Brasília",
+              "São Leopoldo Mandic",
+            ],
+          }),
+        ]}
       />
       <PageHero
         eyebrow="Sobre a Dra. Ana"

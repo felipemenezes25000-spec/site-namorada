@@ -65,12 +65,17 @@ export default function PrivacidadePage() {
 
             <h2>5. Compartilhamento</h2>
             <p>
-              Não vendemos os seus dados. Podemos utilizar provedores de
-              tecnologia (por exemplo, hospedagem, banco de dados e mensageria de
-              WhatsApp) estritamente para operar o atendimento, sempre com
-              obrigação de confidencialidade. [Liste aqui os provedores utilizados,
-              ex.: Vercel, Supabase, provedor de WhatsApp.]
+              Não vendemos os seus dados. Utilizamos provedores de tecnologia
+              estritamente para operar o atendimento e o site, sempre com
+              obrigação de confidencialidade:
             </p>
+            <ul>
+              <li><strong>Vercel</strong> — hospedagem e entrega do site;</li>
+              <li><strong>Supabase</strong> — armazenamento seguro dos dados enviados no formulário de agendamento;</li>
+              <li><strong>WhatsApp (Meta Platforms)</strong> — canal de mensagens para contato e agendamento;</li>
+              <li><strong>Google</strong> — Google Maps (mapa do consultório) e Google Analytics (medição de uso, de forma anônima e mediante o seu consentimento);</li>
+              <li><strong>Meta</strong> — Meta Pixel (mensuração de campanhas, mediante o seu consentimento).</li>
+            </ul>
 
             <h2>6. Cookies e ferramentas de análise</h2>
             <p>
@@ -110,9 +115,12 @@ export default function PrivacidadePage() {
             </p>
 
             <p className="mt-10 rounded-2xl border border-brand-ink/[0.07] bg-brand-beige/30 p-5 text-sm">
-              <strong>Aviso:</strong> este documento é um modelo inicial e deve ser
-              revisado por um(a) profissional jurídico(a) e adequado à realidade do
-              consultório antes da publicação definitiva.
+              <strong>Encarregado pelo tratamento de dados (DPO):</strong> em caso
+              de dúvidas ou solicitações relativas aos seus dados pessoais, entre em
+              contato pelo e-mail{" "}
+              <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>. Esta
+              política é revisada periodicamente para refletir as melhores práticas
+              de privacidade e a legislação vigente.
             </p>
           </LegalShell>
         </div>

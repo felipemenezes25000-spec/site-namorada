@@ -168,3 +168,57 @@ export function websiteSchema() {
     publisher: { "@id": `${siteConfig.url}/#dentist` },
   };
 }
+
+/** Schema da profissional (Person) — autoridade E-E-A-T para o Google. */
+export function personSchema(opts?: { sameAs?: string[]; alumniOf?: string[] }) {
+  const sameAs = [siteConfig.instagramUrl, ...(opts?.sameAs ?? [])].filter(
+    (u) => !isPlaceholder(u),
+  );
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": `${siteConfig.url}/#person`,
+    name: siteConfig.doctorName,
+    jobTitle: siteConfig.title,
+    description: localize(siteConfig.focus),
+    image: absoluteUrl("/dra-ana.webp"),
+    url: absoluteUrl("/sobre"),
+    worksFor: { "@id": `${siteConfig.url}/#dentist` },
+    knowsAbout: [
+      "Odontologia",
+      "Cirurgia oral",
+      "Clareamento dental",
+      "Prevenção odontológica",
+      "Estética do sorriso",
+    ],
+    ...(opts?.alumniOf?.length
+      ? { alumniOf: opts.alumniOf.map((name) => ({ "@type": "EducationalOrganization", name })) }
+      : {}),
+    ...(sameAs.length ? { sameAs } : {}),
+    hasCredential: {
+      "@type": "EducationalOccupationalCredential",
+      credentialCategory: "Registro profissional",
+      name: siteConfig.cro,
+    },
+  };
+}
+
+/** Catálogo de serviços/procedimentos — ajuda o Google a entender a oferta. */
+export function servicesSchema(items: { name: string; slug: string; excerpt: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `Tratamentos odontológicos — ${siteConfig.doctorName}`,
+    itemListElement: items.map((t, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "MedicalProcedure",
+        name: t.name,
+        description: localize(t.excerpt),
+        url: absoluteUrl(`/tratamentos/${t.slug}`),
+        provider: { "@id": `${siteConfig.url}/#dentist` },
+      },
+    })),
+  };
+}

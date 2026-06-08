@@ -1,6 +1,7 @@
 import { Quote, Star, User } from "lucide-react";
 import { testimonials } from "@/lib/content";
 import { siteConfig } from "@/lib/site-config";
+import { isPlaceholder } from "@/lib/seo";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { ButtonLink } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
@@ -10,9 +11,9 @@ export function Testimonials() {
     <section className="section-y bg-gradient-to-b from-brand-beige/40 to-brand-bone">
       <div className="container">
         <SectionHeading
-          eyebrow="Depoimentos"
+          eyebrow="Relatos de pacientes"
           title="O cuidado sentido por quem já foi atendido"
-          description="A experiência de cada paciente é única. Estes relatos refletem o tom do atendimento — humano, atento e sem pressa."
+          description="A experiência de cada paciente é única. Estes relatos refletem o tom do atendimento — humano, atento e sem pressa — e são compartilhados com a identidade preservada."
         />
 
         <div className="mt-14 grid gap-6 md:grid-cols-3">
@@ -40,18 +41,20 @@ export function Testimonials() {
           ))}
         </div>
 
-        <Reveal delay={0.1}>
-          <div className="mt-12 flex flex-col items-center gap-4 text-center">
-            <p className="text-sm text-brand-ink/60">
-              Já é paciente da Dra. Ana? Sua avaliação ajuda outras pessoas a
-              encontrarem um atendimento de confiança.
-            </p>
-            <ButtonLink href={siteConfig.address.reviewUrl} external variant="secondary" size="md">
-              <Star className="size-4 fill-brand-gold text-brand-gold" />
-              Avaliar no Google
-            </ButtonLink>
-          </div>
-        </Reveal>
+        {!isPlaceholder(siteConfig.address.reviewUrl) && (
+          <Reveal delay={0.1}>
+            <div className="mt-12 flex flex-col items-center gap-4 text-center">
+              <p className="text-sm text-brand-ink/60">
+                Já é paciente da Dra. Ana? Sua avaliação ajuda outras pessoas a
+                encontrarem um atendimento de confiança.
+              </p>
+              <ButtonLink href={siteConfig.address.reviewUrl} external variant="secondary" size="md">
+                <Star className="size-4 fill-brand-gold text-brand-gold" />
+                Avaliar no Google
+              </ButtonLink>
+            </div>
+          </Reveal>
+        )}
       </div>
     </section>
   );

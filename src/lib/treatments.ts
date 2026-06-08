@@ -259,7 +259,7 @@ export const treatments: Treatment[] = [
     ],
     benefits: [
       "Avaliação criteriosa antes de qualquer indicação cirúrgica",
-      "Técnica focada em conforto e ausência de dor durante o procedimento",
+      "Técnica e anestesia focadas no conforto e no controle da dor durante o procedimento",
       "Orientação completa sobre cuidados pré e pós-operatórios",
       "Acompanhamento próximo durante toda a recuperação",
     ],
@@ -270,7 +270,7 @@ export const treatments: Treatment[] = [
       { title: "Pós-operatório", description: "Orientações claras de cuidado, retornos para acompanhar a cicatrização e canal aberto para qualquer dúvida." },
     ],
     faqs: [
-      { q: "A cirurgia oral dói?", a: "Durante o procedimento, não. A cirurgia é realizada sob anestesia local, garantindo total conforto. No pós-operatório pode haver desconforto, controlado com a medicação orientada para o seu caso e acompanhamento próximo." },
+      { q: "A cirurgia oral dói?", a: "Durante o procedimento, a cirurgia é realizada sob anestesia local, com foco no seu conforto. No pós-operatório pode haver algum desconforto, controlado com a medicação orientada para o seu caso e acompanhamento próximo." },
       { q: "Quanto tempo leva a recuperação?", a: "Depende do procedimento e do organismo de cada pessoa. A maioria dos pacientes retoma a rotina em poucos dias. A recuperação completa é acompanhada até o final, com retornos para avaliar a cicatrização." },
       { q: "Como saber se realmente preciso da cirurgia?", a: "A indicação é definida após o exame clínico e a análise das imagens (radiografias ou tomografias). Quando existem alternativas, elas são apresentadas, e a decisão é tomada junto com você, considerando riscos, benefícios e os seus objetivos." },
     ],
