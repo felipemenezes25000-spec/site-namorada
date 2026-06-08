@@ -6,6 +6,7 @@ import { Cookie } from "lucide-react";
 
 const CONSENT_KEY = "abl_cookie_consent";
 const CONSENT_EVENT = "abl-consent-changed";
+const OPEN_EVENT = "abl-open-consent";
 
 export type ConsentState = "accepted" | "declined" | "pending";
 
@@ -15,6 +16,12 @@ export function getConsent(): ConsentState {
   const v = window.localStorage.getItem(CONSENT_KEY);
   if (v === "accepted" || v === "declined") return v;
   return "pending";
+}
+
+/** Reabre o banner para o usuário rever/revogar a decisão (direito LGPD). */
+export function openCookieSettings() {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new Event(OPEN_EVENT));
 }
 
 function setConsent(state: "accepted" | "declined") {
@@ -36,6 +43,9 @@ export function CookieConsent() {
 
   useEffect(() => {
     setOpen(getConsent() === "pending");
+    const reopen = () => setOpen(true);
+    window.addEventListener(OPEN_EVENT, reopen);
+    return () => window.removeEventListener(OPEN_EVENT, reopen);
   }, []);
 
   if (!open) return null;

@@ -174,6 +174,55 @@ export default async function TreatmentPage({ params }: { params: Params }) {
         </div>
       </section>
 
+      {/* Investimento — transparência sem cotar valores (ética CFO) */}
+      <section className="section-y bg-brand-bone">
+        <div className="container">
+          <div className="mx-auto max-w-3xl rounded-3xl border border-brand-ink/[0.07] bg-white p-8 shadow-card sm:p-10">
+            <p className="eyebrow flex items-center gap-3">
+              <span className="inline-block h-px w-7 bg-brand-gold/70" /> Investimento
+            </p>
+            <h2 className="mt-4 text-display-sm">Transparência sobre valores</h2>
+            <p className="mt-5 text-pretty leading-relaxed text-brand-ink/75">
+              O atendimento é particular. Como cada caso é único, o valor exato só é
+              definido após a avaliação — quando já se sabe, com clareza, o que de
+              fato é necessário. Por se tratar de saúde, não passamos orçamentos sem
+              antes examinar.
+            </p>
+            <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+              {[
+                "Orçamento apresentado após a avaliação, sem surpresas",
+                "Pagamento via Pix, cartão de débito e cartão de crédito",
+                "Plano com prioridades, no seu tempo",
+                "Sem pressão para fechar tratamento na hora",
+              ].map((b) => (
+                <li key={b} className="flex items-start gap-3 text-sm text-brand-ink/75">
+                  <Check className="mt-0.5 size-5 shrink-0 text-brand-green" strokeWidth={2} />
+                  {b}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Links de apoio — reduz fricção e cria jornada por intenção */}
+          <div className="mx-auto mt-8 grid max-w-3xl gap-4 sm:grid-cols-2">
+            <Link
+              href="/primeira-consulta"
+              className="group flex items-center justify-between gap-4 rounded-2xl border border-brand-ink/[0.07] bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-brand-gold/40 hover:shadow-card"
+            >
+              <span className="font-display text-lg text-brand-green">Como é a primeira consulta</span>
+              <ArrowUpRight className="size-5 shrink-0 text-brand-gold transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </Link>
+            <Link
+              href="/medo-de-dentista"
+              className="group flex items-center justify-between gap-4 rounded-2xl border border-brand-ink/[0.07] bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-brand-gold/40 hover:shadow-card"
+            >
+              <span className="font-display text-lg text-brand-green">Sente medo de dentista?</span>
+              <ArrowUpRight className="size-5 shrink-0 text-brand-gold transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <FAQSection
         items={t.faqs}
         eyebrow="Dúvidas sobre o tratamento"

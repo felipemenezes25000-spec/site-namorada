@@ -4,6 +4,7 @@ import { siteConfig, mainNav } from "@/lib/site-config";
 import { whatsappLink, waMessages } from "@/lib/whatsapp";
 import { treatments } from "@/lib/treatments";
 import { BrandSymbol } from "@/components/ui/logo";
+import { ManageCookiesButton } from "@/components/seo/manage-cookies-button";
 
 const legal = [
   { label: "Política de Privacidade", href: "/politica-de-privacidade" },
@@ -165,6 +166,7 @@ export function Footer() {
                 {l.label}
               </Link>
             ))}
+            <ManageCookiesButton className="hover:text-brand-bone" />
           </div>
         </div>
         <p className="mt-6 max-w-3xl text-[0.7rem] leading-relaxed text-brand-bone/65">

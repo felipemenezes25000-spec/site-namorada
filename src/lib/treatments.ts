@@ -153,8 +153,10 @@ export const treatments: Treatment[] = [
       { title: "Manutenção", description: "Orientações para preservar o resultado por mais tempo." },
     ],
     faqs: [
-      { q: "Clareamento dental dói?", a: "A maioria dos pacientes não sente dor. Pode haver uma sensibilidade leve e passageira, e o protocolo é sempre ajustado individualmente para garantir o seu conforto." },
+      { q: "Clareamento dental dói?", a: "A maioria dos pacientes não sente dor. Pode haver uma sensibilidade leve e passageira, e o protocolo é sempre ajustado individualmente para o seu conforto." },
+      { q: "Qual a diferença entre clareamento em consultório e caseiro?", a: "No de consultório, o gel é aplicado pela dentista, com resultado mais rápido. No caseiro, você usa moldeiras personalizadas em casa, no seu ritmo. Há também o protocolo combinado, que une os dois. A melhor opção para o seu caso é definida na avaliação." },
       { q: "Quanto tempo dura o resultado do clareamento?", a: "O resultado tem boa durabilidade, geralmente de um a três anos, mas pode variar conforme hábitos como consumo de café, chá, vinho tinto e cigarro. Manutenções periódicas ajudam a preservar o tom." },
+      { q: "Existe alguma contraindicação?", a: "Sim. Gestantes, menores de certa idade e quem tem cáries ativas, gengiva inflamada ou sensibilidade acentuada podem precisar de cuidados ou de adiar o procedimento. Por isso a avaliação prévia é indispensável." },
       { q: "Posso fazer clareamento se tenho restaurações ou facetas?", a: "Sim, mas o clareamento não age sobre restaurações, facetas ou coroas. Por isso, em alguns casos pode ser necessário trocar restaurações visíveis após o clareamento para harmonizar a cor do sorriso." },
     ],
     metaTitle: "Clareamento dental em [Cidade] — Dra. Ana Beatriz Lemos Souza",
@@ -271,6 +273,8 @@ export const treatments: Treatment[] = [
     ],
     faqs: [
       { q: "A cirurgia oral dói?", a: "Durante o procedimento, a cirurgia é realizada sob anestesia local, com foco no seu conforto. No pós-operatório pode haver algum desconforto, controlado com a medicação orientada para o seu caso e acompanhamento próximo." },
+      { q: "Preciso fazer radiografia ou tomografia antes?", a: "Quase sempre, sim. As imagens mostram a posição da raiz, dos nervos e das estruturas vizinhas, permitindo planejar a cirurgia com segurança. O exame necessário é orientado na avaliação." },
+      { q: "Como sei se o meu siso está inflamado?", a: "Sinais comuns são dor na região do fundo da boca, inchaço, gengiva avermelhada, dificuldade para abrir a boca ou para mastigar e, às vezes, mau gosto. Diante desses sinais, procure avaliação — em casos agudos, é uma urgência." },
       { q: "Quanto tempo leva a recuperação?", a: "Depende do procedimento e do organismo de cada pessoa. A maioria dos pacientes retoma a rotina em poucos dias. A recuperação completa é acompanhada até o final, com retornos para avaliar a cicatrização." },
       { q: "Como saber se realmente preciso da cirurgia?", a: "A indicação é definida após o exame clínico e a análise das imagens (radiografias ou tomografias). Quando existem alternativas, elas são apresentadas, e a decisão é tomada junto com você, considerando riscos, benefícios e os seus objetivos." },
     ],

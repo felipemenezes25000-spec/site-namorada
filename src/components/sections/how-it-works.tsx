@@ -19,8 +19,8 @@ export function HowItWorks() {
         <SectionHeading
           light
           eyebrow="Como funciona"
-          title="Do primeiro contato à sua avaliação, em passos simples"
-          description="Sem burocracia e sem etapas desnecessárias — um caminho claro até o cuidado que você procura."
+          title="Do primeiro contato à sua consulta, em passos simples"
+          description="Você não precisa chegar sabendo o que precisa. Sem burocracia e sem etapas desnecessárias — um caminho claro, no seu ritmo, até o cuidado que você procura."
         />
 
         <RevealGroup className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4" stagger={0.1}>
@@ -45,7 +45,7 @@ export function HowItWorks() {
         </RevealGroup>
 
         <Reveal delay={0.1}>
-          <div className="mt-14 flex justify-center">
+          <div className="mt-14 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <ButtonLink
               href={whatsappLink(waMessages.default)}
               external
@@ -54,6 +54,9 @@ export function HowItWorks() {
             >
               <MessageCircle className="size-5" strokeWidth={1.7} />
               Começar pelo WhatsApp
+            </ButtonLink>
+            <ButtonLink href="/primeira-consulta" variant="light" size="lg">
+              Ver como é a primeira consulta
             </ButtonLink>
           </div>
         </Reveal>

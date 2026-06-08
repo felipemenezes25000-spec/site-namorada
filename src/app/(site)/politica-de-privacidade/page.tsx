@@ -76,6 +76,14 @@ export default function PrivacidadePage() {
               <li><strong>Google</strong> — Google Maps (mapa do consultório) e Google Analytics (medição de uso, de forma anônima e mediante o seu consentimento);</li>
               <li><strong>Meta</strong> — Meta Pixel (mensuração de campanhas, mediante o seu consentimento).</li>
             </ul>
+            <p>
+              <strong>Transferência internacional:</strong> algumas dessas
+              ferramentas (como Google e Meta) podem processar dados em servidores
+              fora do Brasil. Esse tratamento ocorre apenas mediante o seu
+              consentimento e segue as salvaguardas previstas na LGPD (art. 33).
+              Você pode revogar o consentimento a qualquer momento em
+              <strong> Gerenciar cookies</strong>, no rodapé do site.
+            </p>
 
             <h2>6. Cookies e ferramentas de análise</h2>
             <p>
@@ -102,9 +110,11 @@ export default function PrivacidadePage() {
             <h2>8. Segurança e retenção</h2>
             <p>
               Adotamos medidas razoáveis para proteger os seus dados contra acesso
-              não autorizado. Mantemos as informações apenas pelo tempo necessário
-              às finalidades descritas ou conforme exigências legais aplicáveis à
-              área da saúde.
+              não autorizado. Os dados de contato enviados pelo formulário são
+              mantidos enquanto durar o relacionamento de atendimento e, depois,
+              pelo prazo necessário ao cumprimento de obrigações legais aplicáveis à
+              área da saúde. Encerradas essas finalidades, os dados são eliminados
+              ou anonimizados. Você pode solicitar a exclusão a qualquer momento.
             </p>
 
             <h2>9. Alterações</h2>
