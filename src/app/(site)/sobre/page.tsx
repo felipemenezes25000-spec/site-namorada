@@ -172,7 +172,7 @@ export default function SobrePage() {
               </p>
             </Reveal>
           </div>
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
               {
                 src: "/consultorio-1.png",
@@ -185,6 +185,10 @@ export default function SobrePage() {
               {
                 src: "/consultorio-3.png",
                 alt: "Ambiente do consultório da Dra. Ana Beatriz na Bela Vista, São Paulo — espaço moderno e acolhedor",
+              },
+              {
+                src: "/consultorio-4.jpg",
+                alt: "Dra. Ana Beatriz realizando procedimento cirúrgico com paramentação completa — dedicação e precisão clínica",
               },
             ].map((img, i) => (
               <Reveal key={img.src} delay={i * 0.08}>
