@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { CalendarDays } from "lucide-react";
 import { TrackedButtonLink } from "@/components/ui/tracked-button-link";
 import { Reveal } from "@/components/ui/reveal";
@@ -16,6 +17,21 @@ export function CTASection({
           {/* ornamentos */}
           <div aria-hidden className="pointer-events-none absolute -left-16 -top-16 size-64 rounded-full bg-brand-gold/10 blur-3xl" />
           <div aria-hidden className="pointer-events-none absolute -bottom-20 -right-10 size-72 rounded-full bg-brand-mint/10 blur-3xl" />
+
+          {/* Marca-d'água da logomarca — filigrana branca translúcida, à direita */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-12 top-1/2 hidden h-[150%] -translate-y-1/2 md:block"
+          >
+            <Image
+              src="/brand/lockup-full.png"
+              alt=""
+              width={520}
+              height={528}
+              sizes="24rem"
+              className="h-full w-auto opacity-[0.07] [filter:brightness(0)_invert(1)]"
+            />
+          </div>
           <svg
             aria-hidden
             viewBox="0 0 400 120"
