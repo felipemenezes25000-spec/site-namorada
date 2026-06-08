@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/primeira-consulta`, lastModified, changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/medo-de-dentista`, lastModified, changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/agendamento`, lastModified, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${base}/valores`, lastModified, changeFrequency: "yearly", priority: 0.7 },
     { url: `${base}/contato`, lastModified, changeFrequency: "yearly", priority: 0.7 },
     { url: `${base}/politica-de-privacidade`, lastModified, changeFrequency: "yearly", priority: 0.3 },
     { url: `${base}/termos-de-uso`, lastModified, changeFrequency: "yearly", priority: 0.3 },

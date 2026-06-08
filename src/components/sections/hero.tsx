@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ArrowRight, ShieldCheck, MapPin, HeartHandshake, CalendarCheck, Sparkles } from "lucide-react";
+import { ArrowRight, ShieldCheck, MapPin, HeartHandshake, CalendarCheck, Sparkles, Navigation } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
 import { ButtonLink } from "@/components/ui/button";
 import { HeroWhatsAppButton } from "./hero-whatsapp-button";
@@ -30,18 +30,18 @@ export function Hero() {
 
           {/* H1 estático = LCP imediato (sem animação que atrase o paint) */}
           <h1 className="mt-6 text-display-xl text-balance">
-            Cuidado odontológico{" "}
-            <span className="whitespace-nowrap italic text-brand-gold-ink">sem dor</span>:
-            a união entre saúde, estética e bem-estar.
+            Dentista particular em{" "}
+            <span className="whitespace-nowrap italic text-brand-gold-ink">{siteConfig.neighborhood}</span>{" "}
+            com atendimento acolhedor, claro e sem pressão.
           </h1>
 
           <p
             className="mt-6 max-w-prose2 text-pretty text-base leading-relaxed text-brand-ink/75 animate-fade-up sm:text-lg"
             style={{ animationDelay: "0.14s" }}
           >
-            Avaliação, limpeza, clareamento, restaurações, prevenção, cirurgia oral
-            e urgências. Atendimento particular com escuta, planejamento e
-            explicações claras antes de cada procedimento.
+            Consulta de 40 a 60 minutos com avaliação completa, explicação simples
+            e plano de tratamento individualizado. Prevenção, restaurações,
+            clareamento, cirurgia oral e urgências odontológicas.
           </p>
 
           <div
@@ -50,8 +50,12 @@ export function Hero() {
           >
             <HeroWhatsAppButton />
             <ButtonLink href="/tratamentos" variant="secondary" size="lg">
-              Conhecer tratamentos
+              Ver tratamentos
               <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={1.7} />
+            </ButtonLink>
+            <ButtonLink href={siteConfig.address.mapsDirectionsUrl} variant="secondary" size="lg" external>
+              <Navigation className="size-4" strokeWidth={1.7} />
+              Como chegar
             </ButtonLink>
           </div>
 
@@ -61,15 +65,15 @@ export function Hero() {
           >
             <li className="flex items-center gap-2">
               <HeartHandshake className="size-4 text-brand-green" strokeWidth={1.6} />
-              Atendimento humanizado
+              Consulta sem linha de produção
             </li>
             <li className="flex items-center gap-2">
               <ShieldCheck className="size-4 text-brand-green" strokeWidth={1.6} />
-              Planejamento individual
+              Diagnóstico antes de qualquer decisão
             </li>
             <li className="flex items-center gap-2">
               <MapPin className="size-4 text-brand-green" strokeWidth={1.6} />
-              {siteConfig.region}
+              {siteConfig.neighborhood}, {siteConfig.city}
             </li>
           </ul>
 

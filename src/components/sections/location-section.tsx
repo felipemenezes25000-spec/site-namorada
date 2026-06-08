@@ -17,7 +17,7 @@ export function LocationSection() {
           align="left"
           eyebrow="Localização"
           title="Um espaço acolhedor, pensado para o seu conforto"
-          description={`Atendimento em ${siteConfig.region}. Venha conhecer ou fale com a Dra. Ana para combinar o melhor horário.`}
+          description={`Consultório na ${siteConfig.neighborhood}, ${siteConfig.city} — com fácil acesso pela Av. Paulista. Venha conhecer ou fale com a Dra. Ana para combinar o melhor horário.`}
           className="max-w-3xl"
         />
 
@@ -111,9 +111,7 @@ export function LocationSection() {
                     <MapPin className="size-7" strokeWidth={1.5} />
                   </span>
                   <p className="max-w-xs text-sm text-brand-green/70">
-                    Mapa do consultório. Cole o link de incorporação do Google Maps em
-                    <code className="mx-1 rounded bg-white/70 px-1 text-xs">site-config.ts</code>
-                    para exibir aqui.
+                    {siteConfig.address.full}
                   </p>
                   <ButtonLink
                     href={siteConfig.address.mapsDirectionsUrl}
@@ -123,7 +121,7 @@ export function LocationSection() {
                     onClick={() => track("map_click", { location: "location_map_placeholder" })}
                   >
                     <Navigation className="size-4" strokeWidth={1.7} />
-                    Abrir no Google Maps
+                    Como chegar
                   </ButtonLink>
                 </div>
               )}

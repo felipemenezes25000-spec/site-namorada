@@ -76,12 +76,15 @@ export default function TermosPage() {
             <h2>7. Comunicação ética em odontologia</h2>
             <p>
               Este site segue o Código de Ética Odontológica e as normas de
-              publicidade do Conselho Federal de Odontologia (incluindo a Resolução
-              CFO-196/2019). Em conformidade com essas normas: não divulgamos
-              imagens de “antes e depois”, não prometemos resultados, não usamos
-              preços ou descontos como atrativo, não empregamos expressões
-              sensacionalistas e não divulgamos técnicas ou equipamentos como
-              exclusivos. Todo o conteúdo tem finalidade informativa e educativa,
+              publicidade do Conselho Federal de Odontologia, incluindo a Resolução
+              CFO-196/2019. Em conformidade com essas normas: não prometemos
+              resultados, não usamos preços ou descontos como atrativo, não
+              empregamos expressões sensacionalistas e não divulgamos técnicas ou
+              equipamentos como exclusivos. O uso de imagens clínicas de
+              diagnóstico e conclusão de tratamento, quando houver, seguirá
+              rigorosamente as normas do CFO/CRO-SP, com autorização formal do
+              paciente (TCLE), identificação profissional e sem promessa de
+              resultado. Todo o conteúdo tem finalidade informativa e educativa,
               sob responsabilidade técnica da profissional identificada neste site
               (CRO indicado no rodapé).
             </p>

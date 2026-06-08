@@ -22,40 +22,35 @@ export const siteConfig = {
   focus:
     "Odontologia preventiva, saúde bucal, estética do sorriso, cirurgia oral e atendimento humanizado.",
 
-  /** Cidade / bairro — usados no SEO local. Edite para a região real. */
-  city: "[Cidade]",
+  /** Cidade / bairro — usados no SEO local. */
+  city: "São Paulo",
   state: "SP",
-  neighborhood: "[Bairro]",
-  region: "[Cidade] e região",
+  neighborhood: "Bela Vista",
+  region: "São Paulo",
 
   /** Contato. */
-  // WhatsApp em formato internacional, somente números: 55 + DDD + número.
-  whatsapp: "5500000000000",
-  whatsappDisplay: "[(00) 00000-0000]",
-  phone: "5500000000000",
-  phoneDisplay: "[(00) 00000-0000]",
+  whatsapp: "5511939222289",
+  whatsappDisplay: "(11) 93922-2289",
+  phone: "5511939222289",
+  phoneDisplay: "(11) 93922-2289",
   email: "draanabeatrizodontologia@gmail.com",
-  instagram: "[@dra.anabeatrizlemos]",
-  instagramUrl: "https://instagram.com/[dra.anabeatrizlemos]",
+  instagram: "@dra.anabeatrizodonto",
+  instagramUrl: "https://www.instagram.com/dra.anabeatrizodonto/",
 
   /** Endereço do consultório. */
   address: {
-    street: "[Rua / Avenida, número]",
-    complement: "[Sala / Conjunto]",
-    neighborhood: "[Bairro]",
-    city: "[Cidade]",
+    street: "R. Itapeva, 286",
+    complement: "",
+    neighborhood: "Bela Vista",
+    city: "São Paulo",
     state: "SP",
-    zip: "[00000-000]",
-    full: "[Rua Exemplo, 000 — Sala 00], [Bairro], [Cidade] - SP",
-    // Cole aqui o link de incorporação do Google Maps (Compartilhar > Incorporar um mapa).
-    mapsEmbedUrl: "",
-    // Link "Como chegar" — substitua pelo link do seu Google Business Profile.
-    mapsDirectionsUrl: "https://www.google.com/maps/search/?api=1&query=Dra.+Ana+Beatriz+Lemos+Souza+Odontologia",
-    // Link para avaliações no Google (cole o link curto do seu perfil).
+    zip: "01332-000",
+    full: "R. Itapeva, 286 — Bela Vista, São Paulo - SP",
+    mapsEmbedUrl: "https://www.google.com/maps?q=-23.5586695,-46.6521676&output=embed",
+    mapsDirectionsUrl: "https://www.google.com/maps/dir/?api=1&destination=-23.5586695,-46.6521676",
+    // Link para avaliações no Google — atualize com o Place ID real quando disponível.
     reviewUrl: "https://search.google.com/local/writereview?placeid=[SEU_PLACE_ID]",
-    // Coordenadas do consultório (Google Maps > clicar no local > copiar lat,lng).
-    // Deixe vazio para omitir do schema. Ex.: lat: "-23.5614", lng: "-46.6559".
-    geo: { lat: "", lng: "" },
+    geo: { lat: "-23.5586695", lng: "-46.6521676" },
   },
 
   /** Horários de atendimento (editável). */
@@ -67,7 +62,7 @@ export const siteConfig = {
 
   /** URL pública canônica (também em NEXT_PUBLIC_SITE_URL). */
   url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-    "https://www.draanabeatrizlemos.com.br",
+    "https://www.draanabeatrizodonto.com.br",
 } as const;
 
 /** Navegação principal. */

@@ -154,6 +154,56 @@ export default function SobrePage() {
         </div>
       </section>
 
+      {/* Consultório */}
+      <section className="section-y bg-gradient-to-b from-brand-beige/40 to-brand-bone">
+        <div className="container">
+          <div className="max-w-2xl">
+            <Reveal>
+              <p className="eyebrow flex items-center gap-3">
+                <span className="inline-block h-px w-7 bg-brand-gold/70" /> O consultório
+              </p>
+              <h2 className="mt-4 text-display-sm">
+                Um espaço pensado para o seu conforto
+              </h2>
+              <p className="mt-5 text-pretty text-lg leading-relaxed text-brand-ink/75">
+                Ambiente moderno, com luz natural e vista panorâmica, na região
+                da Bela Vista em São Paulo. Aqui, cada detalhe foi planejado para
+                que você se sinta acolhido(a) desde o primeiro momento.
+              </p>
+            </Reveal>
+          </div>
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              {
+                src: "/consultorio-1.png",
+                alt: "Consultório da Dra. Ana Beatriz — mesa de atendimento com cadeira odontológica e vista para a cidade de São Paulo",
+              },
+              {
+                src: "/consultorio-2.png",
+                alt: "Vista ampla do consultório — equipamento odontológico moderno, marcenaria em madeira e janelas com luz natural",
+              },
+              {
+                src: "/consultorio-3.png",
+                alt: "Ambiente do consultório da Dra. Ana Beatriz na Bela Vista, São Paulo — espaço moderno e acolhedor",
+              },
+            ].map((img, i) => (
+              <Reveal key={img.src} delay={i * 0.08}>
+                <div className="relative aspect-[3/4] overflow-hidden rounded-3xl bg-brand-green/5 shadow-card">
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Compromisso */}
       <section className="bg-brand-bone pb-4">
         <div className="container">

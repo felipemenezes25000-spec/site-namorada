@@ -57,7 +57,9 @@ const care = [
   "Explicação de cada passo, em linguagem simples",
   "Controle da dor e anestesia aplicada com cuidado para o seu conforto",
   "Ritmo respeitado — nada é feito com pressa",
-  "Você pode pedir uma pausa a qualquer momento",
+  "Você pode pedir uma pausa ou combinar um sinal a qualquer momento",
+  "A primeira consulta pode ser apenas uma conversa e avaliação",
+  "Você não precisa resolver tudo no mesmo dia",
   "Ambiente calmo e acolhedor, do primeiro contato ao retorno",
 ];
 
@@ -73,6 +75,18 @@ const faqs = [
   {
     q: "Faz muito tempo que não vou ao dentista. Tem problema?",
     a: "Nenhum. Retomar os cuidados é sempre possível, e a avaliação serve para organizar prioridades com calma, sem cobrança.",
+  },
+  {
+    q: "A primeira consulta já envolve procedimento?",
+    a: "Não necessariamente. A primeira consulta pode ser apenas uma conversa e avaliação. Nada é feito sem a sua autorização e sem que você esteja confortável.",
+  },
+  {
+    q: "Posso conversar antes de decidir marcar?",
+    a: "Sim. Você pode falar pelo WhatsApp para tirar dúvidas, contar o que sente e entender como funciona antes de agendar. Sem compromisso.",
+  },
+  {
+    q: "Nada é feito sem eu saber o que vai acontecer?",
+    a: "Nada. Cada etapa é explicada antes de começar, em linguagem simples, para que você tenha clareza e controle sobre o que acontece.",
   },
 ];
 
@@ -119,7 +133,7 @@ export default function MedoDeDentistaPage() {
             Quero dar o primeiro passo
           </TrackedButtonLink>
           <TrackedButtonLink
-            href={whatsappLink(waMessages.firstVisit)}
+            href={whatsappLink(waMessages.fear)}
             external
             variant="whatsapp"
             size="md"
@@ -244,7 +258,7 @@ export default function MedoDeDentistaPage() {
         items={faqs}
         eyebrow="Dúvidas sobre o atendimento"
         title="Perguntas frequentes"
-        whatsappMessage={waMessages.firstVisit}
+        whatsappMessage={waMessages.fear}
       />
 
       <CTASection />

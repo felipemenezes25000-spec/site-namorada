@@ -20,7 +20,7 @@ export const homeFaqs = [
   },
   {
     q: "Quais são as formas de pagamento?",
-    a: "Aceitamos PIX, cartão de crédito e cartão de débito.",
+    a: "Pix, cartão de crédito e cartão de débito. O parcelamento no crédito está disponível conforme as condições da operadora do cartão.",
   },
   {
     q: "A Dra. Ana atende crianças?",
@@ -28,15 +28,55 @@ export const homeFaqs = [
   },
   {
     q: "Quais são as áreas de atuação da Dra. Ana?",
-    a: "A Dra. Ana atua nas seguintes áreas: dentística, restaurações, clareamento dental, cirurgias odontológicas, prevenção e profilaxia (limpeza dental).",
+    a: "Dentística, restaurações, clareamento dental, cirurgia oral (incluindo extração de sisos), prevenção e profilaxia (limpeza dental) e atendimento de urgências odontológicas.",
   },
   {
     q: "A Dra. Ana realiza atendimentos de urgência?",
-    a: "Sim. Entre em contato para verificar a disponibilidade e receber orientações sobre o atendimento de urgência.",
+    a: "Sim, conforme disponibilidade de agenda. Entre em contato pelo WhatsApp descrevendo o que você está sentindo para receber orientação e agendar o atendimento o quanto antes.",
   },
   {
     q: "É possível receber um orçamento antes da consulta?",
-    a: "Não. Cada paciente possui necessidades específicas que só podem ser avaliadas adequadamente durante a consulta odontológica. Por se tratar de um atendimento relacionado à saúde, não é possível fornecer valores ou orçamentos prévios sem uma avaliação profissional. Após a consulta e o diagnóstico, a Dra. Ana apresenta o plano de tratamento completo e o respectivo orçamento de forma transparente.",
+    a: "Não é possível passar orçamento sem avaliação clínica, porque cada caso precisa ser examinado individualmente. Após a consulta, a Dra. Ana apresenta o plano de tratamento completo e o respectivo orçamento de forma transparente, sem pressão para fechar na hora.",
+  },
+  {
+    q: "Quanto dura a primeira consulta?",
+    a: "De 40 a 60 minutos, em média. O tempo é dedicado para avaliação completa, diagnóstico claro e apresentação do plano de cuidado — sem pressa.",
+  },
+  {
+    q: "Preciso levar exames na primeira consulta?",
+    a: "Se você tiver radiografias ou exames recentes, leve — ajudam no diagnóstico. Se não tiver, o que for necessário é solicitado na própria consulta.",
+  },
+  {
+    q: "O consultório tem estacionamento?",
+    a: "O consultório fica na R. Itapeva, 286 — Bela Vista, próximo à Av. Paulista. Há estacionamentos conveniados e rotativos na região. Consulte a página de localização para mais detalhes sobre como chegar.",
+  },
+  {
+    q: "O consultório é acessível para pessoas com mobilidade reduzida?",
+    a: "Sim. O consultório conta com acesso adequado. Se você tiver alguma necessidade específica, entre em contato pelo WhatsApp para que possamos orientá-lo(a).",
+  },
+  {
+    q: "A consulta tem retorno incluído?",
+    a: "Os retornos de acompanhamento fazem parte do plano de tratamento. Após a avaliação, a Dra. Ana explica quais retornos estão previstos para o seu caso.",
+  },
+  {
+    q: "Posso parcelar o tratamento?",
+    a: "O pagamento pode ser feito via Pix, débito ou crédito. No cartão de crédito, o parcelamento segue as condições da operadora do seu cartão.",
+  },
+  {
+    q: "O clareamento dental causa sensibilidade?",
+    a: "A maioria dos pacientes não sente dor. Pode haver uma sensibilidade leve e passageira, e o protocolo é sempre ajustado individualmente para o seu conforto.",
+  },
+  {
+    q: "Limpeza dental dói?",
+    a: "O objetivo é que seja confortável. A técnica prioriza o conforto e, quando há sensibilidade, costuma ser leve e passageira, diminuindo em poucas horas.",
+  },
+  {
+    q: "Extração de siso dói?",
+    a: "O procedimento é realizado com anestesia local, com foco no conforto. No pós-operatório pode haver desconforto, controlado com a medicação orientada e acompanhamento próximo da Dra. Ana.",
+  },
+  {
+    q: "Quando devo procurar atendimento de urgência?",
+    a: "Dor intensa ou latejante, dente quebrado ou avulsionado, sangramento que não para, inchaço no rosto ou na gengiva, siso inflamado ou restauração que caiu. Fale pelo WhatsApp para orientação imediata.",
   },
 ];
 
@@ -57,12 +97,12 @@ export const careNeeds: { icon: LucideIcon; title: string; description: string; 
 
 /** Diferenciais (seção dedicada). */
 export const differentials: { icon: LucideIcon; title: string; description: string }[] = [
-  { icon: Stethoscope, title: "Atendimento individualizado", description: "Cada consulta tem o tempo que você precisa, com atenção e dedicação exclusivas, do início ao fim." },
-  { icon: MessageCircle, title: "Explicação clara antes de tudo", description: "Você entende cada etapa antes de qualquer procedimento, sem termos confusos." },
-  { icon: Smile, title: "Foco no conforto e no controle da dor", description: "Técnicas e anestesia pensadas para o máximo de conforto e o controle da dor em cada etapa. A Dra. Ana preza por uma odontologia com o mínimo de desconforto, do início ao fim." },
-  { icon: Sparkles, title: "Estética com saúde", description: "Resultados pensados para parecer naturais — combinando com o seu rosto, não um branco artificial. A saúde bucal vem sempre primeiro." },
-  { icon: HeartHandshake, title: "Experiência acolhedora", description: "Você pode pedir uma pausa a qualquer momento e tirar dúvidas sem se sentir apressado — do primeiro contato ao retorno." },
-  { icon: CalendarHeart, title: "Comunicação simples", description: "Dúvidas, agendamentos e retornos resolvidos com facilidade pelo WhatsApp." },
+  { icon: Stethoscope, title: "Consulta de 40 a 60 minutos", description: "Cada consulta tem o tempo que precisa — sem atendimento em linha de produção. Atenção e dedicação exclusivas, do início ao fim." },
+  { icon: MessageCircle, title: "Diagnóstico antes de qualquer decisão", description: "Você entende o que foi encontrado, em linguagem simples, antes de decidir qualquer procedimento. Sem termos confusos." },
+  { icon: Smile, title: "Controle da dor em cada etapa", description: "Anestesia aplicada com técnica e cuidado. Você pode pedir uma pausa a qualquer momento e combinar sinais de conforto." },
+  { icon: Sparkles, title: "Orçamento após avaliação, sem pressão", description: "Plano de tratamento com etapas e investimento apresentados de forma transparente. Você decide no seu tempo, sem pressão para fechar na hora." },
+  { icon: HeartHandshake, title: "Atendimento particular com Pix, débito e crédito", description: "Sem convênio. O valor reflete o tempo e a dedicação de cada consulta. Pagamento via Pix, débito ou crédito." },
+  { icon: CalendarHeart, title: "WhatsApp direto com a Dra. Ana", description: "Dúvidas, agendamentos e retornos resolvidos com facilidade. Urgências avaliadas conforme disponibilidade." },
 ];
 
 /** Passos "Como funciona". */

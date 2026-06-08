@@ -16,6 +16,7 @@ const supportNav = [
   { label: "Urgência odontológica", href: "/urgencia-odontologica" },
   { label: "Primeira consulta", href: "/primeira-consulta" },
   { label: "Medo de dentista", href: "/medo-de-dentista" },
+  { label: "Como funcionam os valores", href: "/valores" },
 ];
 
 export function Footer() {

@@ -35,4 +35,16 @@ export const waMessages = {
   /** Primeira consulta / quem está há tempos sem ir ao dentista. */
   firstVisit:
     "Olá, Dra. Ana! Faz um tempo que não vou ao dentista e gostaria de agendar uma primeira consulta com tranquilidade.",
+
+  /** Paciente com medo/ansiedade de dentista. */
+  fear:
+    "Olá, Dra. Ana! Tenho um pouco de receio de ir ao dentista e gostaria de conversar antes de marcar uma consulta.",
+
+  /** Clareamento dental específico. */
+  whitening:
+    "Olá, Dra. Ana! Tenho interesse em clareamento dental e gostaria de saber como funciona a avaliação.",
+
+  /** Localização / como chegar. */
+  location:
+    "Olá, Dra. Ana! Vim pelo site e gostaria de confirmar o endereço e horários de atendimento.",
 } as const;
