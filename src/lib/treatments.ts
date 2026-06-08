@@ -75,9 +75,9 @@ export const treatments: Treatment[] = [
       { title: "Plano de cuidado", description: "Um caminho personalizado, com prioridades e próximos passos definidos junto com você." },
     ],
     faqs: [
-      { q: "A avaliação dói?", a: "Não. É um exame tranquilo, sem procedimentos invasivos. Caso algo precise ser feito, isso será conversado e agendado com antecedência." },
-      { q: "Preciso levar exames antigos?", a: "Se você tiver radiografias ou exames recentes, leve — eles ajudam. Mas não se preocupe se não tiver; o que for necessário é solicitado na consulta." },
-      { q: "Já saio com tudo resolvido?", a: "A avaliação define o plano. Procedimentos costumam ser agendados em consultas seguintes, respeitando o seu tempo e suas prioridades." },
+      { q: "Como é a primeira consulta com a Dra. Ana?", a: "Começa com uma conversa para entender o que te trouxe e a sua história. Em seguida, é feito o exame clínico detalhado e, quando indicado, são solicitados exames complementares. Ao final, você recebe um diagnóstico claro e a proposta de plano de tratamento." },
+      { q: "Quanto tempo dura a consulta de avaliação?", a: "Em média de 40 a 60 minutos. O tempo é dedicado para que tudo seja avaliado com calma e para que você consiga esclarecer todas as dúvidas antes de qualquer decisão." },
+      { q: "Preciso levar exames anteriores ou radiografias?", a: "Se você já tem radiografias ou exames recentes, leve — eles ajudam no diagnóstico. Mas não se preocupe se não tiver: o que for necessário é solicitado durante a consulta." },
     ],
     metaTitle: "Avaliação odontológica em [Cidade] — Dra. Ana Beatriz Lemos Souza",
     metaDescription:
@@ -114,9 +114,9 @@ export const treatments: Treatment[] = [
       { title: "Orientação", description: "Dicas práticas de higiene personalizadas para a sua rotina." },
     ],
     faqs: [
-      { q: "Com que frequência devo fazer limpeza?", a: "Em geral, a cada seis meses — mas o intervalo ideal é definido na avaliação, de acordo com a sua saúde bucal e seus hábitos." },
-      { q: "A limpeza enfraquece os dentes?", a: "Não. A limpeza remove o tártaro, que é prejudicial. O esmalte do dente é preservado durante todo o procedimento." },
-      { q: "Vou sentir sensibilidade depois?", a: "Pode haver uma leve sensibilidade temporária, que costuma passar em pouco tempo. A técnica é delicada justamente para minimizar o desconforto." },
+      { q: "A limpeza dental dói?", a: "Não. A técnica utilizada prioriza o seu conforto durante todo o procedimento. Após a limpeza, pode haver uma leve sensibilidade temporária, que costuma passar em poucas horas." },
+      { q: "Quanto tempo dura a limpeza?", a: "Em geral, entre 40 minutos e 1 hora, dependendo da quantidade de cálculo dental acumulado e do estado das gengivas." },
+      { q: "De quanto em quanto tempo devo fazer a limpeza?", a: "A recomendação geral é a cada seis meses, mas o intervalo ideal é definido durante a consulta, conforme a sua saúde bucal e os seus hábitos." },
     ],
     metaTitle: "Limpeza dental em [Cidade] — Dra. Ana Beatriz Lemos Souza",
     metaDescription:
@@ -153,9 +153,9 @@ export const treatments: Treatment[] = [
       { title: "Manutenção", description: "Orientações para preservar o resultado por mais tempo." },
     ],
     faqs: [
-      { q: "Clareamento dental dói?", a: "A maioria das pessoas sente, no máximo, uma sensibilidade leve e passageira. O protocolo é ajustado justamente para deixar a experiência confortável." },
-      { q: "O resultado é permanente?", a: "O clareamento tem boa durabilidade, mas pode ser influenciado por hábitos como café, chá e cigarro. Manutenções periódicas ajudam a preservar o tom." },
-      { q: "Qualquer pessoa pode clarear os dentes?", a: "É necessário avaliar antes. Algumas situações pedem cuidados específicos, e por isso a avaliação é sempre o primeiro passo." },
+      { q: "Clareamento dental dói?", a: "A maioria dos pacientes não sente dor. Pode haver uma sensibilidade leve e passageira, e o protocolo é sempre ajustado individualmente para garantir o seu conforto." },
+      { q: "Quanto tempo dura o resultado do clareamento?", a: "O resultado tem boa durabilidade, geralmente de um a três anos, mas pode variar conforme hábitos como consumo de café, chá, vinho tinto e cigarro. Manutenções periódicas ajudam a preservar o tom." },
+      { q: "Posso fazer clareamento se tenho restaurações ou facetas?", a: "Sim, mas o clareamento não age sobre restaurações, facetas ou coroas. Por isso, em alguns casos pode ser necessário trocar restaurações visíveis após o clareamento para harmonizar a cor do sorriso." },
     ],
     metaTitle: "Clareamento dental em [Cidade] — Dra. Ana Beatriz Lemos Souza",
     metaDescription:
@@ -192,9 +192,9 @@ export const treatments: Treatment[] = [
       { title: "Ajuste final", description: "Conferência da mordida e do polimento para um acabamento confortável." },
     ],
     faqs: [
-      { q: "A restauração é perceptível?", a: "O objetivo é que não seja. Os materiais atuais permitem reproduzir a cor e o brilho do dente natural, deixando o reparo discreto." },
-      { q: "Quanto tempo dura uma restauração?", a: "A durabilidade depende do caso e dos cuidados de higiene. Com acompanhamento e manutenção, as restaurações têm boa longevidade." },
-      { q: "Preciso trocar restaurações antigas?", a: "Nem sempre. Na avaliação verificamos se há infiltração, desgaste ou questão estética que justifique a troca." },
+      { q: "A restauração é perceptível depois de pronta?", a: "O objetivo é justamente o contrário: os materiais atuais permitem reproduzir a cor e o brilho do dente natural, deixando o reparo discreto e harmonioso." },
+      { q: "Quanto tempo dura uma restauração?", a: "A durabilidade depende do caso, do material utilizado e dos seus cuidados de higiene. Com acompanhamento e manutenção, as restaurações têm boa longevidade." },
+      { q: "Posso comer normalmente depois do procedimento?", a: "Sim, na maioria dos casos a alimentação pode ser retomada logo após o procedimento. A Dra. Ana orienta cada caso individualmente, conforme o tipo de restauração realizada." },
     ],
     metaTitle: "Restaurações dentárias em [Cidade] — Dra. Ana Beatriz Lemos Souza",
     metaDescription:
@@ -231,9 +231,9 @@ export const treatments: Treatment[] = [
       { title: "Acompanhamento", description: "Definição da melhor frequência de retorno para manter tudo em ordem." },
     ],
     faqs: [
-      { q: "De quanto em quanto tempo devo retornar?", a: "Costuma ser a cada seis meses, mas o intervalo é individual e definido conforme a sua saúde bucal e seus hábitos." },
-      { q: "Prevenção vale a pena mesmo sem dor?", a: "Sim — e principalmente sem dor. Muitas alterações são silenciosas no começo, e o acompanhamento permite agir cedo, de forma simples." },
-      { q: "Crianças também precisam de prevenção?", a: "Sim. O acompanhamento desde cedo ajuda a criar bons hábitos e a manter a saúde bucal em todas as fases." },
+      { q: "Com que frequência devo ir ao dentista para prevenção?", a: "Geralmente, a cada seis meses. O intervalo ideal é individual e definido conforme a sua saúde bucal e os seus hábitos durante a consulta." },
+      { q: "Prevenção vale a pena mesmo sem dor ou queixa?", a: "Sim, principalmente sem dor. Muitas alterações são silenciosas no início, e o acompanhamento regular permite identificar e tratar pequenos problemas antes que se tornem maiores." },
+      { q: "A partir de qual idade as crianças podem fazer acompanhamento?", a: "A Dra. Ana atende crianças a partir de 7 anos. O acompanhamento desde cedo ajuda a criar hábitos saudáveis e a prevenir problemas ao longo da vida." },
     ],
     metaTitle: "Prevenção odontológica em [Cidade] — Dra. Ana Beatriz Lemos Souza",
     metaDescription:
@@ -270,9 +270,9 @@ export const treatments: Treatment[] = [
       { title: "Pós-operatório", description: "Orientações claras de cuidado, retornos para acompanhar a cicatrização e canal aberto para qualquer dúvida." },
     ],
     faqs: [
-      { q: "A cirurgia dói?", a: "O procedimento é realizado sob anestesia, sem dor durante. No pós-operatório pode haver desconforto, controlado com a medicação orientada para o seu caso e acompanhado de perto." },
-      { q: "Quanto tempo leva a recuperação?", a: "Depende do procedimento e do seu organismo. A maioria das pessoas retoma a rotina em poucos dias, e a recuperação completa é acompanhada até o final." },
-      { q: "Como saber se realmente preciso da cirurgia?", a: "A indicação é definida na avaliação, com base no exame clínico e em imagens. Quando existem alternativas, elas são apresentadas — e a decisão é tomada junto com você, considerando riscos e benefícios." },
+      { q: "A cirurgia oral dói?", a: "Durante o procedimento, não. A cirurgia é realizada sob anestesia local, garantindo total conforto. No pós-operatório pode haver desconforto, controlado com a medicação orientada para o seu caso e acompanhamento próximo." },
+      { q: "Quanto tempo leva a recuperação?", a: "Depende do procedimento e do organismo de cada pessoa. A maioria dos pacientes retoma a rotina em poucos dias. A recuperação completa é acompanhada até o final, com retornos para avaliar a cicatrização." },
+      { q: "Como saber se realmente preciso da cirurgia?", a: "A indicação é definida após o exame clínico e a análise das imagens (radiografias ou tomografias). Quando existem alternativas, elas são apresentadas, e a decisão é tomada junto com você, considerando riscos, benefícios e os seus objetivos." },
     ],
     metaTitle: "Cirurgia oral em [Cidade] — Dra. Ana Beatriz Lemos Souza",
     metaDescription:
