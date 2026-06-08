@@ -20,7 +20,7 @@ export const siteConfig = {
   title: "Cirurgiã-Dentista",
   /** Foco de atuação — usado em textos e SEO. */
   focus:
-    "Odontologia preventiva, estética do sorriso, saúde bucal e atendimento humanizado, com interesse em cirurgia oral.",
+    "Odontologia preventiva, saúde bucal, estética do sorriso, cirurgia oral e atendimento humanizado.",
 
   /** Cidade / bairro — usados no SEO local. Edite para a região real. */
   city: "[Cidade]",

@@ -15,13 +15,13 @@ import { cn } from "@/lib/utils";
 export const metadata: Metadata = buildMetadata({
   title: "Tratamentos odontológicos",
   description:
-    "Avaliação, limpeza, clareamento, restaurações, prevenção e estética do sorriso em [Cidade]. Conheça os tratamentos da Dra. Ana Beatriz Lemos Souza e agende pelo WhatsApp.",
+    "Avaliação, limpeza, clareamento, restaurações, prevenção e cirurgia oral em [Cidade]. Conheça os tratamentos da Dra. Ana Beatriz Lemos Souza e agende pelo WhatsApp.",
   path: "/tratamentos",
   keywords: [
     `tratamentos odontológicos em ${siteConfig.city}`,
     `limpeza dental em ${siteConfig.city}`,
     `clareamento dental em ${siteConfig.city}`,
-    `estética do sorriso em ${siteConfig.city}`,
+    `cirurgia oral em ${siteConfig.city}`,
   ],
 });
 

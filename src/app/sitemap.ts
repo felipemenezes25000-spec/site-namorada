@@ -5,7 +5,7 @@ import { treatmentSlugs } from "@/lib/treatments";
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = siteConfig.url;
   // Data fixa para build determinístico — atualize manualmente se desejar.
-  const lastModified = new Date("2026-06-07");
+  const lastModified = new Date("2026-06-08");
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${base}/`, lastModified, changeFrequency: "monthly", priority: 1 },

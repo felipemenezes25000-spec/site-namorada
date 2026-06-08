@@ -17,7 +17,7 @@ import { CTASection } from "@/components/sections/cta-section";
 export const metadata: Metadata = buildMetadata({
   title: `${siteConfig.doctorName} — ${siteConfig.title} em ${siteConfig.city}`,
   description:
-    "Odontologia humanizada em [Cidade]: avaliação, limpeza, clareamento, restaurações, prevenção e estética do sorriso. Atendimento acolhedor e planejamento individual. Agende pelo WhatsApp.",
+    "Odontologia humanizada em [Cidade]: avaliação, limpeza, clareamento, restaurações, prevenção e cirurgia oral. Atendimento acolhedor e planejamento individual. Agende pelo WhatsApp.",
   path: "/",
   keywords: [
     `dentista em ${siteConfig.city}`,

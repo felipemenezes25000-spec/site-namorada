@@ -6,7 +6,6 @@ import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { whatsappLink, waMessages } from "@/lib/whatsapp";
 import { JsonLd } from "@/components/seo/json-ld";
 import { PageHero } from "@/components/sections/page-hero";
-import { Differentials } from "@/components/sections/differentials";
 import { CTASection } from "@/components/sections/cta-section";
 import { Reveal } from "@/components/ui/reveal";
 import { ButtonLink } from "@/components/ui/button";
@@ -174,8 +173,6 @@ export default function SobrePage() {
           </div>
         </div>
       </section>
-
-      <Differentials />
 
       <CTASection />
     </>

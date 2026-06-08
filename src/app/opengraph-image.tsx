@@ -73,8 +73,8 @@ export default function OpengraphImage() {
               lineHeight: 1.35,
             }}
           >
-            Cuidado odontológico humanizado para um sorriso natural, saudável e
-            seguro.
+            Cuidado odontológico sem dor — a união entre saúde, estética e
+            bem-estar.
           </div>
         </div>
 

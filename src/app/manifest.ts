@@ -6,7 +6,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: `${siteConfig.doctorName} — ${siteConfig.title}`,
     short_name: "Dra. Ana Beatriz",
     description:
-      "Odontologia humanizada: avaliação, limpeza, clareamento, prevenção e estética do sorriso.",
+      "Odontologia humanizada: avaliação, limpeza, clareamento, prevenção, restaurações e cirurgia oral.",
     start_url: "/",
     display: "standalone",
     background_color: "#FCFCFC",

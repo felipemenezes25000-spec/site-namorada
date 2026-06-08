@@ -1,10 +1,27 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Script from "next/script";
+import { getConsent, subscribeConsent } from "./cookie-consent";
 
 /**
- * Carrega GA4, Google Tag Manager e Meta Pixel SOMENTE se os IDs
- * estiverem definidos no ambiente. Sem IDs, nada é injetado.
+ * Carrega GA4, Google Tag Manager e Meta Pixel SOMENTE se:
+ *  1) os IDs estiverem definidos no ambiente; E
+ *  2) o usuário deu consentimento via banner LGPD.
+ *
+ * Sem consentimento (ou em estado "pending"/"declined"), NADA é injetado —
+ * cumprindo LGPD/CMP por padrão "opt-in".
  */
 export function Analytics() {
+  const [consented, setConsented] = useState(false);
+
+  useEffect(() => {
+    setConsented(getConsent() === "accepted");
+    return subscribeConsent((state) => setConsented(state === "accepted"));
+  }, []);
+
+  if (!consented) return null;
+
   const ga = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
   const pixel = process.env.NEXT_PUBLIC_META_PIXEL_ID;
   const gtm = process.env.NEXT_PUBLIC_GTM_ID;

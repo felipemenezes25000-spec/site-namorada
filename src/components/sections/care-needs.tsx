@@ -1,6 +1,5 @@
-import { ArrowRight, MessageCircle } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { careNeeds } from "@/lib/content";
-import { whatsappLink, waMessages } from "@/lib/whatsapp";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { ButtonLink } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
@@ -37,14 +36,10 @@ export function CareNeeds() {
         </div>
 
         <Reveal delay={0.1}>
-          <div className="mt-12 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <div className="mt-12 flex justify-center">
             <ButtonLink href="/agendamento" variant="primary" size="md">
               Quero agendar minha avaliação
               <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={1.7} />
-            </ButtonLink>
-            <ButtonLink href={whatsappLink(waMessages.questions)} external variant="secondary" size="md">
-              <MessageCircle className="size-4" strokeWidth={1.7} />
-              Tirar dúvidas no WhatsApp
             </ButtonLink>
           </div>
         </Reveal>

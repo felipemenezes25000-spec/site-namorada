@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Montserrat } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/lib/site-config";
 import { Analytics } from "@/components/seo/analytics";
+import { CookieConsent } from "@/components/seo/cookie-consent";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.doctorName}`,
   },
   description:
-    "Odontologia humanizada com foco em saúde bucal, prevenção e estética do sorriso. Avaliação, limpeza, clareamento e mais. Agende pelo WhatsApp.",
+    "Odontologia humanizada com foco em saúde bucal, prevenção e cirurgia oral. Avaliação, limpeza, clareamento, restaurações e mais. Agende pelo WhatsApp.",
   applicationName: siteConfig.doctorName,
   authors: [{ name: siteConfig.doctorName }],
   creator: siteConfig.doctorName,
@@ -54,6 +55,7 @@ export default function RootLayout({
     <html lang="pt-BR" className={`${cormorant.variable} ${montserrat.variable}`}>
       <body className="min-h-screen bg-brand-bone font-sans text-brand-ink antialiased">
         {children}
+        <CookieConsent />
         <Analytics />
       </body>
     </html>
