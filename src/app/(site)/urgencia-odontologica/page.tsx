@@ -13,7 +13,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { PageHero } from "@/components/sections/page-hero";
 import { FAQSection } from "@/components/sections/faq-section";
 import { CTASection } from "@/components/sections/cta-section";
-import { ButtonLink } from "@/components/ui/button";
+import { TrackedButtonLink } from "@/components/ui/tracked-button-link";
 import { Reveal } from "@/components/ui/reveal";
 
 const PATH = "/urgencia-odontologica";
@@ -104,14 +104,27 @@ export default function UrgenciaOdontologicaPage() {
         breadcrumbs={[{ name: "Início", href: "/" }, { name: "Urgência odontológica" }]}
       >
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-          <ButtonLink href={whatsappLink(waMessages.urgency)} external variant="whatsapp" size="md">
+          <TrackedButtonLink
+            href={whatsappLink(waMessages.urgency)}
+            external
+            variant="whatsapp"
+            size="md"
+            event="whatsapp_click"
+            eventParams={{ location: "urgency_hero" }}
+          >
             <MessageCircle className="size-4" strokeWidth={1.7} />
             Falar agora pelo WhatsApp
-          </ButtonLink>
-          <ButtonLink href={`tel:+${siteConfig.phone}`} variant="secondary" size="md">
+          </TrackedButtonLink>
+          <TrackedButtonLink
+            href={`tel:+${siteConfig.phone}`}
+            variant="secondary"
+            size="md"
+            event="phone_click"
+            eventParams={{ location: "urgency_hero" }}
+          >
             <Phone className="size-4" strokeWidth={1.7} />
             Ligar para o consultório
-          </ButtonLink>
+          </TrackedButtonLink>
         </div>
       </PageHero>
 
@@ -210,6 +223,34 @@ export default function UrgenciaOdontologicaPage() {
                 </div>
               </Reveal>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Reforço de CTA no meio da página longa */}
+      <section className="bg-brand-bone pb-4">
+        <div className="container">
+          <div className="texture-grain relative overflow-hidden rounded-[2rem] bg-brand-green px-6 py-12 text-center text-brand-bone sm:px-12">
+            <div aria-hidden className="pointer-events-none absolute -right-10 -top-10 size-56 rounded-full bg-brand-gold/10 blur-3xl" />
+            <div className="relative">
+              <h2 className="text-display-sm text-brand-bone">Está com dor agora? Não espere.</h2>
+              <p className="mx-auto mt-3 max-w-xl text-brand-bone/75">
+                Fale com a Dra. Ana pelo WhatsApp e receba orientação para aliviar o desconforto até o atendimento.
+              </p>
+              <div className="mt-7 flex justify-center">
+                <TrackedButtonLink
+                  href={whatsappLink(waMessages.urgency)}
+                  external
+                  variant="gold"
+                  size="lg"
+                  event="whatsapp_click"
+                  eventParams={{ location: "urgency_midpage" }}
+                >
+                  <MessageCircle className="size-5" strokeWidth={1.7} />
+                  Falar agora pelo WhatsApp
+                </TrackedButtonLink>
+              </div>
+            </div>
           </div>
         </div>
       </section>

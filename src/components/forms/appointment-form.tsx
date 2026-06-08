@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,6 +37,14 @@ const treatmentOptions = [
 export function AppointmentForm() {
   const router = useRouter();
   const [status, setStatus] = useState<"idle" | "submitting" | "error">("idle");
+  const startedRef = useRef(false);
+
+  function onFormStart() {
+    if (!startedRef.current) {
+      startedRef.current = true;
+      track("form_start", { location: "appointment_page" });
+    }
+  }
 
   const {
     register,
@@ -83,6 +91,7 @@ export function AppointmentForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit, onInvalid)}
+      onFocus={onFormStart}
       noValidate
       className="surface space-y-6 p-6 sm:p-8 lg:p-10"
     >
@@ -220,7 +229,7 @@ export function AppointmentForm() {
             <a href="/politica-de-privacidade" target="_blank" className="font-semibold text-brand-green underline decoration-brand-gold/50 underline-offset-2 hover:decoration-brand-gold">
               Política de Privacidade
             </a>
-            .
+            . Posso revogar este consentimento a qualquer momento pelos canais ali indicados.
           </span>
         </label>
         <FieldError id="err-lgpd" message={errors.lgpdConsent?.message as string | undefined} />
@@ -275,6 +284,19 @@ export function AppointmentForm() {
         <p className="flex items-center justify-center gap-2 text-center text-xs text-brand-ink/65">
           <ShieldCheck className="size-3.5 shrink-0 text-brand-green" />
           Sem compromisso de venda. Seus dados são sigilosos e usados apenas para contato.
+        </p>
+        <p className="text-center text-xs text-brand-ink/65">
+          Prefere não preencher?{" "}
+          <a
+            href={whatsappLink(waMessages.default)}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => track("whatsapp_click", { location: "form_alt" })}
+            className="font-semibold text-brand-green underline decoration-brand-gold/50 underline-offset-2 hover:decoration-brand-gold"
+          >
+            Fale direto no WhatsApp
+          </a>
+          .
         </p>
       </div>
     </form>

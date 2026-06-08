@@ -6,6 +6,9 @@ import type { NewAppointmentLead } from "@/types/lead";
 
 export const runtime = "nodejs";
 
+/** Versão vigente da Política de Privacidade aceita no formulário (prova de consentimento). */
+const PRIVACY_POLICY_VERSION = "2026-06-08";
+
 export async function POST(request: Request) {
   // 1) Mesma origem (mitiga CSRF/abuso cross-site).
   const origin = request.headers.get("origin");
@@ -61,6 +64,8 @@ export async function POST(request: Request) {
     main_complaint: data.mainComplaint || null,
     source: data.source || null,
     lgpd_consent: data.lgpdConsent,
+    lgpd_consent_at: new Date().toISOString(),
+    privacy_policy_version: PRIVACY_POLICY_VERSION,
     status: "new",
   };
 

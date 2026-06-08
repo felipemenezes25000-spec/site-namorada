@@ -60,8 +60,8 @@ export const differentials: { icon: LucideIcon; title: string; description: stri
   { icon: Stethoscope, title: "Atendimento individualizado", description: "Cada consulta tem o tempo que você precisa, com atenção e dedicação exclusivas, do início ao fim." },
   { icon: MessageCircle, title: "Explicação clara antes de tudo", description: "Você entende cada etapa antes de qualquer procedimento, sem termos confusos." },
   { icon: Smile, title: "Foco no conforto e no controle da dor", description: "Técnicas e anestesia pensadas para o máximo de conforto e o controle da dor em cada etapa. A Dra. Ana preza por uma odontologia com o mínimo de desconforto, do início ao fim." },
-  { icon: Sparkles, title: "Estética com saúde", description: "Beleza e bem-estar caminham juntos, sempre partindo da saúde bucal." },
-  { icon: HeartHandshake, title: "Experiência acolhedora", description: "Um ambiente tranquilo, do primeiro contato ao acompanhamento." },
+  { icon: Sparkles, title: "Estética com saúde", description: "Resultados pensados para parecer naturais — combinando com o seu rosto, não um branco artificial. A saúde bucal vem sempre primeiro." },
+  { icon: HeartHandshake, title: "Experiência acolhedora", description: "Você pode pedir uma pausa a qualquer momento e tirar dúvidas sem se sentir apressado — do primeiro contato ao retorno." },
   { icon: CalendarHeart, title: "Comunicação simples", description: "Dúvidas, agendamentos e retornos resolvidos com facilidade pelo WhatsApp." },
 ];
 
@@ -70,7 +70,7 @@ export const journeySteps = [
   { number: "01", title: "Escolha o melhor canal", description: "Fale pelo WhatsApp ou preencha o formulário — o que for mais confortável para você." },
   { number: "02", title: "Conte o que você precisa", description: "Compartilhe o que te trouxe e suas dúvidas. Tudo no seu tempo, sem pressão." },
   { number: "03", title: "Agende sua avaliação", description: "A Dra. Ana confirma o melhor dia e horário para o seu primeiro encontro." },
-  { number: "04", title: "Receba um plano de cuidado", description: "Um caminho personalizado, claro e seguro, construído junto com você." },
+  { number: "04", title: "Receba um plano de cuidado", description: "Ao final da avaliação, você sai com as prioridades organizadas e um orçamento transparente — e decide o que fazer no seu tempo." },
 ];
 
 /**
@@ -86,18 +86,18 @@ export const testimonials: { quote: string; author: string; context: string }[] 
     quote:
       "Me senti acolhida desde o primeiro contato. A Dra. Ana explicou tudo com calma e nunca me senti pressionada a nada.",
     author: "Paciente da Dra. Ana",
-    context: "Relato com identidade preservada",
+    context: "Relato de avaliação inicial",
   },
   {
     quote:
       "Gostei de entender cada passo antes de começar. O atendimento é atencioso e o ambiente passa muita confiança.",
     author: "Paciente da Dra. Ana",
-    context: "Relato com identidade preservada",
+    context: "Relato durante o tratamento",
   },
   {
     quote:
       "Voltei a cuidar dos dentes depois de muito tempo e foi tranquilo. Saí com um plano claro e sem aquela sensação de cobrança.",
     author: "Paciente da Dra. Ana",
-    context: "Relato com identidade preservada",
+    context: "Relato de retorno aos cuidados",
   },
 ];

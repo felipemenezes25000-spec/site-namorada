@@ -1,5 +1,5 @@
 import { CalendarDays } from "lucide-react";
-import { ButtonLink } from "@/components/ui/button";
+import { TrackedButtonLink } from "@/components/ui/tracked-button-link";
 import { Reveal } from "@/components/ui/reveal";
 
 export function CTASection({
@@ -39,10 +39,16 @@ export function CTASection({
           </Reveal>
           <Reveal delay={0.18}>
             <div className="mt-9 flex items-center justify-center">
-              <ButtonLink href="/agendamento" variant="light" size="lg">
+              <TrackedButtonLink
+                href="/agendamento"
+                variant="light"
+                size="lg"
+                event="scheduling_intent"
+                eventParams={{ location: "cta_section" }}
+              >
                 <CalendarDays className="size-5" strokeWidth={1.7} />
-                Preencher formulário
-              </ButtonLink>
+                Agendar minha avaliação
+              </TrackedButtonLink>
             </div>
           </Reveal>
         </div>

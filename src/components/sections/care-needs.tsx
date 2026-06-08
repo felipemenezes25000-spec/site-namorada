@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { careNeeds } from "@/lib/content";
+import { track } from "@/lib/analytics";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { ButtonLink } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
@@ -25,6 +28,7 @@ export function CareNeeds() {
             <Reveal key={title} delay={(i % 3) * 0.07}>
               <Link
                 href={href}
+                onClick={() => track("care_need_click", { need: title, href })}
                 className="group flex h-full flex-col gap-4 rounded-3xl border border-brand-ink/[0.07] bg-white/80 p-6 shadow-card transition-all duration-500 ease-out-expo hover:-translate-y-1 hover:border-brand-gold/30 hover:shadow-lift sm:p-7"
               >
                 <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-brand-green/[0.07] text-brand-green transition-colors duration-500 group-hover:bg-brand-green group-hover:text-brand-bone">
@@ -45,8 +49,13 @@ export function CareNeeds() {
 
         <Reveal delay={0.1}>
           <div className="mt-12 flex justify-center">
-            <ButtonLink href="/agendamento" variant="primary" size="md">
-              Não sei por onde começar — quero agendar uma avaliação
+            <ButtonLink
+              href="/agendamento"
+              variant="primary"
+              size="md"
+              onClick={() => track("scheduling_intent", { location: "care_needs" })}
+            >
+              Quero começar por uma avaliação
               <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={1.7} />
             </ButtonLink>
           </div>

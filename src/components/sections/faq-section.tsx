@@ -9,7 +9,7 @@ export function FAQSection({
   items,
   eyebrow = "Dúvidas frequentes",
   title = "Perguntas que ouvimos com frequência",
-  description = "Se ficar com qualquer dúvida, é só chamar no WhatsApp — a Dra. Ana responde com atenção.",
+  description = "Não achou a sua dúvida aqui? Manda no WhatsApp que a gente responde.",
   whatsappMessage = waMessages.questions,
 }: {
   items: { q: string; a: string }[];

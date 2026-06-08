@@ -13,7 +13,11 @@ export type TrackEvent =
   | "map_click"
   | "instagram_click"
   | "phone_click"
-  | "lead_created";
+  | "lead_created"
+  | "care_need_click"
+  | "cta_click"
+  | "form_start"
+  | "scheduling_intent";
 
 declare global {
   interface Window {
@@ -32,6 +36,8 @@ export function track(event: TrackEvent, params: EventParams = {}): void {
     if (window.fbq) {
       if (event === "lead_created" || event === "appointment_form_submit") {
         window.fbq("track", "Lead", params);
+      } else if (event === "scheduling_intent") {
+        window.fbq("track", "InitiateCheckout", params);
       } else if (event === "whatsapp_click") {
         window.fbq("track", "Contact", params);
       } else {

@@ -56,11 +56,16 @@ export default function PrivacidadePage() {
             </ul>
 
             <h2>4. Base legal</h2>
+            <p>O tratamento dos seus dados se baseia em diferentes fundamentos da LGPD, conforme a finalidade:</p>
+            <ul>
+              <li><strong>Consentimento</strong> (art. 7º, I): para o envio do formulário, o uso de cookies de medição e a comunicação por mensagens;</li>
+              <li><strong>Execução de procedimentos preliminares e do atendimento solicitado por você</strong> (art. 7º, V): para entrar em contato e dar continuidade ao agendamento;</li>
+              <li><strong>Tutela da saúde, por profissional de saúde</strong> (art. 11, II, “f”): para informações estritamente necessárias ao atendimento, sempre sob sigilo profissional;</li>
+              <li><strong>Cumprimento de obrigação legal ou regulatória</strong> (art. 7º, II): para a guarda de prontuário e documentos exigidos na área odontológica.</li>
+            </ul>
             <p>
-              O tratamento dos seus dados se baseia no seu <strong>consentimento</strong>
-              {" "}(art. 7º, I, da LGPD), manifestado ao marcar a caixa de autorização
-              no formulário, e, quando aplicável, no legítimo interesse para a
-              prestação do atendimento solicitado.
+              Você pode revogar o consentimento a qualquer momento, sem que isso
+              afete a licitude do tratamento já realizado.
             </p>
 
             <h2>5. Compartilhamento</h2>
@@ -84,12 +89,20 @@ export default function PrivacidadePage() {
               Você pode revogar o consentimento a qualquer momento em
               <strong> Gerenciar cookies</strong>, no rodapé do site.
             </p>
+            <p>
+              Cada um desses provedores trata os dados conforme as suas próprias
+              políticas de privacidade. Recomendamos consultar os avisos do Google,
+              da Meta e dos demais serviços para detalhes sobre como operam.
+            </p>
 
             <h2>6. Cookies e ferramentas de análise</h2>
             <p>
-              Este site pode utilizar cookies e ferramentas como Google Analytics e
-              Meta Pixel para entender o uso das páginas e mensurar campanhas, de
-              forma agregada. Você pode gerenciar cookies nas configurações do seu
+              Cookies essenciais ao funcionamento do site são sempre ativos.
+              Cookies de medição (Google Analytics) e de campanha (Meta Pixel) só
+              são carregados <strong>após o seu consentimento</strong> no banner de
+              cookies. Você pode revisar ou revogar essa escolha a qualquer momento
+              clicando em <strong>Gerenciar cookies</strong>, no rodapé de todas as
+              páginas. Também é possível bloquear cookies nas configurações do seu
               navegador.
             </p>
 
@@ -106,18 +119,42 @@ export default function PrivacidadePage() {
               Para exercer esses direitos, escreva para{" "}
               <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>.
             </p>
+            <p>
+              Não tomamos decisões automatizadas que produzam efeitos jurídicos
+              sobre você ou que afetem seus interesses de forma significativa. Os
+              dados de navegação são usados apenas de forma agregada e anônima para
+              melhorar o site.
+            </p>
+            <p>
+              Se entender que seus direitos não foram atendidos, você pode
+              apresentar reclamação à <strong>Autoridade Nacional de Proteção de
+              Dados (ANPD)</strong> pelos canais oficiais disponíveis em{" "}
+              <a href="https://www.gov.br/anpd" target="_blank" rel="noopener noreferrer">gov.br/anpd</a>.
+            </p>
 
-            <h2>8. Segurança e retenção</h2>
+            <h2>8. Dados de crianças e adolescentes</h2>
+            <p>
+              O atendimento de menores de 18 anos ocorre sempre com a presença e o
+              consentimento de ao menos um dos pais ou do responsável legal, no
+              melhor interesse da criança ou do adolescente, conforme o art. 14 da
+              LGPD. Não coletamos intencionalmente dados de menores por este site
+              sem essa autorização.
+            </p>
+
+            <h2>9. Segurança e retenção</h2>
             <p>
               Adotamos medidas razoáveis para proteger os seus dados contra acesso
               não autorizado. Os dados de contato enviados pelo formulário são
-              mantidos enquanto durar o relacionamento de atendimento e, depois,
-              pelo prazo necessário ao cumprimento de obrigações legais aplicáveis à
-              área da saúde. Encerradas essas finalidades, os dados são eliminados
-              ou anonimizados. Você pode solicitar a exclusão a qualquer momento.
+              mantidos enquanto durar o relacionamento de atendimento. Documentos e
+              registros clínicos, quando existirem, são guardados pelo prazo mínimo
+              exigido para prontuários na área da saúde (em regra, 20 anos a contar
+              do último registro, conforme as normas aplicáveis). Encerradas as
+              finalidades e os prazos legais, os dados são eliminados ou
+              anonimizados. Você pode solicitar a exclusão dos dados de contato a
+              qualquer momento.
             </p>
 
-            <h2>9. Alterações</h2>
+            <h2>10. Alterações</h2>
             <p>
               Esta política pode ser atualizada para refletir melhorias ou
               mudanças legais. A versão vigente estará sempre disponível nesta
@@ -125,12 +162,12 @@ export default function PrivacidadePage() {
             </p>
 
             <p className="mt-10 rounded-2xl border border-brand-ink/[0.07] bg-brand-beige/30 p-5 text-sm">
-              <strong>Encarregado pelo tratamento de dados (DPO):</strong> em caso
-              de dúvidas ou solicitações relativas aos seus dados pessoais, entre em
-              contato pelo e-mail{" "}
-              <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>. Esta
-              política é revisada periodicamente para refletir as melhores práticas
-              de privacidade e a legislação vigente.
+              <strong>Encarregado pelo tratamento de dados (DPO):</strong> as
+              funções de encarregado são exercidas pelo próprio controlador. Para
+              qualquer solicitação relativa aos seus dados pessoais, utilize o
+              e-mail <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>,
+              canal oficial de privacidade. Respondemos no menor prazo possível,
+              observados os limites da LGPD.
             </p>
           </LegalShell>
         </div>

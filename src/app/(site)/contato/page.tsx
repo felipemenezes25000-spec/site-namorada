@@ -26,7 +26,7 @@ export default function ContatoPage() {
       />
       <PageHero
         eyebrow="Contato"
-        title="Estamos por perto para o que você precisar"
+        title="Fale com a Dra. Ana pelo canal que for mais fácil para você"
         description="Escolha o canal mais confortável para você. O atendimento é acolhedor desde a primeira mensagem."
         breadcrumbs={[{ name: "Início", href: "/" }, { name: "Contato" }]}
       />

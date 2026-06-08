@@ -10,7 +10,7 @@ const methods = [
   {
     icon: MessageCircle,
     label: "WhatsApp",
-    value: "Resposta rápida e atenciosa",
+    value: "Tire dúvidas ou agende em poucos toques",
     href: whatsappLink(waMessages.default),
     event: "whatsapp_click" as const,
     accent: true,

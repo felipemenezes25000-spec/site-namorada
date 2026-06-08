@@ -69,7 +69,9 @@ export function CookieConsent() {
           <p className="text-sm leading-relaxed text-brand-ink/75">
             Usamos cookies para entender como o site é utilizado e melhorar a sua
             experiência. Cookies essenciais são sempre ativos; cookies de medição
-            (analytics) só com a sua autorização. Saiba mais na{" "}
+            (analytics) só com a sua autorização. Você pode rever ou alterar essa
+            escolha quando quiser em <strong>Gerenciar cookies</strong>, no rodapé.
+            Saiba mais na{" "}
             <Link
               href="/politica-de-privacidade"
               className="font-semibold text-brand-green underline decoration-brand-gold/50 underline-offset-2 hover:decoration-brand-gold"

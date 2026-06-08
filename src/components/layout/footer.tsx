@@ -38,7 +38,7 @@ export function Footer() {
               {siteConfig.doctorName}
             </p>
             <p className="mt-1 text-sm uppercase tracking-eyebrow text-brand-gold-soft">
-              {siteConfig.title} · {siteConfig.cro}
+              {siteConfig.title} · Responsável Técnica: {siteConfig.cro}
             </p>
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-brand-bone/70">
               Cuidado odontológico humanizado, com planejamento individual e foco

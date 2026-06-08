@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Check, MessageCircle, CalendarDays, HeartHandshake, Activity, ArrowUpRight } from "lucide-react";
+import { Check, MessageCircle, CalendarDays, HeartHandshake, Activity, ShieldCheck, RotateCcw, CalendarClock, ArrowUpRight } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
 import { buildMetadata, breadcrumbSchema, faqSchema, localize } from "@/lib/seo";
 import { whatsappLink, waMessages } from "@/lib/whatsapp";
@@ -7,7 +7,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { PageHero } from "@/components/sections/page-hero";
 import { FAQSection } from "@/components/sections/faq-section";
 import { CTASection } from "@/components/sections/cta-section";
-import { ButtonLink } from "@/components/ui/button";
+import { TrackedButtonLink } from "@/components/ui/tracked-button-link";
 import { Reveal } from "@/components/ui/reveal";
 
 const PATH = "/medo-de-dentista";
@@ -31,12 +31,12 @@ const feelings = [
     text: "É um receio comum. Aqui, o controle da dor e o seu conforto são prioridade em cada etapa.",
   },
   {
-    icon: HeartHandshake,
+    icon: ShieldCheck,
     title: "Vergonha do estado atual dos dentes",
     text: "Não existe julgamento. O ponto de partida é sempre onde você está hoje — com acolhimento.",
   },
   {
-    icon: HeartHandshake,
+    icon: RotateCcw,
     title: "Experiências ruins no passado",
     text: "Uma vivência difícil deixa marcas. Aqui, a proposta é construir uma nova relação, com calma.",
   },
@@ -46,7 +46,7 @@ const feelings = [
     text: "Tudo é explicado antes, no seu tempo, para que nada chegue de surpresa e você se sinta segura(o).",
   },
   {
-    icon: HeartHandshake,
+    icon: CalendarClock,
     title: "Receio de ser julgado(a) por ter demorado",
     text: "Retomar os cuidados é sempre bem-vindo. O foco é ajudar, não cobrar pelo tempo que passou.",
   },
@@ -108,19 +108,27 @@ export default function MedoDeDentistaPage() {
         breadcrumbs={[{ name: "Início", href: "/" }, { name: "Medo de dentista" }]}
       >
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-          <ButtonLink href="/agendamento" variant="primary" size="md">
+          <TrackedButtonLink
+            href="/agendamento"
+            variant="primary"
+            size="md"
+            event="scheduling_intent"
+            eventParams={{ location: "fear_hero" }}
+          >
             <CalendarDays className="size-4" strokeWidth={1.7} />
             Quero dar o primeiro passo
-          </ButtonLink>
-          <ButtonLink
+          </TrackedButtonLink>
+          <TrackedButtonLink
             href={whatsappLink(waMessages.firstVisit)}
             external
             variant="whatsapp"
             size="md"
+            event="whatsapp_click"
+            eventParams={{ location: "fear_hero" }}
           >
             <MessageCircle className="size-4" strokeWidth={1.7} />
             Conversar pelo WhatsApp
-          </ButtonLink>
+          </TrackedButtonLink>
         </div>
       </PageHero>
 
@@ -202,12 +210,12 @@ export default function MedoDeDentistaPage() {
             <div className="max-w-2xl">
               <Reveal>
                 <p className="eyebrow flex items-center gap-3">
-                  <span className="inline-block h-px w-7 bg-brand-gold/70" /> Sem compromisso
+                  <span className="inline-block h-px w-7 bg-brand-gold/70" /> Sem pressão
                 </p>
                 <h2 className="mt-4 text-display-sm">O primeiro passo é só uma conversa</h2>
                 <p className="mt-5 text-pretty text-lg leading-relaxed text-brand-ink/75">
                   A primeira consulta é, antes de tudo, uma conversa. Você não precisa chegar sabendo
-                  o que precisa, nem decidir nada na hora — não há compromisso de fechar tratamento.
+                  o que precisa, nem decidir nada na hora — sem pressão para fechar tratamento.
                   É um momento para a Dra. Ana entender a sua história, esclarecer dúvidas e, juntos,
                   pensar nos próximos passos com calma. Em {siteConfig.region}, o cuidado começa pela
                   escuta.
@@ -215,10 +223,16 @@ export default function MedoDeDentistaPage() {
               </Reveal>
               <Reveal delay={0.1}>
                 <div className="mt-8">
-                  <ButtonLink href="/primeira-consulta" variant="secondary" size="md">
+                  <TrackedButtonLink
+                    href="/primeira-consulta"
+                    variant="secondary"
+                    size="md"
+                    event="cta_click"
+                    eventParams={{ location: "fear_page", target: "primeira_consulta" }}
+                  >
                     Saiba como é a primeira consulta
                     <ArrowUpRight className="size-4" strokeWidth={1.7} />
-                  </ButtonLink>
+                  </TrackedButtonLink>
                 </div>
               </Reveal>
             </div>

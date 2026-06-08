@@ -59,8 +59,8 @@ export default function AgendamentoPage() {
                     Fale pelo WhatsApp em poucos toques
                   </h2>
                   <p className="mt-3 text-sm leading-relaxed text-brand-bone/75">
-                    Tire dúvidas ou agende diretamente com a Dra. Ana. Resposta com
-                    atenção e sem pressão.
+                    Tire dúvidas ou agende diretamente com a Dra. Ana. Ela retorna
+                    assim que possível para combinar o melhor horário.
                   </p>
                   <ButtonLink
                     href={whatsappLink(waMessages.default)}

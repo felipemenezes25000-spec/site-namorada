@@ -7,7 +7,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { PageHero } from "@/components/sections/page-hero";
 import { FAQSection } from "@/components/sections/faq-section";
 import { CTASection } from "@/components/sections/cta-section";
-import { ButtonLink } from "@/components/ui/button";
+import { TrackedButtonLink } from "@/components/ui/tracked-button-link";
 import { Reveal } from "@/components/ui/reveal";
 
 export const metadata: Metadata = buildMetadata({
@@ -122,19 +122,27 @@ export default function PrimeiraConsultaPage() {
         ]}
       >
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-          <ButtonLink href="/agendamento" variant="primary" size="md">
+          <TrackedButtonLink
+            href="/agendamento"
+            variant="primary"
+            size="md"
+            event="scheduling_intent"
+            eventParams={{ location: "first_visit_hero" }}
+          >
             <CalendarDays className="size-4" strokeWidth={1.7} />
             Agendar minha primeira consulta
-          </ButtonLink>
-          <ButtonLink
+          </TrackedButtonLink>
+          <TrackedButtonLink
             href={whatsappLink(waMessages.firstVisit)}
             external
             variant="whatsapp"
             size="md"
+            event="whatsapp_click"
+            eventParams={{ location: "first_visit_hero" }}
           >
             <MessageCircle className="size-4" strokeWidth={1.7} />
             Tirar dúvidas no WhatsApp
-          </ButtonLink>
+          </TrackedButtonLink>
         </div>
       </PageHero>
 

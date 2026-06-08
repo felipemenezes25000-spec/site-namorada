@@ -13,7 +13,7 @@ export function Testimonials() {
         <SectionHeading
           eyebrow="Relatos de pacientes"
           title="O cuidado sentido por quem já foi atendido"
-          description="A experiência de cada paciente é única. Estes relatos refletem o tom do atendimento — humano, atento e sem pressa — e são compartilhados com a identidade preservada."
+          description="Falas reais de quem já foi atendido, compartilhadas com a identidade preservada. Assim que houver avaliações públicas no Google, elas aparecem aqui."
         />
 
         <div className="mt-14 grid gap-6 md:grid-cols-3">
@@ -40,6 +40,25 @@ export function Testimonials() {
             </Reveal>
           ))}
         </div>
+
+        <Reveal delay={0.05}>
+          <ul className="mt-12 flex flex-wrap justify-center gap-2.5 text-xs font-medium text-brand-green">
+            {[
+              siteConfig.cro,
+              "Atendimento particular",
+              "Crianças a partir de 7 anos",
+              "Pix, débito e crédito",
+              "Explicação clara antes de cada procedimento",
+            ].map((item) => (
+              <li
+                key={item}
+                className="rounded-full border border-brand-gold/30 bg-brand-gold/[0.06] px-3.5 py-1.5"
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
+        </Reveal>
 
         {!isPlaceholder(siteConfig.address.reviewUrl) && (
           <Reveal delay={0.1}>

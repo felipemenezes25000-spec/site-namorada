@@ -38,6 +38,20 @@ export interface Treatment {
   /** Como funciona (passos). */
   steps: { title: string; description: string }[];
   faqs: TreatmentFAQ[];
+  /** Duração média de uma sessão (ex.: "40 a 60 minutos"). */
+  duration?: string;
+  /** Número típico de sessões. */
+  sessions?: string;
+  /** Quando não é indicado / o que não resolve (gestão de expectativa). */
+  notFor?: string;
+  /** Situações que pedem atenção/cuidado antes do procedimento. */
+  contraindications?: string[];
+  /** Preparo antes do procedimento. */
+  preparation?: string[];
+  /** Cuidados após o procedimento. */
+  aftercare?: { title: string; description: string }[];
+  /** Sinais para procurar a Dra. depois do procedimento. */
+  warningSigns?: string[];
   /** SEO. */
   metaTitle: string;
   metaDescription: string;
@@ -78,11 +92,14 @@ export const treatments: Treatment[] = [
       { q: "Como é a primeira consulta com a Dra. Ana?", a: "Começa com uma conversa para entender o que te trouxe e a sua história. Em seguida, é feito o exame clínico detalhado e, quando indicado, são solicitados exames complementares. Ao final, você recebe um diagnóstico claro e a proposta de plano de tratamento." },
       { q: "Quanto tempo dura a consulta de avaliação?", a: "Em média de 40 a 60 minutos. O tempo é dedicado para que tudo seja avaliado com calma e para que você consiga esclarecer todas as dúvidas antes de qualquer decisão." },
       { q: "Preciso levar exames anteriores ou radiografias?", a: "Se você já tem radiografias ou exames recentes, leve — eles ajudam no diagnóstico. Mas não se preocupe se não tiver: o que for necessário é solicitado durante a consulta." },
+      { q: "A avaliação tem algum custo?", a: "O atendimento é particular; o valor da avaliação e de eventuais exames é informado de forma transparente antes de qualquer procedimento." },
     ],
     metaTitle: "Avaliação odontológica em [Cidade] — Dra. Ana Beatriz Lemos Souza",
     metaDescription:
       "Avaliação odontológica humanizada em [Cidade]. Exame completo, diagnóstico claro e plano de cuidado individual com a Dra. Ana Beatriz Lemos Souza. Agende pelo WhatsApp.",
     keywords: ["avaliação odontológica em [cidade]", "dentista em [cidade]", "consulta odontológica [bairro]"],
+    duration: "40 a 60 minutos",
+    sessions: "1 consulta",
   },
   {
     slug: "limpeza-dental",
@@ -90,7 +107,7 @@ export const treatments: Treatment[] = [
     shortName: "Limpeza",
     icon: "cleaning",
     excerpt:
-      "A famosa limpeza. Remoção de placa e cálculo dental com técnicas focadas em garantir o seu conforto e a ausência de dor.",
+      "A limpeza profissional (profilaxia): remoção de placa e cálculo dental com técnica delicada, focada no seu conforto durante todo o procedimento.",
     intro:
       "A limpeza profissional é um dos cuidados mais simples e, ao mesmo tempo, mais importantes para manter a boca saudável. Feita com técnica e gentileza, ela remove o que a escova não alcança e ajuda a prevenir problemas antes que eles apareçam.",
     what:
@@ -114,14 +131,22 @@ export const treatments: Treatment[] = [
       { title: "Orientação", description: "Dicas práticas de higiene personalizadas para a sua rotina." },
     ],
     faqs: [
-      { q: "A limpeza dental dói?", a: "Não. A técnica utilizada prioriza o seu conforto durante todo o procedimento. Após a limpeza, pode haver uma leve sensibilidade temporária, que costuma passar em poucas horas." },
+      { q: "A limpeza dental dói?", a: "O objetivo é que seja confortável. A técnica utilizada prioriza o seu conforto e, quando há sensibilidade, ela costuma ser leve e passageira. Após a limpeza, pode haver uma sensibilidade temporária, que tende a passar em poucas horas." },
       { q: "Quanto tempo dura a limpeza?", a: "Em geral, entre 40 minutos e 1 hora, dependendo da quantidade de cálculo dental acumulado e do estado das gengivas." },
       { q: "De quanto em quanto tempo devo fazer a limpeza?", a: "A recomendação geral é a cada seis meses, mas o intervalo ideal é definido durante a consulta, conforme a sua saúde bucal e os seus hábitos." },
+      { q: "Minha gengiva sangrou na limpeza, devo me preocupar?", a: "O sangramento costuma indicar gengiva inflamada e tende a reduzir conforme a saúde gengival melhora com a higiene orientada. Se persistir, a situação é reavaliada." },
     ],
     metaTitle: "Limpeza dental em [Cidade] — Dra. Ana Beatriz Lemos Souza",
     metaDescription:
       "Limpeza dental (profilaxia) delicada em [Cidade]. Remoção de tártaro, polimento e orientação personalizada com a Dra. Ana Beatriz Lemos Souza. Agende pelo WhatsApp.",
     keywords: ["limpeza dental em [cidade]", "profilaxia dental [bairro]", "dentista em [cidade]"],
+    duration: "40 minutos a 1 hora",
+    sessions: "1 sessão, com manutenção periódica",
+    aftercare: [
+      { title: "Sensibilidade leve", description: "Pode haver uma sensibilidade passageira nas primeiras horas, que tende a diminuir." },
+      { title: "Higiene em dia", description: "Manter a escovação e o uso do fio dental preserva o resultado por mais tempo." },
+    ],
+    warningSigns: ["Sangramento na gengiva que persiste por vários dias", "Dor que aumenta em vez de diminuir"],
   },
   {
     slug: "clareamento-dental",
@@ -163,6 +188,18 @@ export const treatments: Treatment[] = [
     metaDescription:
       "Clareamento dental com acompanhamento profissional em [Cidade]. Resultado natural e protocolo ajustado à sua sensibilidade. Agende sua avaliação com a Dra. Ana Beatriz.",
     keywords: ["clareamento dental em [cidade]", "clareamento dental [bairro]", "dentista estética [cidade]"],
+    duration: "1 a 3 sessões, conforme o protocolo",
+    sessions: "Consultório, caseiro ou combinado",
+    notFor: "O clareamento não age sobre restaurações, facetas, coroas nem sobre manchas de origem interna profunda — nesses casos, outras abordagens são avaliadas.",
+    contraindications: [
+      "Gestantes e lactantes",
+      "Adolescentes com a dentição ainda em formação",
+      "Cáries ativas, gengiva inflamada ou sensibilidade acentuada (tratadas antes)",
+    ],
+    aftercare: [
+      { title: "Dieta nas primeiras 48h", description: "Evitar café, chá, vinho tinto, beterraba e outros alimentos pigmentados ajuda a fixar o resultado." },
+      { title: "Sensibilidade", description: "Pode haver sensibilidade temporária; o protocolo é ajustado para o seu conforto." },
+    ],
   },
   {
     slug: "restauracoes",
@@ -197,11 +234,20 @@ export const treatments: Treatment[] = [
       { q: "A restauração é perceptível depois de pronta?", a: "O objetivo é justamente o contrário: os materiais atuais permitem reproduzir a cor e o brilho do dente natural, deixando o reparo discreto e harmonioso." },
       { q: "Quanto tempo dura uma restauração?", a: "A durabilidade depende do caso, do material utilizado e dos seus cuidados de higiene. Com acompanhamento e manutenção, as restaurações têm boa longevidade." },
       { q: "Posso comer normalmente depois do procedimento?", a: "Sim, na maioria dos casos a alimentação pode ser retomada logo após o procedimento. A Dra. Ana orienta cada caso individualmente, conforme o tipo de restauração realizada." },
+      { q: "A restauração pode cair ou trincar?", a: "Como qualquer reparo, pode haver desgaste ao longo do tempo, sobretudo com bruxismo ou hábitos como roer unhas ou gelo. O acompanhamento periódico permite identificar e ajustar precocemente." },
     ],
     metaTitle: "Restaurações dentárias em [Cidade] — Dra. Ana Beatriz Lemos Souza",
     metaDescription:
       "Restaurações dentárias estéticas em [Cidade]. Recuperação de forma, função e aparência natural do dente com a Dra. Ana Beatriz Lemos Souza. Agende pelo WhatsApp.",
     keywords: ["restauração dental em [cidade]", "restauração dentária [bairro]", "tratamento de cárie [cidade]"],
+    duration: "30 a 60 minutos por dente",
+    sessions: "Em geral 1 sessão por restauração",
+    notFor: "Quando a estrutura do dente está muito comprometida, a restauração direta pode não ser suficiente, e outras opções (coroa, tratamento de canal) são avaliadas na consulta.",
+    aftercare: [
+      { title: "Sensibilidade inicial", description: "Pode haver leve sensibilidade ao frio ou ao quente nas primeiras horas ou dias, que tende a diminuir." },
+      { title: "Ajuste de mordida", description: "Se sentir que a restauração está alta ao morder, entre em contato para um ajuste simples." },
+    ],
+    warningSigns: ["Dor que aumenta em vez de diminuir", "Sensibilidade persistente por mais de alguns dias"],
   },
   {
     slug: "prevencao",
@@ -241,6 +287,8 @@ export const treatments: Treatment[] = [
     metaDescription:
       "Prevenção odontológica e acompanhamento de rotina em [Cidade]. Cuide da saúde bucal antes dos problemas com a Dra. Ana Beatriz Lemos Souza. Agende pelo WhatsApp.",
     keywords: ["prevenção odontológica em [cidade]", "dentista preventivo [bairro]", "check-up odontológico [cidade]"],
+    duration: "40 a 60 minutos por consulta",
+    sessions: "Retornos periódicos (em geral a cada 6 meses)",
   },
   {
     slug: "cirurgia-oral",
@@ -248,7 +296,7 @@ export const treatments: Treatment[] = [
     shortName: "Cirurgia",
     icon: "surgery",
     excerpt:
-      "Procedimentos cirúrgicos seguros e precisos, como a remoção de dentes, realizados com máxima segurança, técnica, cuidado e foco em uma recuperação tranquila.",
+      "Procedimentos cirúrgicos como a remoção de dentes, realizados com técnica, planejamento cuidadoso e atenção a cada etapa da sua recuperação.",
     intro:
       "Procedimentos cirúrgicos pedem técnica, planejamento e cuidado em cada detalhe. Aqui, a cirurgia oral é conduzida com calma, com informação clara sobre o que será feito e com atenção integral à sua experiência — antes, durante e depois.",
     what:
@@ -282,6 +330,27 @@ export const treatments: Treatment[] = [
     metaDescription:
       "Cirurgia oral de pequeno e médio porte em [Cidade]: remoção de sisos e outros procedimentos com avaliação criteriosa, técnica precisa e acompanhamento próximo, com a Dra. Ana Beatriz Lemos Souza.",
     keywords: ["cirurgia oral em [cidade]", "extração de siso [bairro]", "dentista cirurgião em [cidade]"],
+    duration: "40 a 60 minutos em média",
+    sessions: "Geralmente 1 sessão, com retorno para acompanhar a cicatrização",
+    preparation: [
+      "Avise sobre medicamentos de uso contínuo, alergias e condições de saúde na avaliação",
+      "Em geral não é necessário jejum para anestesia local, mas as orientações do seu caso são passadas antes",
+      "Para alguns procedimentos, pode ser recomendado ter um acompanhante na volta para casa",
+    ],
+    contraindications: [
+      "Infecção aguda no local pode pedir tratamento antes da cirurgia",
+      "Algumas condições de saúde e medicamentos exigem cuidados específicos, avaliados caso a caso",
+    ],
+    aftercare: [
+      { title: "Repouso e gelo", description: "Repouse nas primeiras horas e use compressa fria por fora do rosto para reduzir o inchaço." },
+      { title: "Alimentação", description: "Prefira alimentos frios ou mornos e macios nos primeiros dias, mastigando do lado oposto." },
+      { title: "Higiene e medicação", description: "Siga as orientações de higiene da região e tome a medicação conforme prescrito." },
+    ],
+    warningSigns: [
+      "Sangramento intenso que não cede com compressão",
+      "Inchaço que cresce muito após o terceiro dia",
+      "Febre ou dor que aumenta com o passar dos dias",
+    ],
   },
 ];
 

@@ -75,9 +75,15 @@ export default function TermosPage() {
 
             <h2>7. Comunicação ética em odontologia</h2>
             <p>
-              Este site segue as normas de publicidade odontológica. Não utilizamos
-              promessas de resultado, sensacionalismo ou imagens de pacientes sem o
-              devido consentimento.
+              Este site segue o Código de Ética Odontológica e as normas de
+              publicidade do Conselho Federal de Odontologia (incluindo a Resolução
+              CFO-196/2019). Em conformidade com essas normas: não divulgamos
+              imagens de “antes e depois”, não prometemos resultados, não usamos
+              preços ou descontos como atrativo, não empregamos expressões
+              sensacionalistas e não divulgamos técnicas ou equipamentos como
+              exclusivos. Todo o conteúdo tem finalidade informativa e educativa,
+              sob responsabilidade técnica da profissional identificada neste site
+              (CRO indicado no rodapé).
             </p>
 
             <h2>8. Alterações</h2>

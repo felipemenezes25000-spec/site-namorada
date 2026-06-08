@@ -27,9 +27,16 @@ create table if not exists public.appointment_leads (
   status             lead_status not null default 'new',
   notes              text,
   lgpd_consent       boolean not null default false,
+  -- Prova de consentimento (LGPD art. 8, §2): quando foi dado e qual versão da política.
+  lgpd_consent_at    timestamptz,
+  privacy_policy_version text,
   created_at         timestamptz not null default now(),
   updated_at         timestamptz not null default now()
 );
+
+-- Migração para tabelas já existentes (rode uma vez se a tabela já foi criada antes):
+alter table public.appointment_leads add column if not exists lgpd_consent_at timestamptz;
+alter table public.appointment_leads add column if not exists privacy_policy_version text;
 
 create index if not exists appointment_leads_status_idx
   on public.appointment_leads (status);

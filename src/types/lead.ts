@@ -38,6 +38,8 @@ export interface AppointmentLead {
   status: LeadStatus;
   notes: string | null;
   lgpd_consent: boolean;
+  lgpd_consent_at: string | null;
+  privacy_policy_version: string | null;
   created_at: string;
   updated_at: string;
 }

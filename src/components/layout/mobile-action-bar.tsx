@@ -33,6 +33,7 @@ export function MobileActionBar() {
         </a>
         <a
           href="/agendamento"
+          onClick={() => track("scheduling_intent", { location: "mobile_bar" })}
           className="flex flex-col items-center justify-center gap-1 border-x border-brand-ink/[0.08] py-2.5 text-[0.68rem] font-semibold text-brand-green"
         >
           <CalendarDays className="size-5" strokeWidth={1.8} />

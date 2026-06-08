@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { MessageCircle } from "lucide-react";
 import { journeySteps } from "@/lib/content";
 import { whatsappLink, waMessages } from "@/lib/whatsapp";
+import { track } from "@/lib/analytics";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { ButtonLink } from "@/components/ui/button";
 import { Reveal, RevealGroup, revealItem } from "@/components/ui/reveal";
@@ -51,11 +52,17 @@ export function HowItWorks() {
               external
               variant="gold"
               size="lg"
+              onClick={() => track("whatsapp_click", { location: "how_it_works" })}
             >
               <MessageCircle className="size-5" strokeWidth={1.7} />
               Começar pelo WhatsApp
             </ButtonLink>
-            <ButtonLink href="/primeira-consulta" variant="light" size="lg">
+            <ButtonLink
+              href="/primeira-consulta"
+              variant="light"
+              size="lg"
+              onClick={() => track("cta_click", { location: "how_it_works", target: "primeira_consulta" })}
+            >
               Ver como é a primeira consulta
             </ButtonLink>
           </div>

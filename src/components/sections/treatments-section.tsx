@@ -17,7 +17,7 @@ export function TreatmentsSection({
         <SectionHeading
           eyebrow={eyebrow}
           title="Cuidados pensados para cada etapa do seu sorriso"
-          description="Da primeira avaliação à estética, cada tratamento é conduzido com técnica, clareza e respeito ao seu tempo."
+          description="Da primeira avaliação à estética — e o que cada um resolve, explicado sem jargão, para você escolher por onde começar."
         />
         <RevealGroup className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" stagger={0.08}>
           {list.map((t) => (
