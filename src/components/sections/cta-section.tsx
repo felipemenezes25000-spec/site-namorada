@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { CalendarDays } from "lucide-react";
 import { TrackedButtonLink } from "@/components/ui/tracked-button-link";
 import { Reveal } from "@/components/ui/reveal";
@@ -18,20 +17,27 @@ export function CTASection({
           <div aria-hidden className="pointer-events-none absolute -left-16 -top-16 size-64 rounded-full bg-brand-gold/10 blur-3xl" />
           <div aria-hidden className="pointer-events-none absolute -bottom-20 -right-10 size-72 rounded-full bg-brand-mint/10 blur-3xl" />
 
-          {/* Marca-d'água da logomarca — filigrana branca translúcida, à direita */}
-          <div
+          {/* Mandíbula da marca em SVG puro (sem moldura/texto) — filigrana dourada */}
+          <svg
             aria-hidden
-            className="pointer-events-none absolute -right-12 top-1/2 hidden h-[150%] -translate-y-1/2 md:block"
+            viewBox="0 0 400 300"
+            className="pointer-events-none absolute -right-8 top-1/2 hidden h-[155%] w-auto -translate-y-1/2 text-brand-gold/[0.18] md:block"
           >
-            <Image
-              src="/brand/lockup-full.png"
-              alt=""
-              width={520}
-              height={528}
-              sizes="24rem"
-              className="h-full w-auto opacity-[0.07] [filter:brightness(0)_invert(1)]"
+            <path
+              d="M60 48 C 52 110, 22 128, 84 166 C 150 208, 250 208, 316 166 C 378 128, 348 110, 340 48"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+              strokeLinecap="round"
             />
-          </div>
+            <path
+              d="M94 70 C 88 118, 60 132, 112 162 C 162 192, 238 192, 288 162 C 340 132, 312 118, 306 70"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+            />
+          </svg>
           <svg
             aria-hidden
             viewBox="0 0 400 120"
