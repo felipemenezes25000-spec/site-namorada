@@ -14,7 +14,7 @@ export function whatsappLink(message?: string): string {
 export const waMessages = {
   /** CTA padrão do site. */
   default:
-    "Olá, Dra. Ana! Vim pelo site e gostaria de agendar uma avaliação odontológica.",
+    "Olá, Dra. Ana! Vim pelo site e gostaria de agendar uma consulta odontológica.",
 
   /** Mensagem contextual por tratamento. */
   treatment: (treatment: string) =>
@@ -22,7 +22,7 @@ export const waMessages = {
 
   /** Mensagem gerada após o envio do formulário de agendamento. */
   fromForm: (name: string, treatment: string) =>
-    `Olá, Dra. Ana! Vim pelo site e gostaria de agendar uma avaliação odontológica. Meu nome é ${name} e tenho interesse em ${treatment}.`,
+    `Olá, Dra. Ana! Vim pelo site e gostaria de agendar uma consulta odontológica. Meu nome é ${name} e tenho interesse em ${treatment}.`,
 
   /** Dúvidas gerais sobre atendimento. */
   questions:
