@@ -22,13 +22,16 @@ export default function SiteLayout({
       </a>
       <JsonLd data={[dentistSchema(), websiteSchema()]} />
 
-      {/* Marca-d'água com o símbolo AB — sutil, fixa no canto direito.
-          z-30 fica abaixo do header (z-50) e modais, mas acima do conteúdo,
-          com pointer-events-none para não interferir em cliques.
-          Oculta em telas pequenas para não competir com conteúdo. */}
+      {/* Marca-d'água com o símbolo AB — centralizada na tela, fixa.
+          z-30 fica acima das seções mas abaixo do header (z-50) e modais.
+          mix-blend-multiply integra com o fundo: escurece sutilmente sobre
+          claro, fica quase invisível sobre verde-escuro (footer, HowItWorks).
+          Opacity 0.06 com multiply dá presença discreta sem competir com texto.
+          pointer-events-none permite cliques atravessarem normalmente.
+          Oculta em mobile para não ofuscar conteúdo apertado. */}
       <div
         aria-hidden
-        className="pointer-events-none fixed inset-y-0 -right-[12%] z-30 hidden items-center md:flex"
+        className="pointer-events-none fixed inset-0 z-30 hidden items-center justify-center md:flex"
       >
         <Image
           src="/brand/symbol.png"
@@ -36,8 +39,8 @@ export default function SiteLayout({
           width={800}
           height={800}
           priority={false}
-          sizes="60vh"
-          className="h-auto w-[55vh] max-w-[640px] opacity-[0.04]"
+          sizes="55vh"
+          className="h-[55vh] w-auto opacity-[0.06] mix-blend-multiply"
         />
       </div>
 
