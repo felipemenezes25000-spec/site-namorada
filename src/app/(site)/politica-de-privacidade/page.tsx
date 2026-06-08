@@ -24,7 +24,7 @@ export default function PrivacidadePage() {
       <section className="section-y bg-brand-bone">
         <div className="container">
           <LegalShell>
-            <p className="text-sm text-brand-ink/50">Última atualização: [data].</p>
+            <p className="text-sm text-brand-ink/50">Última atualização: 8 de junho de 2026.</p>
 
             <h2>1. Quem é o responsável pelos seus dados</h2>
             <p>
