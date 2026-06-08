@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MapPin, Clock, MessageCircle, Instagram, Mail, Phone } from "lucide-react";
+import { MapPin, MessageCircle, Instagram, Mail, Phone } from "lucide-react";
 import { siteConfig, mainNav } from "@/lib/site-config";
 import { whatsappLink, waMessages } from "@/lib/whatsapp";
 import { treatments } from "@/lib/treatments";
@@ -112,14 +112,8 @@ export function Footer() {
                 <span>{siteConfig.address.full}</span>
               </li>
               <li className="flex gap-3">
-                <Clock className="mt-0.5 size-4 shrink-0 text-brand-gold-soft" strokeWidth={1.6} />
-                <span>
-                  {siteConfig.hours.map((h) => (
-                    <span key={h.days} className="block">
-                      {h.days}: {h.time}
-                    </span>
-                  ))}
-                </span>
+                <MessageCircle className="mt-0.5 size-4 shrink-0 text-brand-gold-soft" strokeWidth={1.6} />
+                <span>Agende pelo WhatsApp</span>
               </li>
               <li className="flex gap-3">
                 <Phone className="mt-0.5 size-4 shrink-0 text-brand-gold-soft" strokeWidth={1.6} />

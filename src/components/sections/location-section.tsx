@@ -1,6 +1,6 @@
 "use client";
 
-import { MapPin, Clock, Navigation, MessageCircle, Phone } from "lucide-react";
+import { MapPin, Navigation, MessageCircle, Phone } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
 import { whatsappLink, waMessages } from "@/lib/whatsapp";
 import { track } from "@/lib/analytics";
@@ -36,17 +36,11 @@ export function LocationSection() {
               </div>
               <div className="flex gap-4">
                 <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-brand-green/[0.07] text-brand-green">
-                  <Clock className="size-5" strokeWidth={1.6} />
+                  <MessageCircle className="size-5" strokeWidth={1.6} />
                 </span>
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-eyebrow text-brand-gold-ink">Horários</p>
-                  <ul className="mt-1 space-y-0.5 text-brand-ink/80">
-                    {siteConfig.hours.map((h) => (
-                      <li key={h.days}>
-                        <span className="text-brand-ink/55">{h.days}:</span> {h.time}
-                      </li>
-                    ))}
-                  </ul>
+                  <p className="text-xs font-semibold uppercase tracking-eyebrow text-brand-gold-ink">Agendamento</p>
+                  <p className="mt-1 leading-relaxed text-brand-ink/80">Fale pelo WhatsApp para combinar o melhor dia e horário.</p>
                 </div>
               </div>
               <div className="flex gap-4">

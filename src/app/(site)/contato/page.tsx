@@ -10,7 +10,7 @@ import { CTASection } from "@/components/sections/cta-section";
 export const metadata: Metadata = buildMetadata({
   title: "Contato",
   description:
-    "Fale com a Dra. Ana Beatriz Lemos Souza por WhatsApp, telefone, e-mail ou Instagram. Endereço, horários e localização do consultório em [Cidade].",
+    `Fale com a ${siteConfig.doctorName} por WhatsApp, telefone, e-mail ou Instagram. Endereço e localização do consultório em ${siteConfig.city}.`,
   path: "/contato",
   keywords: [`contato dentista ${siteConfig.city}`, `dentista ${siteConfig.neighborhood}`],
 });

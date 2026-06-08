@@ -53,13 +53,6 @@ export const siteConfig = {
     geo: { lat: "-23.5586695", lng: "-46.6521676" },
   },
 
-  /** Horários de atendimento (editável). */
-  hours: [
-    { days: "Segunda a Sexta", time: "09h às 19h" },
-    { days: "Sábado", time: "09h às 13h" },
-    { days: "Domingo e feriados", time: "Fechado" },
-  ],
-
   /** URL pública canônica (também em NEXT_PUBLIC_SITE_URL). */
   url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
     "https://www.draanabeatrizodonto.com.br",

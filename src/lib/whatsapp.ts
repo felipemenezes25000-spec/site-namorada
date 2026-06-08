@@ -46,5 +46,5 @@ export const waMessages = {
 
   /** Localização / como chegar. */
   location:
-    "Olá, Dra. Ana! Vim pelo site e gostaria de confirmar o endereço e horários de atendimento.",
+    "Olá, Dra. Ana! Vim pelo site e gostaria de confirmar o endereço do consultório.",
 } as const;

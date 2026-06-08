@@ -115,20 +115,6 @@ export function dentistSchema() {
     hasMap: address.mapsDirectionsUrl,
     areaServed: localize(siteConfig.region),
     sameAs: [siteConfig.instagramUrl].filter((u) => !isPlaceholder(u)),
-    openingHoursSpecification: [
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-        opens: "09:00",
-        closes: "19:00",
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Saturday"],
-        opens: "09:00",
-        closes: "13:00",
-      },
-    ],
   };
 }
 

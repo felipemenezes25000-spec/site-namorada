@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { MessageCircle, Clock, MapPin, ShieldCheck, HeartHandshake, CheckCircle2 } from "lucide-react";
+import { MessageCircle, MapPin, ShieldCheck, HeartHandshake, CheckCircle2 } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { whatsappLink, waMessages } from "@/lib/whatsapp";
@@ -96,14 +96,10 @@ export default function AgendamentoPage() {
                       </div>
                     </div>
                     <div className="flex gap-3">
-                      <Clock className="mt-0.5 size-4 shrink-0 text-brand-gold" strokeWidth={1.7} />
+                      <MessageCircle className="mt-0.5 size-4 shrink-0 text-brand-gold" strokeWidth={1.7} />
                       <div>
-                        <dt className="font-semibold text-brand-green">Horários</dt>
-                        <dd className="text-brand-ink/70">
-                          {siteConfig.hours.map((h) => (
-                            <span key={h.days} className="block">{h.days}: {h.time}</span>
-                          ))}
-                        </dd>
+                        <dt className="font-semibold text-brand-green">Agendamento</dt>
+                        <dd className="text-brand-ink/70">Fale pelo WhatsApp para combinar o melhor dia e horário.</dd>
                       </div>
                     </div>
                   </dl>
