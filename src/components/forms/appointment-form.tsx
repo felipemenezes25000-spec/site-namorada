@@ -65,6 +65,23 @@ export function AppointmentForm() {
     if (first) setFocus(first);
   }
 
+  function buildLeadMessage(data: AppointmentInput): string {
+    const lines = [
+      `📋 *Novo lead pelo site*`,
+      ``,
+      `*Nome:* ${data.fullName}`,
+      `*WhatsApp:* ${data.whatsapp}`,
+    ];
+    if (data.email) lines.push(`*E-mail:* ${data.email}`);
+    lines.push(`*Tratamento:* ${data.treatmentInterest}`);
+    if (data.preferredPeriod) lines.push(`*Período:* ${data.preferredPeriod}`);
+    if (data.preferredDate) lines.push(`*Melhor dia:* ${data.preferredDate}`);
+    if (data.hasXray) lines.push(`*Exame radiográfico:* ${data.hasXray === "sim" ? "Sim" : "Não"}`);
+    if (data.mainComplaint) lines.push(`*Queixa:* ${data.mainComplaint}`);
+    if (data.source) lines.push(`*Como conheceu:* ${data.source}`);
+    return lines.join("\n");
+  }
+
   async function onSubmit(data: AppointmentInput) {
     setStatus("submitting");
     try {
@@ -77,6 +94,10 @@ export function AppointmentForm() {
 
       track("appointment_form_submit", { treatment: data.treatmentInterest });
       track("lead_created", { treatment: data.treatmentInterest });
+
+      // Abre WhatsApp com todos os dados do lead
+      const waUrl = whatsappLink(buildLeadMessage(data));
+      window.open(waUrl, "_blank", "noopener");
 
       const params = new URLSearchParams({
         n: data.fullName,
