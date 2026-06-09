@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { appointmentSchema } from "@/lib/validations";
 import { getServerSupabase, isSupabaseConfigured } from "@/lib/supabase";
+import { sendLeadNotification, isEmailConfigured } from "@/lib/email";
 import { rateLimit, clientIp } from "@/lib/rate-limit";
 import type { NewAppointmentLead } from "@/types/lead";
 
@@ -54,6 +55,22 @@ export async function POST(request: Request) {
   }
 
   const data = parsed.data;
+
+  // 4) Enviar e-mail de notificação para a Dra. (assíncrono, não bloqueia resposta).
+  const emailPromise = isEmailConfigured()
+    ? sendLeadNotification({
+        fullName: data.fullName,
+        whatsapp: data.whatsapp,
+        email: data.email || null,
+        treatmentInterest: data.treatmentInterest,
+        preferredPeriod: data.preferredPeriod || null,
+        preferredDate: data.preferredDate || null,
+        hasXray: data.hasXray || null,
+        mainComplaint: data.mainComplaint || null,
+        source: data.source || null,
+      })
+    : Promise.resolve({ ok: false, reason: "not_configured" });
+
   const lead: NewAppointmentLead = {
     full_name: data.fullName,
     whatsapp: data.whatsapp,
@@ -69,24 +86,24 @@ export async function POST(request: Request) {
     status: "new",
   };
 
-  // Sem Supabase configurado: aceita o lead (o fluxo segue para o WhatsApp).
-  if (!isSupabaseConfigured()) {
-    return NextResponse.json({ ok: true, persisted: false });
+  // 5) Persistir no Supabase (quando configurado).
+  let persisted = false;
+  if (isSupabaseConfigured()) {
+    try {
+      const supabase = getServerSupabase();
+      if (supabase) {
+        const { error } = await supabase.from("appointment_leads").insert(lead);
+        if (error) console.error("[leads] supabase insert error:", error.message);
+        else persisted = true;
+      }
+    } catch (err) {
+      console.error("[leads] supabase unexpected error:", err);
+    }
   }
 
-  try {
-    const supabase = getServerSupabase();
-    if (!supabase) {
-      return NextResponse.json({ ok: true, persisted: false });
-    }
-    const { error } = await supabase.from("appointment_leads").insert(lead);
-    if (error) {
-      console.error("[leads] supabase insert error:", error.message);
-      return NextResponse.json({ ok: true, persisted: false });
-    }
-    return NextResponse.json({ ok: true, persisted: true });
-  } catch (err) {
-    console.error("[leads] unexpected error:", err);
-    return NextResponse.json({ ok: true, persisted: false });
-  }
+  // Espera o e-mail terminar (já disparou em paralelo).
+  const emailResult = await emailPromise;
+  const emailed = "ok" in emailResult && emailResult.ok;
+
+  return NextResponse.json({ ok: true, persisted, emailed });
 }
