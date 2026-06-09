@@ -73,7 +73,7 @@ export const treatments: Treatment[] = [
     excerpt:
       "Uma conversa cuidadosa e com exames complementares para entender as suas necessidades e avaliar sua saúde bucal antes de qualquer decisão.",
     intro:
-      "Toda jornada começa por aqui. A avaliação é o momento de olhar com calma para a sua saúde bucal, ouvir o que te trouxe até o consultório e construir, junto com você, um plano que faça sentido para a sua vida — sem pressa e sem etapas desnecessárias.",
+      "Toda jornada começa por aqui. A avaliação é o momento de olhar com calma para a sua saúde bucal, ouvir o que te trouxe até o consultório e construir, junto com você, um plano que faça sentido para a sua vida — sem etapas desnecessárias.",
     what:
       "É um exame clínico detalhado em que a Dra. Ana observa dentes, gengivas, mordida e tecidos da boca, esclarece dúvidas e, quando necessário, solicita exames complementares. Mais do que um check-up, é uma conversa para alinhar expectativas e prioridades.",
     forWhom: [
