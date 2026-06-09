@@ -314,6 +314,9 @@ export const treatments: Treatment[] = [
     name: "Cirurgia oral",
     shortName: "Cirurgia",
     icon: "surgery",
+    images: [
+      { src: "/tratamentos/cirurgia.png", alt: "Dra. Ana Beatriz realizando procedimento cirúrgico oral com equipe — paramentação completa e ambiente seguro" },
+    ],
     excerpt:
       "Procedimentos cirúrgicos como a remoção de dentes, realizados com técnica, planejamento cuidadoso e atenção a cada etapa da sua recuperação.",
     intro:
