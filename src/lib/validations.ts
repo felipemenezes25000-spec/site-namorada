@@ -39,6 +39,7 @@ export const appointmentSchema = z.object({
   preferredPeriod: z.enum(periods, {
     errorMap: () => ({ message: "Selecione um período." }),
   }),
+  hasXray: z.enum(["sim", "nao"]).optional(),
   mainComplaint: z
     .string()
     .trim()

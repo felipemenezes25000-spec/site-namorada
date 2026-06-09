@@ -185,6 +185,32 @@ export function AppointmentForm() {
         </div>
 
         <div className="sm:col-span-2">
+          <Label>Tem exame radiográfico?</Label>
+          <div className="mt-2 flex items-center gap-6">
+            <label htmlFor="hasXray-sim" className="flex cursor-pointer items-center gap-2 text-sm text-brand-ink/75">
+              <input
+                id="hasXray-sim"
+                type="radio"
+                value="sim"
+                className="size-4 cursor-pointer accent-brand-green"
+                {...register("hasXray")}
+              />
+              Sim
+            </label>
+            <label htmlFor="hasXray-nao" className="flex cursor-pointer items-center gap-2 text-sm text-brand-ink/75">
+              <input
+                id="hasXray-nao"
+                type="radio"
+                value="nao"
+                className="size-4 cursor-pointer accent-brand-green"
+                {...register("hasXray")}
+              />
+              Não
+            </label>
+          </div>
+        </div>
+
+        <div className="sm:col-span-2">
           <Label htmlFor="mainComplaint">Queixa principal ou observação <span className="font-normal text-brand-ink/60">(opcional)</span></Label>
           <Textarea
             id="mainComplaint"

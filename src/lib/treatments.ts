@@ -66,6 +66,10 @@ export const treatments: Treatment[] = [
     name: "Avaliação odontológica",
     shortName: "Avaliação",
     icon: "evaluation",
+    images: [
+      { src: "/tratamentos/avaliacao-1.jpg", alt: "Radiografia periapical sendo analisada — exame complementar utilizado na avaliação odontológica" },
+      { src: "/tratamentos/avaliacao-2.jpg", alt: "Análise de radiografia dental no negatoscópio — diagnóstico por imagem no consultório" },
+    ],
     excerpt:
       "Uma conversa cuidadosa e com exames complementares para entender as suas necessidades e avaliar sua saúde bucal antes de qualquer decisão.",
     intro:
@@ -214,6 +218,10 @@ export const treatments: Treatment[] = [
     name: "Restaurações",
     shortName: "Restaurações",
     icon: "restoration",
+    images: [
+      { src: "/tratamentos/restauracao-1.jpg", alt: "Antes e depois de restauração dental — recuperação estética e funcional dos dentes anteriores" },
+      { src: "/tratamentos/restauracao-2.jpg", alt: "Procedimento de restauração com isolamento absoluto — técnica que garante qualidade e durabilidade" },
+    ],
     excerpt:
       "Devolvendo estética e função ao dente com materiais de alta qualidade que preservam a naturalidade do seu sorriso.",
     intro:
