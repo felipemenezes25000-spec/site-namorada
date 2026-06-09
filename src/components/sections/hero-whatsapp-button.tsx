@@ -16,7 +16,7 @@ export function HeroWhatsAppButton() {
       onClick={() => track("whatsapp_click", { location: "hero" })}
     >
       <MessageCircle className="size-5" strokeWidth={1.7} />
-      Agendar avaliação no WhatsApp
+      Agendar consulta no WhatsApp
     </ButtonLink>
   );
 }

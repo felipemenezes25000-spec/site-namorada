@@ -130,7 +130,7 @@ export function Hero() {
                 <CalendarCheck className="size-4" strokeWidth={1.8} />
               </span>
               <span className="text-sm font-medium text-brand-green">
-                Avaliação sem pressão
+                Plano de tratamento com clareza
               </span>
             </div>
 
