@@ -14,6 +14,7 @@ import { CTASection } from "@/components/sections/cta-section";
 import { TreatmentIcon } from "@/components/ui/treatment-icon";
 import { Reveal } from "@/components/ui/reveal";
 import { ButtonLink } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 type Params = Promise<{ slug: string }>;
 
@@ -136,13 +137,16 @@ export default async function TreatmentPage({ params }: { params: Params }) {
           <aside className="lg:col-span-5 lg:sticky lg:top-28">
             <Reveal y={24}>
               {t.images?.length ? (
-                <div className="relative mb-6 aspect-[5/3] overflow-hidden rounded-3xl shadow-lift">
+                <div className={cn(
+                  "relative mb-6 aspect-[5/3] overflow-hidden rounded-3xl shadow-lift",
+                  t.images[0].fit === "contain" && "bg-white"
+                )}>
                   <Image
                     src={t.images[0].src}
                     alt={t.images[0].alt}
                     fill
                     sizes="(max-width: 1024px) 100vw, 42vw"
-                    className="object-cover"
+                    className={t.images[0].fit === "contain" ? "object-contain p-2" : "object-cover"}
                   />
                 </div>
               ) : (
