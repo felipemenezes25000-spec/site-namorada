@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { Check, MessageCircle, CalendarDays, ArrowUpRight } from "lucide-react";
 import { treatments, getTreatment, treatmentSlugs } from "@/lib/treatments";
 import { siteConfig } from "@/lib/site-config";
@@ -134,12 +135,24 @@ export default async function TreatmentPage({ params }: { params: Params }) {
           {/* Aside: indicado para + visual */}
           <aside className="lg:col-span-5 lg:sticky lg:top-28">
             <Reveal y={24}>
-              <div className="texture-grain relative mb-6 flex aspect-[5/3] items-center justify-center overflow-hidden rounded-3xl bg-gradient-to-br from-brand-green via-brand-green-dark to-brand-green-deep shadow-lift">
-                <span aria-hidden className="pointer-events-none absolute -right-8 -top-8 size-40 rounded-full bg-brand-gold/15 blur-3xl" />
-                <span className="flex size-20 items-center justify-center rounded-3xl border border-brand-gold/30 text-brand-gold-soft">
-                  <TreatmentIcon name={t.icon} className="size-10" />
-                </span>
-              </div>
+              {t.images?.length ? (
+                <div className="relative mb-6 aspect-[5/3] overflow-hidden rounded-3xl shadow-lift">
+                  <Image
+                    src={t.images[0].src}
+                    alt={t.images[0].alt}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 42vw"
+                    className="object-cover"
+                  />
+                </div>
+              ) : (
+                <div className="texture-grain relative mb-6 flex aspect-[5/3] items-center justify-center overflow-hidden rounded-3xl bg-gradient-to-br from-brand-green via-brand-green-dark to-brand-green-deep shadow-lift">
+                  <span aria-hidden className="pointer-events-none absolute -right-8 -top-8 size-40 rounded-full bg-brand-gold/15 blur-3xl" />
+                  <span className="flex size-20 items-center justify-center rounded-3xl border border-brand-gold/30 text-brand-gold-soft">
+                    <TreatmentIcon name={t.icon} className="size-10" />
+                  </span>
+                </div>
+              )}
               <div className="surface p-7">
                 <h3 className="font-display text-2xl text-brand-green">Indicado para</h3>
                 <ul className="mt-4 space-y-3">

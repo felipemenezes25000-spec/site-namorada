@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { ArrowRight, Check, MessageCircle } from "lucide-react";
 import { treatments } from "@/lib/treatments";
 import { siteConfig } from "@/lib/site-config";
@@ -63,15 +64,30 @@ export default function TratamentosPage() {
                     className={cn("lg:col-span-5", reversed && "lg:order-2")}
                     y={24}
                   >
-                    <div className="texture-grain relative flex aspect-[5/4] items-center justify-center overflow-hidden rounded-3xl bg-gradient-to-br from-brand-green via-brand-green-dark to-brand-green-deep shadow-lift">
-                      <span aria-hidden className="pointer-events-none absolute -right-8 -top-8 size-40 rounded-full bg-brand-gold/15 blur-3xl" />
-                      <span className="absolute left-6 top-6 font-display text-6xl text-brand-bone/10">
-                        0{i + 1}
-                      </span>
-                      <span className="flex size-24 items-center justify-center rounded-3xl border border-brand-gold/30 bg-brand-bone/5 text-brand-gold-soft">
-                        <TreatmentIcon name={t.icon} className="size-12" />
-                      </span>
-                    </div>
+                    {t.images?.length ? (
+                      <div className="relative aspect-[5/4] overflow-hidden rounded-3xl shadow-lift">
+                        <Image
+                          src={t.images[0].src}
+                          alt={t.images[0].alt}
+                          fill
+                          sizes="(max-width: 1024px) 100vw, 42vw"
+                          className="object-cover"
+                        />
+                        <span className="absolute left-5 top-5 font-display text-5xl text-white/20 drop-shadow-sm">
+                          0{i + 1}
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="texture-grain relative flex aspect-[5/4] items-center justify-center overflow-hidden rounded-3xl bg-gradient-to-br from-brand-green via-brand-green-dark to-brand-green-deep shadow-lift">
+                        <span aria-hidden className="pointer-events-none absolute -right-8 -top-8 size-40 rounded-full bg-brand-gold/15 blur-3xl" />
+                        <span className="absolute left-6 top-6 font-display text-6xl text-brand-bone/10">
+                          0{i + 1}
+                        </span>
+                        <span className="flex size-24 items-center justify-center rounded-3xl border border-brand-gold/30 bg-brand-bone/5 text-brand-gold-soft">
+                          <TreatmentIcon name={t.icon} className="size-12" />
+                        </span>
+                      </div>
+                    )}
                   </Reveal>
 
                   {/* Conteúdo */}

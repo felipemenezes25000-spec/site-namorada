@@ -25,6 +25,8 @@ export interface Treatment {
   name: string;
   shortName: string;
   icon: TreatmentIcon;
+  /** Imagem(ns) real(is) do tratamento (caminho relativo a /public). */
+  images?: { src: string; alt: string }[];
   /** Frase curta para o card. */
   excerpt: string;
   /** Abertura humana da página individual. */
@@ -106,6 +108,9 @@ export const treatments: Treatment[] = [
     name: "Limpeza dental",
     shortName: "Limpeza",
     icon: "cleaning",
+    images: [
+      { src: "/tratamentos/limpeza.jpg", alt: "Procedimento de limpeza dental realizado pela Dra. Ana Beatriz — evidenciação de placa bacteriana para higiene orientada" },
+    ],
     excerpt:
       "A limpeza profissional (profilaxia): remoção de placa e cálculo dental com técnica delicada, focada no seu conforto durante todo o procedimento.",
     intro:
@@ -153,6 +158,9 @@ export const treatments: Treatment[] = [
     name: "Clareamento dental",
     shortName: "Clareamento",
     icon: "whitening",
+    images: [
+      { src: "/tratamentos/clareamento.png", alt: "Moldeira de clareamento dental — tratamento estético com acompanhamento profissional" },
+    ],
     excerpt:
       "Um tom mais claro e natural para o seu sorriso, com acompanhamento profissional do início ao fim.",
     intro:
@@ -254,6 +262,9 @@ export const treatments: Treatment[] = [
     name: "Prevenção odontológica",
     shortName: "Prevenção",
     icon: "prevention",
+    images: [
+      { src: "/tratamentos/prevencao.png", alt: "Atendimento preventivo infantil no consultório da Dra. Ana Beatriz — criança sorridente durante consulta odontológica" },
+    ],
     excerpt:
       "Acompanhamento regular e orientação para evitar problemas antes que eles comecem.",
     intro:
