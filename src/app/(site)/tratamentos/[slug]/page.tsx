@@ -137,16 +137,13 @@ export default async function TreatmentPage({ params }: { params: Params }) {
           <aside className="lg:col-span-5 lg:sticky lg:top-28">
             <Reveal y={24}>
               {t.images?.length ? (
-                <div className={cn(
-                  "relative mb-6 aspect-[5/3] overflow-hidden rounded-3xl shadow-lift",
-                  t.images[0].fit === "contain" && "bg-white"
-                )}>
+                <div className="relative mb-6 aspect-[5/3] overflow-hidden rounded-3xl shadow-lift">
                   <Image
                     src={t.images[0].src}
                     alt={t.images[0].alt}
                     fill
                     sizes="(max-width: 1024px) 100vw, 42vw"
-                    className={t.images[0].fit === "contain" ? "object-contain p-2" : "object-cover"}
+                    className="object-cover"
                   />
                 </div>
               ) : (

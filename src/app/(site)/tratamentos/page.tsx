@@ -65,16 +65,13 @@ export default function TratamentosPage() {
                     y={24}
                   >
                     {t.images?.length ? (
-                      <div className={cn(
-                        "relative aspect-[5/4] overflow-hidden rounded-3xl shadow-lift",
-                        t.images[0].fit === "contain" && "bg-white"
-                      )}>
+                      <div className="relative aspect-[5/4] overflow-hidden rounded-3xl shadow-lift">
                         <Image
                           src={t.images[0].src}
                           alt={t.images[0].alt}
                           fill
                           sizes="(max-width: 1024px) 100vw, 42vw"
-                          className={t.images[0].fit === "contain" ? "object-contain p-2" : "object-cover"}
+                          className="object-cover"
                         />
                         <span className="absolute left-5 top-5 font-display text-5xl text-white/20 drop-shadow-sm">
                           0{i + 1}

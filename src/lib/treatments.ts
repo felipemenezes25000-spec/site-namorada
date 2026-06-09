@@ -26,7 +26,7 @@ export interface Treatment {
   shortName: string;
   icon: TreatmentIcon;
   /** Imagem(ns) real(is) do tratamento (caminho relativo a /public). */
-  images?: { src: string; alt: string; fit?: "cover" | "contain" }[];
+  images?: { src: string; alt: string }[];
   /** Frase curta para o card. */
   excerpt: string;
   /** Abertura humana da página individual. */
@@ -219,7 +219,7 @@ export const treatments: Treatment[] = [
     shortName: "Restaurações",
     icon: "restoration",
     images: [
-      { src: "/tratamentos/restauracao-1.jpg", alt: "Antes e depois de restauração dental — recuperação estética e funcional dos dentes anteriores", fit: "contain" },
+      { src: "/tratamentos/restauracao-1.jpg", alt: "Antes e depois de restauração dental — recuperação estética e funcional dos dentes anteriores" },
       { src: "/tratamentos/restauracao-2.jpg", alt: "Procedimento de restauração com isolamento absoluto — técnica que garante qualidade e durabilidade" },
     ],
     excerpt:
@@ -271,7 +271,7 @@ export const treatments: Treatment[] = [
     shortName: "Prevenção",
     icon: "prevention",
     images: [
-      { src: "/tratamentos/prevencao.png", alt: "Atendimento preventivo infantil no consultório da Dra. Ana Beatriz — criança sorridente durante consulta odontológica", fit: "contain" },
+      { src: "/tratamentos/prevencao.png", alt: "Atendimento preventivo infantil no consultório da Dra. Ana Beatriz — criança sorridente durante consulta odontológica" },
     ],
     excerpt:
       "Acompanhamento regular e orientação para evitar problemas antes que eles comecem.",
