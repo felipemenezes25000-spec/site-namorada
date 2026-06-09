@@ -271,7 +271,7 @@ export const treatments: Treatment[] = [
     shortName: "Prevenção",
     icon: "prevention",
     images: [
-      { src: "/tratamentos/prevencao.png", alt: "Atendimento preventivo infantil no consultório da Dra. Ana Beatriz — criança sorridente durante consulta odontológica" },
+      { src: "/tratamentos/prevencao.png", alt: "Atendimento preventivo infantil no consultório da Dra. Ana Beatriz — criança sorridente durante consulta odontológica", fit: "contain" },
     ],
     excerpt:
       "Acompanhamento regular e orientação para evitar problemas antes que eles comecem.",
