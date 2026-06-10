@@ -45,6 +45,18 @@ const nextConfig = {
     // Tree-shaking dirigido — reduz o custo de lucide-react e framer-motion.
     optimizePackageImports: ["lucide-react", "framer-motion"],
   },
+  async redirects() {
+    return [
+      {
+        // Aliases .vercel.app (projeto, git-main, deploys) servem o mesmo conteúdo
+        // do domínio oficial — redirect 308 evita conteúdo duplicado no Google.
+        source: "/:path*",
+        has: [{ type: "host", value: "site-namorada(.*)\\.vercel\\.app" }],
+        destination: "https://www.draanabeatrizodonto.com.br/:path*",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

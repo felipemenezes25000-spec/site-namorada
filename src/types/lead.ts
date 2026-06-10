@@ -40,6 +40,15 @@ export interface AppointmentLead {
   lgpd_consent: boolean;
   lgpd_consent_at: string | null;
   privacy_policy_version: string | null;
+  /** Atribuição de campanha (Google Ads / UTM) — preenchida quando o lead veio de anúncio. */
+  gclid: string | null;
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_campaign: string | null;
+  utm_term: string | null;
+  utm_content: string | null;
+  landing_page: string | null;
+  referrer: string | null;
   created_at: string;
   updated_at: string;
 }

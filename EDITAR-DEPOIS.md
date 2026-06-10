@@ -51,8 +51,8 @@ Copie `.env.example` para `.env.local` e preencha:
   - Rode o SQL de `supabase/schema.sql` no painel do Supabase.
   - Sem isso, o formulário **continua funcionando** e leva o paciente ao WhatsApp.
 - **Painel admin** (`/admin`): defina `ADMIN_PASSWORD`.
-- **Rastreamento**: `NEXT_PUBLIC_GA_MEASUREMENT_ID`, `NEXT_PUBLIC_META_PIXEL_ID`, `NEXT_PUBLIC_GTM_ID`.
-- **Domínio**: `NEXT_PUBLIC_SITE_URL` (ex.: `https://www.draanabeatriz.com.br`) — usado em sitemap, canonical e Open Graph.
+- **Rastreamento**: `NEXT_PUBLIC_GA_MEASUREMENT_ID`, `NEXT_PUBLIC_META_PIXEL_ID`, `NEXT_PUBLIC_GTM_ID` — passo a passo completo em `GOOGLE-ADS-SETUP.md`.
+- **Domínio**: ⚠️ NÃO defina `NEXT_PUBLIC_SITE_URL` na Vercel — o código já usa `https://www.draanabeatrizodonto.com.br` como padrão. Essa variável com valor errado foi o que impediu a indexação no Google (corrigido em 2026-06-10).
 
 ## 6. Documentos legais
 

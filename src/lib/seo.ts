@@ -64,12 +64,22 @@ export function buildMetadata({
       siteName: siteConfig.doctorName,
       title: fullTitle,
       description: locDescription,
-      // A imagem é injetada automaticamente por src/app/opengraph-image.tsx
+      // Declarada explicitamente: a convenção de arquivo (src/app/opengraph-image.png)
+      // não injeta a meta tag no HTML em produção quando openGraph é sobrescrito por página.
+      images: [
+        {
+          url: absoluteUrl("/opengraph-image.png"),
+          width: 1200,
+          height: 630,
+          alt: `${siteConfig.doctorName} — ${siteConfig.title}`,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: fullTitle,
       description: locDescription,
+      images: [absoluteUrl("/opengraph-image.png")],
     },
   };
 }

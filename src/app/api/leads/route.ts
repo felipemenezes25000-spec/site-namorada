@@ -55,6 +55,13 @@ export async function POST(request: Request) {
   }
 
   const data = parsed.data;
+  const attr = data.attribution;
+  // Identificador de clique do Google Ads (gclid; gbraid/wbraid no iOS levam
+  // prefixo para permanecerem distinguíveis na importação de conversões offline).
+  const clickId =
+    attr?.gclid ||
+    (attr?.gbraid ? `gbraid:${attr.gbraid}` : null) ||
+    (attr?.wbraid ? `wbraid:${attr.wbraid}` : null);
 
   // 4) Enviar e-mail de notificação para a Dra. (assíncrono, não bloqueia resposta).
   const emailPromise = isEmailConfigured()
@@ -68,6 +75,11 @@ export async function POST(request: Request) {
         hasXray: data.hasXray || null,
         mainComplaint: data.mainComplaint || null,
         source: data.source || null,
+        gclid: clickId,
+        utmSource: attr?.utmSource || null,
+        utmMedium: attr?.utmMedium || null,
+        utmCampaign: attr?.utmCampaign || null,
+        landingPage: attr?.landingPage || null,
       })
     : Promise.resolve({ ok: false, reason: "not_configured" });
 
@@ -83,6 +95,14 @@ export async function POST(request: Request) {
     lgpd_consent: data.lgpdConsent,
     lgpd_consent_at: new Date().toISOString(),
     privacy_policy_version: PRIVACY_POLICY_VERSION,
+    gclid: clickId,
+    utm_source: attr?.utmSource || null,
+    utm_medium: attr?.utmMedium || null,
+    utm_campaign: attr?.utmCampaign || null,
+    utm_term: attr?.utmTerm || null,
+    utm_content: attr?.utmContent || null,
+    landing_page: attr?.landingPage || null,
+    referrer: attr?.referrer || null,
     status: "new",
   };
 

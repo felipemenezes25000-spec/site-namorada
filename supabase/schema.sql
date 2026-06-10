@@ -30,6 +30,17 @@ create table if not exists public.appointment_leads (
   -- Prova de consentimento (LGPD art. 8, §2): quando foi dado e qual versão da política.
   lgpd_consent_at    timestamptz,
   privacy_policy_version text,
+  -- Atribuição de campanha (Google Ads / UTM) — permite importar conversões
+  -- offline no Google Ads (qual clique virou paciente). gclid pode carregar
+  -- prefixo "gbraid:"/"wbraid:" para cliques vindos de iOS.
+  gclid              text,
+  utm_source         text,
+  utm_medium         text,
+  utm_campaign       text,
+  utm_term           text,
+  utm_content        text,
+  landing_page       text,
+  referrer           text,
   created_at         timestamptz not null default now(),
   updated_at         timestamptz not null default now()
 );
@@ -37,6 +48,14 @@ create table if not exists public.appointment_leads (
 -- Migração para tabelas já existentes (rode uma vez se a tabela já foi criada antes):
 alter table public.appointment_leads add column if not exists lgpd_consent_at timestamptz;
 alter table public.appointment_leads add column if not exists privacy_policy_version text;
+alter table public.appointment_leads add column if not exists gclid text;
+alter table public.appointment_leads add column if not exists utm_source text;
+alter table public.appointment_leads add column if not exists utm_medium text;
+alter table public.appointment_leads add column if not exists utm_campaign text;
+alter table public.appointment_leads add column if not exists utm_term text;
+alter table public.appointment_leads add column if not exists utm_content text;
+alter table public.appointment_leads add column if not exists landing_page text;
+alter table public.appointment_leads add column if not exists referrer text;
 
 create index if not exists appointment_leads_status_idx
   on public.appointment_leads (status);

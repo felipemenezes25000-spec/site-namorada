@@ -1,7 +1,8 @@
 import Image from "next/image";
-import { ArrowRight, ShieldCheck, MapPin, HeartHandshake, CalendarCheck, Sparkles, Navigation } from "lucide-react";
+import { ArrowRight, ShieldCheck, MapPin, HeartHandshake, CalendarCheck, Sparkles, Navigation, Phone } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
 import { ButtonLink } from "@/components/ui/button";
+import { TrackedButtonLink } from "@/components/ui/tracked-button-link";
 import { HeroWhatsAppButton } from "./hero-whatsapp-button";
 
 /**
@@ -58,6 +59,24 @@ export function Hero() {
               Como chegar
             </ButtonLink>
           </div>
+
+          <p
+            className="mt-4 text-sm text-brand-ink/70 animate-fade-up"
+            style={{ animationDelay: "0.26s" }}
+          >
+            Prefere ligar?{" "}
+            <TrackedButtonLink
+              href={`tel:+${siteConfig.phone}`}
+              variant="ghost"
+              size="sm"
+              event="phone_click"
+              eventParams={{ location: "home_hero" }}
+              className="inline-flex font-semibold text-brand-green"
+            >
+              <Phone className="size-3.5" strokeWidth={1.7} />
+              {siteConfig.phoneDisplay}
+            </TrackedButtonLink>
+          </p>
 
           <ul
             className="mt-10 flex flex-wrap items-center gap-x-7 gap-y-3 text-sm text-brand-ink/75 animate-fade-up"

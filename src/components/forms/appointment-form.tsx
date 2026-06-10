@@ -14,6 +14,7 @@ import {
 import { treatments } from "@/lib/treatments";
 import { whatsappLink, waMessages } from "@/lib/whatsapp";
 import { track } from "@/lib/analytics";
+import { getAttribution } from "@/lib/attribution";
 import { cn } from "@/lib/utils";
 import { Input, Textarea, Select, Label, FieldError } from "@/components/ui/field";
 import { Button, ButtonLink } from "@/components/ui/button";
@@ -71,7 +72,9 @@ export function AppointmentForm() {
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        // Atribuição de campanha (gclid/UTM) viaja junto com o lead —
+        // viabiliza importar conversões offline no Google Ads.
+        body: JSON.stringify({ ...data, attribution: getAttribution() ?? undefined }),
       });
       if (!res.ok) throw new Error("request_failed");
 

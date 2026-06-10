@@ -54,6 +54,22 @@ export const appointmentSchema = z.object({
       message: "É necessário autorizar o uso dos dados para contato.",
     }),
   }),
+  // Atribuição de campanha (gclid/UTM), capturada no navegador.
+  // Opcional e tolerante: nunca derruba um lead válido.
+  attribution: z
+    .object({
+      gclid: z.string().max(200).optional(),
+      gbraid: z.string().max(200).optional(),
+      wbraid: z.string().max(200).optional(),
+      utmSource: z.string().max(200).optional(),
+      utmMedium: z.string().max(200).optional(),
+      utmCampaign: z.string().max(200).optional(),
+      utmTerm: z.string().max(200).optional(),
+      utmContent: z.string().max(200).optional(),
+      landingPage: z.string().max(300).optional(),
+      referrer: z.string().max(300).optional(),
+    })
+    .optional(),
 });
 
 export type AppointmentInput = z.infer<typeof appointmentSchema>;

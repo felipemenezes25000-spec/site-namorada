@@ -24,23 +24,42 @@ interface LeadEmailData {
   hasXray?: string | null;
   mainComplaint?: string | null;
   source?: string | null;
+  /** Atribuição de campanha — presente quando o lead veio de anúncio. */
+  gclid?: string | null;
+  utmSource?: string | null;
+  utmMedium?: string | null;
+  utmCampaign?: string | null;
+  landingPage?: string | null;
 }
 
 export async function sendLeadNotification(data: LeadEmailData) {
   if (!resend) return { ok: false, reason: "not_configured" };
 
+  // Escapa HTML — os valores vêm do formulário e de parâmetros de URL (UTM).
+  const esc = (v: string) =>
+    v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
   const rows = [
-    `<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Nome</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${data.fullName}</td></tr>`,
-    `<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">WhatsApp</td><td style="padding:8px 12px;border-bottom:1px solid #eee"><a href="https://wa.me/55${data.whatsapp.replace(/\D/g, "")}" style="color:#25D366">${data.whatsapp}</a></td></tr>`,
+    `<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Nome</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${esc(data.fullName)}</td></tr>`,
+    `<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">WhatsApp</td><td style="padding:8px 12px;border-bottom:1px solid #eee"><a href="https://wa.me/55${data.whatsapp.replace(/\D/g, "")}" style="color:#25D366">${esc(data.whatsapp)}</a></td></tr>`,
   ];
 
-  if (data.email) rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">E-mail</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${data.email}</td></tr>`);
-  rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Tratamento</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${data.treatmentInterest}</td></tr>`);
-  if (data.preferredPeriod) rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Período</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${data.preferredPeriod}</td></tr>`);
-  if (data.preferredDate) rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Melhor dia</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${data.preferredDate}</td></tr>`);
+  if (data.email) rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">E-mail</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${esc(data.email)}</td></tr>`);
+  rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Tratamento</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${esc(data.treatmentInterest)}</td></tr>`);
+  if (data.preferredPeriod) rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Período</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${esc(data.preferredPeriod)}</td></tr>`);
+  if (data.preferredDate) rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Melhor dia</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${esc(data.preferredDate)}</td></tr>`);
   if (data.hasXray) rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Exame radiográfico</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${data.hasXray === "sim" ? "Sim" : "Não"}</td></tr>`);
-  if (data.mainComplaint) rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Queixa</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${data.mainComplaint}</td></tr>`);
-  if (data.source) rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Como conheceu</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${data.source}</td></tr>`);
+  if (data.mainComplaint) rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Queixa</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${esc(data.mainComplaint)}</td></tr>`);
+  if (data.source) rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Como conheceu</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${esc(data.source)}</td></tr>`);
+
+  // Origem de campanha — mostra de qual anúncio/campanha o lead veio.
+  const originParts: string[] = [];
+  if (data.gclid) originParts.push("Google Ads");
+  if (data.utmSource) originParts.push(`${data.utmSource}${data.utmMedium ? ` / ${data.utmMedium}` : ""}`);
+  if (data.utmCampaign) originParts.push(`campanha: ${data.utmCampaign}`);
+  if (originParts.length) rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Origem (anúncio)</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${esc(originParts.join(" · "))}</td></tr>`);
+  if (data.landingPage) rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Página de entrada</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${esc(data.landingPage)}</td></tr>`);
+  if (data.gclid) rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">ID do clique (gclid)</td><td style="padding:8px 12px;border-bottom:1px solid #eee;font-size:11px;word-break:break-all">${esc(data.gclid)}</td></tr>`);
 
   const whatsappNumber = data.whatsapp.replace(/\D/g, "");
   const waLink = `https://wa.me/55${whatsappNumber}?text=${encodeURIComponent(`Olá, ${data.fullName.split(" ")[0]}! Recebi sua solicitação pelo site e gostaria de confirmar seu agendamento.`)}`;
