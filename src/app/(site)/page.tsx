@@ -35,9 +35,14 @@ export default function HomePage() {
       <JsonLd data={faqSchema(homeFaqs)} />
       <Hero />
       <CareNeeds />
-      <TreatmentsSection />
+      <TreatmentsSection limit={6} />
       <AboutPreview />
-      <AreasSection />
+      <AreasSection
+        eyebrow="Implante e buco-maxilo"
+        title="Tratamentos que pedem técnica e um olhar individual"
+        description="Reposição de dentes perdidos e cirurgia buco-maxilo-facial, conduzidas com planejamento, segurança e acompanhamento próximo. Conheça cada uma e dê o primeiro passo."
+        className="section-y bg-gradient-to-b from-brand-beige/40 to-brand-bone"
+      />
       <HowItWorks />
       <Differentials />
       <Testimonials />

@@ -5,6 +5,7 @@ import {
   Layers,
   ShieldCheck,
   Stethoscope,
+  Smile,
   type LucideIcon,
 } from "lucide-react";
 import type { TreatmentIcon as IconKey } from "@/lib/treatments";
@@ -16,6 +17,7 @@ const map: Record<IconKey, LucideIcon> = {
   restoration: Layers,
   prevention: ShieldCheck,
   surgery: Stethoscope,
+  implant: Smile,
 };
 
 export function TreatmentIcon({

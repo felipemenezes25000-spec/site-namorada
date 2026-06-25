@@ -1,4 +1,5 @@
-import { Smile, Stethoscope, GraduationCap, ArrowRight, MessageCircle } from "lucide-react";
+import Link from "next/link";
+import { Smile, Stethoscope, GraduationCap, ArrowRight, ArrowUpRight, MessageCircle } from "lucide-react";
 import { Reveal } from "@/components/ui/reveal";
 import { TrackedButtonLink } from "@/components/ui/tracked-button-link";
 import { whatsappLink, waMessages } from "@/lib/whatsapp";
@@ -23,6 +24,7 @@ const areas = [
     institutions: ["ABO Central", "APCD Central"],
     ctaLocation: "area_implante",
     waTopic: "implante",
+    slug: "implante",
   },
   {
     icon: Stethoscope,
@@ -32,6 +34,7 @@ const areas = [
     institutions: ["ABO Central", "IOA"],
     ctaLocation: "area_bucomaxilo",
     waTopic: "cirurgia buco-maxilo-facial",
+    slug: "cirurgia-buco-maxilo-facial",
   },
 ] as const;
 
@@ -67,7 +70,7 @@ export function AreasSection({
 
         <div className="mt-12 grid gap-6 md:grid-cols-2">
           {areas.map(
-            ({ icon: Icon, title: areaTitle, description: areaDesc, institutions, ctaLocation, waTopic }, i) => (
+            ({ icon: Icon, title: areaTitle, description: areaDesc, institutions, ctaLocation, waTopic, slug }, i) => (
               <Reveal key={areaTitle} delay={i * 0.08} className="h-full">
                 <div className="surface flex h-full flex-col rounded-3xl p-7 shadow-card sm:p-8">
                   <span className="flex size-12 items-center justify-center rounded-full bg-brand-green/[0.07] text-brand-green">
@@ -86,29 +89,38 @@ export function AreasSection({
                       </span>
                     ))}
                   </div>
-                  <div className="mt-auto flex flex-wrap items-center gap-3 pt-7">
-                    <TrackedButtonLink
-                      href="/agendamento"
-                      variant="primary"
-                      size="md"
-                      event="scheduling_intent"
-                      eventParams={{ location: ctaLocation }}
+                  <div className="mt-auto pt-7">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <TrackedButtonLink
+                        href="/agendamento"
+                        variant="primary"
+                        size="md"
+                        event="scheduling_intent"
+                        eventParams={{ location: ctaLocation }}
+                      >
+                        Agendar avaliação
+                        <ArrowRight className="size-4" strokeWidth={1.7} />
+                      </TrackedButtonLink>
+                      <TrackedButtonLink
+                        href={whatsappLink(waMessages.treatment(waTopic))}
+                        variant="secondary"
+                        size="md"
+                        external
+                        event="whatsapp_click"
+                        eventParams={{ location: ctaLocation }}
+                        aria-label={`Falar no WhatsApp sobre ${areaTitle}`}
+                      >
+                        <MessageCircle className="size-4" strokeWidth={1.7} />
+                        WhatsApp
+                      </TrackedButtonLink>
+                    </div>
+                    <Link
+                      href={`/tratamentos/${slug}`}
+                      className="group mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-brand-green underline decoration-brand-gold/50 underline-offset-4 transition hover:decoration-brand-gold"
                     >
-                      Agendar avaliação
-                      <ArrowRight className="size-4" strokeWidth={1.7} />
-                    </TrackedButtonLink>
-                    <TrackedButtonLink
-                      href={whatsappLink(waMessages.treatment(waTopic))}
-                      variant="secondary"
-                      size="md"
-                      external
-                      event="whatsapp_click"
-                      eventParams={{ location: ctaLocation }}
-                      aria-label={`Falar no WhatsApp sobre ${areaTitle}`}
-                    >
-                      <MessageCircle className="size-4" strokeWidth={1.7} />
-                      WhatsApp
-                    </TrackedButtonLink>
+                      Saiba mais sobre {areaTitle.toLowerCase()}
+                      <ArrowUpRight className="size-4 shrink-0 text-brand-gold transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={1.8} />
+                    </Link>
                   </div>
                 </div>
               </Reveal>

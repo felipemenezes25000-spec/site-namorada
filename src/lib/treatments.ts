@@ -13,7 +13,8 @@ export type TreatmentIcon =
   | "whitening"
   | "restoration"
   | "prevention"
-  | "surgery";
+  | "surgery"
+  | "implant";
 
 export interface TreatmentFAQ {
   q: string;
@@ -366,6 +367,135 @@ export const treatments: Treatment[] = [
     aftercare: [
       { title: "Repouso e gelo", description: "Repouse nas primeiras horas e use compressa fria por fora do rosto para reduzir o inchaço." },
       { title: "Alimentação", description: "Prefira alimentos frios ou mornos e macios nos primeiros dias, mastigando do lado oposto." },
+      { title: "Higiene e medicação", description: "Siga as orientações de higiene da região e tome a medicação conforme prescrito." },
+    ],
+    warningSigns: [
+      "Sangramento intenso que não cede com compressão",
+      "Inchaço que cresce muito após o terceiro dia",
+      "Febre ou dor que aumenta com o passar dos dias",
+    ],
+  },
+  {
+    slug: "implante",
+    name: "Implante dentário",
+    shortName: "Implante",
+    icon: "implant",
+    excerpt:
+      "Reabilitação de dentes perdidos com implantes, devolvendo função, conforto e naturalidade ao sorriso — com planejamento individual e avaliação criteriosa.",
+    intro:
+      "Perder um dente afeta muito mais do que a aparência: muda a mastigação, a fala e, muitas vezes, a confiança. O implante é uma forma moderna e segura de devolver o que foi perdido — sempre a partir de um planejamento cuidadoso e individual.",
+    what:
+      "O implante dentário é um pino de titânio inserido no osso para substituir a raiz de um dente perdido. Sobre ele é instalada uma coroa que reproduz a aparência e a função do dente natural. É uma reabilitação que une cirurgia e prótese, conduzida em etapas e planejada com exames de imagem (radiografias ou tomografia) para cuidar de cada detalhe com segurança.",
+    forWhom: [
+      "Quem perdeu um ou mais dentes e deseja recuperar a mastigação",
+      "Quem usa prótese removível e busca uma solução mais estável",
+      "Quem teve indicação de extração e quer planejar a reposição",
+      "Quem busca uma segunda opinião antes de decidir pelo procedimento",
+    ],
+    benefits: [
+      "Recuperação da função mastigatória e da fala",
+      "Aparência natural, harmoniosa com os demais dentes",
+      "Solução fixa, sem a instabilidade das próteses removíveis",
+      "Ajuda a preservar o osso e a estrutura do rosto ao longo do tempo",
+    ],
+    steps: [
+      { title: "Avaliação e planejamento", description: "Exame clínico e análise de imagens (radiografias ou tomografia) para avaliar o osso e planejar o implante com segurança." },
+      { title: "Instalação do implante", description: "Procedimento cirúrgico realizado sob anestesia local, com técnica precisa e foco no seu conforto." },
+      { title: "Osseointegração", description: "Período em que o implante se integra ao osso. O tempo varia conforme cada caso e é acompanhado de perto." },
+      { title: "Coroa definitiva", description: "Instalação da coroa que devolve a estética e a função, ajustada para uma mordida confortável." },
+    ],
+    faqs: [
+      { q: "Colocar implante dói?", a: "O procedimento é feito sob anestesia local, com foco no conforto. A maioria dos pacientes relata um pós-operatório tranquilo, com desconforto leve e controlado pela medicação orientada para o seu caso." },
+      { q: "Quanto tempo demora o tratamento com implante?", a: "Depende de cada caso. Entre a instalação do implante e a coroa definitiva costuma haver um período de cicatrização (osseointegração) de alguns meses. O tempo exato é estimado após a avaliação." },
+      { q: "Todo mundo pode fazer implante?", a: "A maioria das pessoas pode, mas é preciso avaliar a saúde geral, a qualidade do osso e as condições da gengiva. Algumas situações pedem cuidados ou etapas prévias, definidos na avaliação com exames de imagem." },
+      { q: "Implante dura para sempre?", a: "Com boa higiene e acompanhamento regular, os implantes têm alta durabilidade. Como qualquer reabilitação, dependem de manutenção e de cuidados ao longo do tempo para se manterem saudáveis." },
+      { q: "Preciso fazer tomografia antes?", a: "Na maioria dos casos, sim. A tomografia mostra o volume e a qualidade do osso e a posição de estruturas importantes, permitindo planejar o implante com mais segurança. O exame necessário é orientado na avaliação." },
+    ],
+    metaTitle: "Implante dentário em [Cidade] — Dra. Ana Beatriz Lemos Souza",
+    metaDescription:
+      "Implante dentário com planejamento individual e avaliação criteriosa em [Cidade]. Reabilitação de dentes perdidos com técnica e acompanhamento próximo, com a Dra. Ana Beatriz. Agende sua avaliação.",
+    keywords: ["implante dentário em [cidade]", "implante dentário [bairro]", "reabilitação oral [cidade]", "dentista de implante em [cidade]"],
+    duration: "Instalação: cerca de 1 hora (varia por caso)",
+    sessions: "Tratamento em etapas, ao longo de alguns meses",
+    notFor:
+      "O implante não é uma solução única para todos os casos. Quando o osso é insuficiente ou há outras condições, podem ser necessárias etapas prévias (como enxerto) ou alternativas, sempre avaliadas individualmente.",
+    contraindications: [
+      "Osso insuficiente pode exigir enxerto antes do implante",
+      "Gengiva inflamada ou doença periodontal ativa precisam ser tratadas antes",
+      "Algumas condições de saúde e o tabagismo exigem cuidados específicos, avaliados caso a caso",
+    ],
+    preparation: [
+      "Informe medicamentos de uso contínuo, alergias e condições de saúde na avaliação",
+      "Leve exames de imagem recentes, se tiver (radiografias ou tomografia)",
+      "Siga as orientações pré-operatórias passadas para o seu caso",
+    ],
+    aftercare: [
+      { title: "Repouso e gelo", description: "Repouse nas primeiras horas e use compressa fria por fora do rosto para reduzir o inchaço." },
+      { title: "Alimentação", description: "Prefira alimentos frios ou mornos e macios nos primeiros dias, mastigando do lado oposto ao da cirurgia." },
+      { title: "Higiene e medicação", description: "Mantenha a higiene conforme orientado e tome a medicação prescrita nos horários indicados." },
+    ],
+    warningSigns: [
+      "Sangramento intenso que não cede com compressão",
+      "Inchaço que aumenta muito após o terceiro dia",
+      "Febre ou dor que cresce com o passar dos dias",
+    ],
+  },
+  {
+    slug: "cirurgia-buco-maxilo-facial",
+    name: "Cirurgia buco-maxilo-facial",
+    shortName: "Buco-maxilo",
+    icon: "surgery",
+    excerpt:
+      "Avaliação e procedimentos na área buco-maxilo-facial, conduzidos com técnica, segurança e acompanhamento próximo em cada etapa.",
+    intro:
+      "A região buco-maxilo-facial reúne boca, maxila, mandíbula e estruturas do rosto. Procedimentos nessa área pedem técnica apurada, planejamento e um cuidado próximo — antes, durante e depois. Aqui, cada caso é avaliado com critério para indicar o caminho mais seguro.",
+    what:
+      "A cirurgia buco-maxilo-facial trata de condições e procedimentos que envolvem os ossos e tecidos da face e da boca — como remoção de dentes inclusos (incluindo sisos), avaliação de lesões e cistos e outras intervenções. O foco é unir segurança, precisão técnica e conforto, sempre a partir de avaliação criteriosa com exames de imagem para confirmar a indicação.",
+    forWhom: [
+      "Quem precisa avaliar a remoção de sisos ou dentes inclusos",
+      "Quem foi orientado a investigar uma lesão, cisto ou alteração óssea",
+      "Quem busca avaliação criteriosa antes de um procedimento na face",
+      "Quem deseja uma segunda opinião com planejamento por imagem",
+    ],
+    benefits: [
+      "Avaliação criteriosa antes de qualquer indicação cirúrgica",
+      "Planejamento por imagem (radiografias ou tomografia)",
+      "Técnica e anestesia voltadas ao conforto e à segurança",
+      "Acompanhamento próximo durante toda a recuperação",
+    ],
+    steps: [
+      { title: "Avaliação clínica", description: "Exame detalhado e análise de imagens para entender o caso e confirmar a indicação." },
+      { title: "Planejamento", description: "Explicação clara do procedimento, das opções, dos riscos e dos benefícios — para decidir em conjunto." },
+      { title: "Procedimento com segurança", description: "Realizado com técnica precisa e protocolo de anestesia ajustado ao seu conforto." },
+      { title: "Acompanhamento", description: "Orientações de pós-operatório e retornos para acompanhar a cicatrização." },
+    ],
+    faqs: [
+      { q: "O que é cirurgia buco-maxilo-facial?", a: "É a área que cuida de procedimentos cirúrgicos envolvendo a boca, os ossos da face, a maxila e a mandíbula — como remoção de dentes inclusos, avaliação de lesões e cistos, entre outras intervenções, sempre após avaliação criteriosa." },
+      { q: "A cirurgia é feita no consultório?", a: "Procedimentos de pequeno e médio porte podem ser realizados em consultório, sob anestesia local. Casos mais complexos são avaliados individualmente, e o local e a abordagem mais seguros são definidos no planejamento." },
+      { q: "Preciso de tomografia?", a: "Com frequência, sim. As imagens mostram a posição de raízes, nervos e estruturas vizinhas, permitindo planejar o procedimento com segurança. O exame necessário é orientado na avaliação." },
+      { q: "Como é a recuperação?", a: "Depende do procedimento e do organismo de cada pessoa. A maioria retoma a rotina em poucos dias, com orientações claras de cuidado e retornos para acompanhar a cicatrização." },
+      { q: "Como sei se realmente preciso da cirurgia?", a: "A indicação é definida após o exame clínico e a análise das imagens. Quando há alternativas, elas são apresentadas, e a decisão é tomada junto com você, considerando riscos, benefícios e os seus objetivos." },
+    ],
+    metaTitle: "Cirurgia buco-maxilo-facial em [Cidade] — Dra. Ana Beatriz Lemos Souza",
+    metaDescription:
+      "Cirurgia buco-maxilo-facial em [Cidade]: avaliação criteriosa, planejamento por imagem e acompanhamento próximo, com a Dra. Ana Beatriz Lemos Souza. Agende sua avaliação.",
+    keywords: ["cirurgia buco-maxilo-facial em [cidade]", "bucomaxilo em [cidade]", "remoção de siso [bairro]", "dente incluso [cidade]"],
+    duration: "Varia conforme o procedimento",
+    sessions: "Geralmente 1 sessão, com retornos de acompanhamento",
+    notFor:
+      "Nem toda queixa na região da face exige cirurgia. Quando há alternativas mais conservadoras, elas são avaliadas primeiro — a indicação cirúrgica vem sempre depois de um diagnóstico criterioso.",
+    contraindications: [
+      "Infecção aguda no local pode pedir tratamento antes do procedimento",
+      "Algumas condições de saúde e medicamentos exigem cuidados específicos, avaliados caso a caso",
+    ],
+    preparation: [
+      "Informe medicamentos de uso contínuo, alergias e condições de saúde na avaliação",
+      "Leve exames de imagem recentes, se tiver",
+      "Para alguns procedimentos, pode ser recomendado ter um acompanhante na volta para casa",
+    ],
+    aftercare: [
+      { title: "Repouso e gelo", description: "Repouse nas primeiras horas e use compressa fria por fora do rosto para reduzir o inchaço." },
+      { title: "Alimentação", description: "Prefira alimentos frios ou mornos e macios nos primeiros dias." },
       { title: "Higiene e medicação", description: "Siga as orientações de higiene da região e tome a medicação conforme prescrito." },
     ],
     warningSigns: [
