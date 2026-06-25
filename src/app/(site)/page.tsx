@@ -7,6 +7,7 @@ import { Hero } from "@/components/sections/hero";
 import { CareNeeds } from "@/components/sections/care-needs";
 import { TreatmentsSection } from "@/components/sections/treatments-section";
 import { AboutPreview } from "@/components/sections/about-preview";
+import { AreasSection } from "@/components/sections/areas-section";
 import { HowItWorks } from "@/components/sections/how-it-works";
 import { Differentials } from "@/components/sections/differentials";
 import { Testimonials } from "@/components/sections/testimonials";
@@ -36,6 +37,7 @@ export default function HomePage() {
       <CareNeeds />
       <TreatmentsSection />
       <AboutPreview />
+      <AreasSection />
       <HowItWorks />
       <Differentials />
       <Testimonials />
