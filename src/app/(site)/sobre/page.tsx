@@ -41,6 +41,7 @@ const areas = [
       "Reabilitação de dentes perdidos com implantes, devolvendo função, conforto e naturalidade ao sorriso — sempre com planejamento individual.",
     institutions: ["ABO Central", "APCD Central"],
     ctaLocation: "area_implante",
+    waTopic: "implante",
   },
   {
     icon: Stethoscope,
@@ -49,6 +50,7 @@ const areas = [
       "Avaliação e procedimentos na área buco-maxilo-facial, conduzidos com técnica, segurança e acompanhamento próximo em cada etapa.",
     institutions: ["ABO Central", "IOA"],
     ctaLocation: "area_bucomaxilo",
+    waTopic: "cirurgia buco-maxilo-facial",
   },
 ] as const;
 
@@ -205,7 +207,7 @@ export default function SobrePage() {
           </div>
 
           <div className="mt-12 grid gap-6 md:grid-cols-2">
-            {areas.map(({ icon: Icon, title, description, institutions, ctaLocation }, i) => (
+            {areas.map(({ icon: Icon, title, description, institutions, ctaLocation, waTopic }, i) => (
               <Reveal key={title} delay={i * 0.08} className="h-full">
                 <div className="surface flex h-full flex-col rounded-3xl p-7 shadow-card sm:p-8">
                   <span className="flex size-12 items-center justify-center rounded-full bg-brand-green/[0.07] text-brand-green">
@@ -226,7 +228,7 @@ export default function SobrePage() {
                       </span>
                     ))}
                   </div>
-                  <div className="mt-auto pt-7">
+                  <div className="mt-auto flex flex-wrap items-center gap-3 pt-7">
                     <TrackedButtonLink
                       href="/agendamento"
                       variant="primary"
@@ -236,6 +238,18 @@ export default function SobrePage() {
                     >
                       Agendar avaliação
                       <ArrowRight className="size-4" strokeWidth={1.7} />
+                    </TrackedButtonLink>
+                    <TrackedButtonLink
+                      href={whatsappLink(waMessages.treatment(waTopic))}
+                      variant="secondary"
+                      size="md"
+                      external
+                      event="whatsapp_click"
+                      eventParams={{ location: ctaLocation }}
+                      aria-label={`Falar no WhatsApp sobre ${title}`}
+                    >
+                      <MessageCircle className="size-4" strokeWidth={1.7} />
+                      WhatsApp
                     </TrackedButtonLink>
                   </div>
                 </div>
