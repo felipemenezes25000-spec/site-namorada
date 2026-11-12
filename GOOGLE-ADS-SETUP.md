@@ -22,7 +22,7 @@ e os **IDs nas variáveis de ambiente**. Siga na ordem.
 
 1. https://business.google.com → criar/reivindicar o perfil:
    **Dra. Ana Beatriz Lemos Souza — Cirurgiã-Dentista**, categoria "Dentista",
-   endereço R. Itapeva 286 — Bela Vista, telefone (11) 93922-2289, site
+   endereço R. Rio Verde, 1029 — Vila Bruna, telefone (11) 93922-2289, site
    https://www.draanabeatrizodonto.com.br.
 2. Complete TUDO: horários reais, fotos do consultório e da Dra. (mínimo 10),
    serviços (limpeza, clareamento, restaurações, extração de siso, urgência).

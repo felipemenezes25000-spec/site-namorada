@@ -17,7 +17,7 @@ export function LocationSection() {
           align="left"
           eyebrow="Localização"
           title="Um espaço acolhedor, pensado para o seu conforto"
-          description={`Consultório na ${siteConfig.neighborhood}, ${siteConfig.city} — com fácil acesso pela Av. Paulista. Venha conhecer ou fale com a Dra. Ana para combinar o melhor horário.`}
+          description={`Consultório na ${siteConfig.neighborhood}, ${siteConfig.city} — com fácil acesso pela Av. Edgar Facó. Venha conhecer ou fale com a Dra. Ana para combinar o melhor horário.`}
           className="max-w-3xl"
         />
 

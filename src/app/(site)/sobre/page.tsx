@@ -171,7 +171,7 @@ export default function SobrePage() {
               </h2>
               <p className="mt-5 text-pretty text-lg leading-relaxed text-brand-ink/75">
                 Ambiente moderno, com luz natural e vista panorâmica, na região
-                da Bela Vista em São Paulo. Aqui, cada detalhe foi planejado para
+                da Freguesia do Ó em São Paulo. Aqui, cada detalhe foi planejado para
                 que você se sinta acolhido(a) desde o primeiro momento.
               </p>
             </Reveal>
@@ -188,7 +188,7 @@ export default function SobrePage() {
               },
               {
                 src: "/consultorio-3.png",
-                alt: "Ambiente do consultório da Dra. Ana Beatriz na Bela Vista, São Paulo — espaço moderno e acolhedor",
+                alt: "Ambiente do consultório da Dra. Ana Beatriz na Freguesia do Ó, São Paulo — espaço moderno e acolhedor",
               },
               {
                 src: "/consultorio-4.jpg",

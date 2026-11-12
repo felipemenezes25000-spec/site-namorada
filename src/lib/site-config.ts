@@ -25,7 +25,7 @@ export const siteConfig = {
   /** Cidade / bairro — usados no SEO local. */
   city: "São Paulo",
   state: "SP",
-  neighborhood: "Bela Vista",
+  neighborhood: "Freguesia do Ó",
   region: "São Paulo",
 
   /** Contato. */
@@ -39,18 +39,18 @@ export const siteConfig = {
 
   /** Endereço do consultório. */
   address: {
-    street: "R. Itapeva, 286",
+    street: "R. Rio Verde, 1029",
     complement: "",
-    neighborhood: "Bela Vista",
+    neighborhood: "Vila Bruna",
     city: "São Paulo",
     state: "SP",
-    zip: "01332-000",
-    full: "R. Itapeva, 286 — Bela Vista, São Paulo - SP",
-    mapsEmbedUrl: "https://www.google.com/maps?q=-23.5586695,-46.6521676&output=embed",
-    mapsDirectionsUrl: "https://www.google.com/maps/dir/?api=1&destination=-23.5586695,-46.6521676",
+    zip: "02934-201",
+    full: "R. Rio Verde, 1029 — Vila Bruna, São Paulo - SP",
+    mapsEmbedUrl: "https://www.google.com/maps?q=-23.4884235,-46.7046298&output=embed",
+    mapsDirectionsUrl: "https://www.google.com/maps/dir/?api=1&destination=-23.4884235,-46.7046298",
     // Link para avaliações no Google — atualize com o Place ID real quando disponível.
     reviewUrl: "https://search.google.com/local/writereview?placeid=[SEU_PLACE_ID]",
-    geo: { lat: "-23.5586695", lng: "-46.6521676" },
+    geo: { lat: "-23.4884235", lng: "-46.7046298" },
   },
 
   /** URL pública canônica (também em NEXT_PUBLIC_SITE_URL). */

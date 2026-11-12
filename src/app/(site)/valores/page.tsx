@@ -29,7 +29,7 @@ export const metadata: Metadata = buildMetadata({
   path: PATH,
   keywords: [
     "quanto custa dentista particular São Paulo",
-    "valores dentista Bela Vista",
+    "valores dentista Freguesia do Ó",
     "preço consulta odontológica São Paulo",
     "formas de pagamento dentista",
   ],

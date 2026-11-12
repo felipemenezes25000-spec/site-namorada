@@ -48,7 +48,7 @@ export const homeFaqs = [
   },
   {
     q: "O consultório tem estacionamento?",
-    a: "O consultório fica na R. Itapeva, 286 — Bela Vista, próximo à Av. Paulista. Há estacionamentos conveniados e rotativos na região. Consulte a página de localização para mais detalhes sobre como chegar.",
+    a: "O consultório fica na R. Rio Verde, 1029 — Vila Bruna, região da Freguesia do Ó, travessa da Av. Edgar Facó. Para orientações sobre estacionamento e como chegar, fale pelo WhatsApp.",
   },
   {
     q: "O consultório é acessível para pessoas com mobilidade reduzida?",
