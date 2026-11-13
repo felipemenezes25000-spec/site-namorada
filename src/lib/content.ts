@@ -5,15 +5,13 @@
  * de `hero-statement.tsx`: mudar um título exige mudar quem o procura.
  */
 
-import { locale, localeTexto } from "./site-config";
-
 /* --------------------------- datas e versões --------------------------- */
 
 /**
  * Versão vigente da Política de Privacidade (ISO). É a ÚNICA fonte: a página exibe a data
  * por ela e `api/leads/route.ts` deve gravá-la em `privacy_policy_version` (ver retorno).
  */
-export const PRIVACY_POLICY_VERSION = "2026-11-12";
+export const PRIVACY_POLICY_VERSION = "2026-11-13";
 
 /** Data de vigência dos Termos de Uso (ISO). */
 export const TERMS_VERSION = "2026-11-12";
@@ -23,7 +21,7 @@ export const TERMS_VERSION = "2026-11-12";
  * Alimenta o `lastmod` do sitemap, o `dateModified` do JSON-LD e a data visível de
  * `<AuthorshipLine />`. Só mude quando o texto mudar de verdade.
  */
-export const CONTENT_UPDATED = "2026-11-12";
+export const CONTENT_UPDATED = "2026-11-13";
 
 const MESES = [
   "janeiro",
@@ -55,17 +53,20 @@ export function formatDatePtBR(iso: string): string {
 export const respostas = {
   convenio: "Não. O atendimento é particular.",
   /** Resposta canônica sobre o custo da avaliação (sem divulgar valor). Use em TODA página que fale disso. */
-  avaliacao: "A avaliação é uma consulta particular; o valor é informado pelo WhatsApp ao agendar.",
+  avaliacao: "A avaliação é particular: o valor da consulta é informado pelo WhatsApp ao agendar.",
   /** O que a avaliação inclui (pergunta "O que inclui a avaliação?"); o custo vem de `avaliacao`. */
   avaliacaoInclui:
     "A avaliação é uma consulta completa, com exame clínico, diagnóstico e plano de cuidado.",
+  /** Resposta inteira de "O que inclui a avaliação?": o que é e quanto custa, sem repetir "consulta". */
+  avaliacaoCompleta:
+    "A avaliação é uma consulta completa, com exame clínico, diagnóstico e plano de cuidado. É particular, e o valor é informado pelo WhatsApp ao agendar. O orçamento do tratamento só é feito depois do exame.",
   orcamento:
     "Não. Cada caso precisa ser examinado antes. Depois da avaliação, a Dra. Ana apresenta o plano de tratamento e o orçamento, sem pressão para decidir na hora.",
   /** Única menção a pagamento no site (Código de Ética Odontológica, art. 44, I: sem modalidades em destaque). */
   pagamento: "As formas de pagamento são informadas no atendimento, pelo WhatsApp.",
   duracao:
     "De 40 a 60 minutos, em média. Esse tempo é para o exame, o diagnóstico e a conversa sobre o plano de cuidado, sem pressa.",
-  idade: "Sim. O atendimento é para crianças a partir de 7 anos de idade.",
+  idade: "O atendimento é para crianças a partir de 7 anos de idade.",
   orientacaoWhatsapp: "A orientação por WhatsApp não substitui o exame.",
 } as const;
 
@@ -74,7 +75,7 @@ export const respostas = {
 /** Perguntas frequentes da home (as 8 primeiras ficam à vista; as outras em "Ver todas"). */
 export const homeFaqs = [
   { q: "Quanto dura a primeira consulta?", a: respostas.duracao },
-  { q: "O que inclui a avaliação?", a: `${respostas.avaliacaoInclui} ${respostas.avaliacao}` },
+  { q: "O que inclui a avaliação?", a: respostas.avaliacaoCompleta },
   { q: "É possível receber um orçamento antes da consulta?", a: respostas.orcamento },
   { q: "Quais são as formas de pagamento?", a: respostas.pagamento },
   { q: "A Dra. Ana atende convênios ou planos de saúde?", a: respostas.convenio },
@@ -111,10 +112,6 @@ export const homeFaqs = [
     q: "Como é a extração de siso?",
     a: "O procedimento é feito com anestesia local. Depois, pode haver desconforto, que a Dra. Ana orienta a controlar com a medicação indicada.",
   },
-  {
-    q: "O consultório tem estacionamento?",
-    a: `O consultório fica na ${locale.ruaNumero}, na ${locale.bairro}, ${localeTexto("regiaoZona")}, em uma travessa da Av. Edgar Facó. Para ver o trajeto, use o botão "Como chegar" do mapa. Se quiser saber sobre vaga para estacionar, pergunte ao agendar a sua avaliação.`,
-  },
 ];
 
 /* --------------------------- "O que traz você" --------------------------- */
@@ -126,13 +123,15 @@ export const homeFaqs = [
 export const careNeeds: { title: string; description: string; href: string; cta: string }[] = [
   {
     title: "Faz tempo desde a última consulta",
-    description: "Retome os cuidados com calma e sem julgamentos, a partir de uma avaliação completa.",
+    description:
+      "Retome os cuidados com calma e sem julgamentos, a partir de uma avaliação completa.",
     href: "/primeira-consulta",
     cta: "Como é a primeira consulta",
   },
   {
     title: "Sente dor, sensibilidade ou incômodo? Sua gengiva sangra?",
-    description: "Vamos entender a causa juntos e combinar os próximos passos, com explicações claras.",
+    description:
+      "Vamos entender a causa juntos e combinar os próximos passos, com explicações claras.",
     href: "/urgencia-odontologica",
     cta: "Ver atendimento de urgência",
   },
@@ -144,13 +143,15 @@ export const careNeeds: { title: string; description: string; href: string; cta:
   },
   {
     title: "Precisa avaliar os sisos ou cirurgia oral",
-    description: "Avaliação cuidadosa e orientação sobre a cirurgia oral, de acordo com a sua necessidade.",
+    description:
+      "Avaliação cuidadosa e orientação sobre a cirurgia oral, de acordo com a sua necessidade.",
     href: "/tratamentos/cirurgia-oral",
     cta: "Ver cirurgia oral",
   },
   {
     title: "Quer manter a saúde bucal em dia",
-    description: "Acompanhamento preventivo e limpezas para cuidar antes que os problemas apareçam.",
+    description:
+      "Acompanhamento preventivo e limpezas para cuidar antes que os problemas apareçam.",
     href: "/tratamentos/prevencao",
     cta: "Conhecer a prevenção",
   },
@@ -168,8 +169,7 @@ export const careNeeds: { title: string; description: string; href: string; cta:
 export const differentials: { title: string; description: string }[] = [
   {
     title: "Consulta de 40 a 60 minutos",
-    description:
-      "Cada consulta tem o tempo de que precisa. Do início ao fim, a atenção é sua.",
+    description: "Cada consulta tem o tempo de que precisa. Do início ao fim, a atenção é sua.",
   },
   {
     title: "Diagnóstico antes de qualquer decisão",
@@ -188,7 +188,8 @@ export const differentials: { title: string; description: string }[] = [
   },
   {
     title: "Atendimento particular, sem convênio",
-    description: "O atendimento é particular. Depois da avaliação, você recebe o plano de tratamento e o orçamento.",
+    description:
+      "O atendimento é particular. Depois da avaliação, você recebe o plano de tratamento e o orçamento.",
   },
   {
     title: "WhatsApp direto com a Dra. Ana",
@@ -204,12 +205,14 @@ export const journeySteps = [
   {
     number: "01",
     title: "Escolha o canal que preferir",
-    description: "Fale pelo WhatsApp ou preencha o formulário, do jeito mais confortável para você.",
+    description:
+      "Fale pelo WhatsApp ou preencha o formulário, do jeito mais confortável para você.",
   },
   {
     number: "02",
     title: "Conte o que você precisa",
-    description: "Compartilhe o que trouxe você até aqui e as suas dúvidas. Tudo no seu tempo, sem pressão.",
+    description:
+      "Compartilhe o que trouxe você até aqui e as suas dúvidas. Tudo no seu tempo, sem pressão.",
   },
   {
     number: "03",

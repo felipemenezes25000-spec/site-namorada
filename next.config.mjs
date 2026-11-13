@@ -74,6 +74,10 @@ const nextConfig = {
   outputFileTracingRoot: __dirname,
   images: {
     formats: ["image/avif", "image/webp"],
+    // Larguras do srcset (DESIGN.md): as telas reais do público (390 do celular, 640/828 do tablet e do
+    // celular de densidade 2, 1080 e 1440 do computador). O padrão do Next gerava 9 larguras.
+    deviceSizes: [390, 640, 828, 1080, 1440],
+    imageSizes: [64, 128, 256],
     // Qualidades usadas pelos <Image> do site (lista exigida a partir do Next 16).
     qualities: [72, 75],
     // Variantes otimizadas ficam 30 dias no cache da plataforma.
@@ -84,9 +88,11 @@ const nextConfig = {
     return [
       {
         // Aliases .vercel.app (projeto, git-main, deploys) servem o mesmo conteúdo
-        // do domínio oficial — redirect 308 evita conteúdo duplicado no Google.
+        // do domínio oficial — redirect 308 evita conteúdo duplicado no Google. Qualquer
+        // *.vercel.app que chegue a este deploy de produção é deste projeto: a regra não
+        // depende do nome do projeto (que pode ser renomeado sem mexer aqui).
         source: "/:path*",
-        has: [{ type: "host", value: "site-namorada(.*)\\.vercel\\.app" }],
+        has: [{ type: "host", value: ".*\\.vercel\\.app" }],
         destination: "https://www.draanabeatrizodonto.com.br/:path*",
         permanent: true,
       },

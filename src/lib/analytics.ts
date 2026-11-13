@@ -83,7 +83,8 @@ export function sanitizeParams(params: EventParams): EventParams {
 }
 
 /** Parâmetros que NÃO vão ao Meta Pixel: indicam necessidade de saúde do visitante (mesmo neutros). */
-const PIXEL_BLOCKED = new Set(["need"]);
+// Nunca ao Pixel da Meta: a necessidade escolhida e o tratamento de interesse (dado de saúde).
+const PIXEL_BLOCKED = new Set(["need", "treatment"]);
 
 function pixelParams(params: EventParams): EventParams {
   const out: EventParams = {};

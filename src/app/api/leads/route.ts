@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { buildAppointmentSchema } from "@/lib/validations";
 import { treatmentOptions } from "@/lib/lead-treatments";
 import { getServerSupabase, isSupabaseConfigured } from "@/lib/supabase";
@@ -13,7 +13,11 @@ export const maxDuration = 15;
 
 /*
  * Contrato de resposta (JSON, sempre com Cache-Control: no-store):
- *   200 { ok: true, persisted: boolean, emailed: boolean }   lead gravado e/ou enviado por e-mail
+ *   200 { ok: true, persisted: boolean, emailed: boolean | "pending" }   lead gravado e/ou enviado por e-mail.
+ *       "pending": sem banco, o e-mail passou do prazo de 8 s; ele segue sendo enviado em segundo plano
+ *       (after()), e a resposta não vira 503 por lentidão (o paciente não reenvia e não duplica o lead).
+ *   200 { ok: true, ..., duplicate: true }   mesmo `submissionId` repetido em até 10 min: nada é gravado
+ *       nem enviado de novo (o formulário repete o id nas novas tentativas do mesmo envio).
  *   400 { ok: false, error: "invalid_json" }
  *   403 { ok: false, error: "forbidden" }                     origem diferente do site
  *   413 { ok: false, error: "payload_too_large" }
@@ -36,6 +40,16 @@ const MAX_BODY_BYTES = 20_000;
 const MIN_FILL_MS = 3000;
 const EXTERNAL_TIMEOUT_MS = 8000;
 const TRAP_BODY = { ok: true, persisted: false, emailed: false, trap: true } as const;
+
+/** Envios já recebidos (submissionId -> instante), para descartar repetições. Por instância (memória). */
+const DEDUPE_MS = 10 * 60 * 1000;
+const recentSubmissions = new Map<string, number>();
+function seenSubmission(id: string, now: number): boolean {
+  for (const [k, at] of recentSubmissions) if (now - at > DEDUPE_MS) recentSubmissions.delete(k);
+  if (recentSubmissions.has(id)) return true;
+  recentSubmissions.set(id, now);
+  return false;
+}
 
 /** Resolve com `fallback` se `promise` passar de `ms` (a chamada externa nunca prende o paciente). */
 function withTimeout<T>(promise: Promise<T>, ms: number, fallback: T): Promise<T> {
@@ -78,11 +92,9 @@ export async function POST(request: Request) {
   const ip = clientIp(request.headers);
   const limit = rateLimit(`leads-any:${ip}`, 30, 10 * 60 * 1000);
   if (!limit.ok) {
-    return reply(
-      { ok: false, error: "rate_limited", retryAfter: limit.retryAfter },
-      429,
-      { "Retry-After": String(limit.retryAfter) },
-    );
+    return reply({ ok: false, error: "rate_limited", retryAfter: limit.retryAfter }, 429, {
+      "Retry-After": String(limit.retryAfter),
+    });
   }
 
   const declared = Number(request.headers.get("content-length") ?? 0);
@@ -93,7 +105,8 @@ export async function POST(request: Request) {
   let body: Record<string, unknown>;
   try {
     const raw = await request.text();
-    if (Buffer.byteLength(raw, "utf8") > MAX_BODY_BYTES) return reply({ ok: false, error: "payload_too_large" }, 413);
+    if (Buffer.byteLength(raw, "utf8") > MAX_BODY_BYTES)
+      return reply({ ok: false, error: "payload_too_large" }, 413);
     const parsedJson: unknown = JSON.parse(raw);
     if (!parsedJson || typeof parsedJson !== "object" || Array.isArray(parsedJson)) {
       return reply({ ok: false, error: "invalid_json" }, 400);
@@ -134,15 +147,27 @@ export async function POST(request: Request) {
   // 3c) Limite estrito: só leads válidos gastam as 5 vagas / 10 min.
   const strict = rateLimit(`leads:${ip}`, 5, 10 * 60 * 1000);
   if (!strict.ok) {
-    return reply(
-      { ok: false, error: "rate_limited", retryAfter: strict.retryAfter },
-      429,
-      { "Retry-After": String(strict.retryAfter) },
-    );
+    return reply({ ok: false, error: "rate_limited", retryAfter: strict.retryAfter }, 429, {
+      "Retry-After": String(strict.retryAfter),
+    });
+  }
+
+  // 3d) Repetição do mesmo envio (rede caiu e o paciente tentou de novo): não grava nem envia outra vez.
+  const submissionId =
+    typeof body.submissionId === "string" && /^[A-Za-z0-9-]{8,64}$/.test(body.submissionId)
+      ? body.submissionId
+      : null;
+  if (submissionId && seenSubmission(submissionId, Date.now())) {
+    return reply({ ok: true, persisted: false, emailed: false, duplicate: true });
   }
 
   const data = parsed.data;
   const attr = data.attribution;
+  // Registro do consentimento: o mesmo instante e a mesma versão vão ao e-mail e ao banco.
+  const consentAt = new Date().toISOString();
+  const temDadoDeSaude = Boolean(data.mainComplaint) || data.hasXray === "sim";
+  const healthConsent: "sim" | "nao" | "nao_se_aplica" =
+    data.healthConsent === true ? "sim" : temDadoDeSaude ? "nao" : "nao_se_aplica";
   // Identificador de clique do Google Ads (gclid; gbraid/wbraid no iOS levam
   // prefixo para permanecerem distinguíveis na importação de conversões offline).
   const clickId =
@@ -167,6 +192,9 @@ export async function POST(request: Request) {
         utmMedium: attr?.utmMedium || null,
         utmCampaign: attr?.utmCampaign || null,
         landingPage: attr?.landingPage || null,
+        consentAt,
+        privacyPolicyVersion: PRIVACY_POLICY_VERSION,
+        healthConsent,
       })
     : Promise.resolve({ ok: false, reason: "not_configured" });
   // Falha de envio nunca derruba a resposta: o resultado só conta se o e-mail sair.
@@ -186,7 +214,7 @@ export async function POST(request: Request) {
     main_complaint: data.mainComplaint || null,
     source: data.source || null,
     lgpd_consent: data.lgpdConsent,
-    lgpd_consent_at: new Date().toISOString(),
+    lgpd_consent_at: consentAt,
     privacy_policy_version: PRIVACY_POLICY_VERSION,
     health_consent: data.healthConsent === true,
     gclid: clickId,
@@ -225,13 +253,32 @@ export async function POST(request: Request) {
         else persisted = true;
       }
     } catch (err) {
-      console.error("[leads] supabase unexpected error:", err instanceof Error ? err.name : "unknown");
+      console.error(
+        "[leads] supabase unexpected error:",
+        err instanceof Error ? err.name : "unknown",
+      );
     }
   }
 
   // Espera o e-mail terminar (já disparou em paralelo).
   const emailResult = await emailSettled;
   const emailed = "ok" in emailResult && emailResult.ok === true;
+
+  // E-mail lento (passou do prazo), mas ainda em andamento: a função continua viva até ele terminar
+  // (after) e a resposta não vira 503, que faria o paciente reenviar o mesmo lead.
+  if (!emailed && emailResult.reason === "timeout") {
+    try {
+      after(() =>
+        emailPromise.then(
+          () => undefined,
+          () => undefined,
+        ),
+      );
+    } catch {
+      /* fora do ciclo de uma requisição do Next (testes): a promessa segue sozinha */
+    }
+    if (!persisted) return reply({ ok: true, persisted, emailed: "pending" });
+  }
 
   // Nem gravado nem enviado: o lead se perderia. Erro explícito para o formulário
   // oferecer o atalho de WhatsApp em vez de mostrar um falso sucesso.

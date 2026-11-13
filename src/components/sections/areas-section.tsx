@@ -37,7 +37,7 @@ const areas = [
   {
     title: "Remoção de dentes inclusos e cirurgias na boca",
     description:
-      "Avaliação e cirurgias na boca, como a remoção de dentes inclusos, com planejamento por imagem e acompanhamento em cada etapa.",
+      "Avaliação e pequenas cirurgias orais, como a remoção de dentes inclusos, com planejamento por imagem e acompanhamento em cada etapa.",
     institutions: ["ABO Central", "IOA"],
     ctaLocation: "area_bucomaxilo",
     slug: "cirurgia-buco-maxilo-facial",
@@ -47,10 +47,11 @@ const areas = [
 export function AreasSection({
   eyebrow = "No consultório",
   title = "Implante e cirurgia: o que a Dra. Ana atende",
-  description = "Além do cuidado clínico geral, a Dra. Ana atende casos de implante dentário e de cirurgias na boca, sempre com avaliação criteriosa antes de qualquer indicação.",
+  description = "Além do cuidado clínico geral, a Dra. Ana atende casos de implante dentário e de pequenas cirurgias orais, sempre com avaliação criteriosa antes de qualquer indicação.",
   tone = "osso",
   id,
   variant = "list",
+  compactMobile = false,
   className,
 }: {
   eyebrow?: string;
@@ -60,11 +61,21 @@ export function AreasSection({
   id?: string;
   /** "list" (padrão, home) ou "line" (uma linha com os dois nomes, /sobre). */
   variant?: "list" | "line";
+  /**
+   * Celular (< 760px) enxuto: só o nome e o link de cada área, sem o texto, o curso e o botão (a home já
+   * lista os dois tratamentos no sumário; esta seção vira uma faixa curta). O HTML continua inteiro.
+   */
+  compactMobile?: boolean;
   className?: string;
 }) {
   const titleId = `${id ?? "areas"}-titulo`;
   return (
-    <Section tone={tone} id={id} aria-labelledby={titleId} className={cn(styles.areasSec, styles.secM, className)}>
+    <Section
+      tone={tone}
+      id={id}
+      aria-labelledby={titleId}
+      className={cn(styles.areasSec, styles.secM, compactMobile && styles.areasCompact, className)}
+    >
       <Container>
         <div className="grid12">
           <div className={styles.areaHead}>
@@ -90,33 +101,36 @@ export function AreasSection({
           </ul>
         ) : (
           <>
-        <ol data-reveal="" className={cn("idx", styles.areas)}>
-          {areas.map((a, i) => (
-            <IndexRow key={a.title} i={i} className={styles.area}>
-              <span className={cn("it-sm", styles.areaNum)} aria-hidden="true">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <div className={styles.areaBody}>
-                <h3 className={cn("t-d3 display", styles.areaName)}>{a.title}</h3>
-                <p className="t-body">{a.description}</p>
-                <p className={cn("t-cap", styles.areaCap)}>Curso: {a.institutions.join(" · ")}</p>
-              </div>
-              <div className={styles.areaActions}>
-                <Link href={`/tratamentos/${a.slug}`} className={cn("link t-label", styles.areaLink)}>
-                  <span>
-                    Conhecer {a.title.toLowerCase()}
+            <ol data-reveal="" className={cn("idx", styles.areas)}>
+              {areas.map((a, i) => (
+                <IndexRow key={a.title} i={i} className={styles.area}>
+                  <span className={cn("num-sans", styles.areaNum)} aria-hidden="true">
+                    {String(i + 1).padStart(2, "0")}
                   </span>
-                  <ArrowIcon size={18} />
-                </Link>
-              </div>
-            </IndexRow>
-          ))}
-          <IndexEnd i={areas.length} />
-        </ol>
+                  <div className={styles.areaBody}>
+                    <h3 className={cn("t-d3 display", styles.areaName)}>{a.title}</h3>
+                    <p className={cn("t-body", styles.areaDesc)}>{a.description}</p>
+                    <p className={cn("t-cap", styles.areaCap)}>
+                      Curso: {a.institutions.join(" · ")}
+                    </p>
+                  </div>
+                  <div className={styles.areaActions}>
+                    <Link
+                      href={`/tratamentos/${a.slug}`}
+                      className={cn("link t-label", styles.areaLink)}
+                    >
+                      <span>Conhecer {a.title.toLowerCase()}</span>
+                      <ArrowIcon size={18} />
+                    </Link>
+                  </div>
+                </IndexRow>
+              ))}
+              <IndexEnd i={areas.length} />
+            </ol>
 
-        <div className={styles.areasCta}>
-          <AgendarCTA location="areas" variant="primario" />
-        </div>
+            <div className={styles.areasCta}>
+              <AgendarCTA location="areas" variant="primario" />
+            </div>
           </>
         )}
       </Container>

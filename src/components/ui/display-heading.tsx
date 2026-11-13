@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { cn } from "@/lib/utils";
+import { cn, semQuebraNome } from "@/lib/utils";
 
 export type DisplaySize = "d1" | "d1i" | "d2" | "d3" | "d4" | "row";
 
@@ -37,17 +37,19 @@ export function DisplayHeading({
   children: ReactNode;
 }) {
   const Tag = `h${level}` as "h1" | "h2" | "h3" | "h4";
+  // "Dra." nunca termina linha no título (nem "do Ó" fica sozinho)
+  const texto = (n: ReactNode) => (typeof n === "string" ? semQuebraNome(n) : n);
   const withLuz = luz ?? level === 1;
   return (
     <Tag id={id} className={cn(sizeClass[size], withLuz && "luz", className)}>
       {kicker && (
         <>
-          <span className="t-kicker mb-[10px] block">{kicker}</span>
+          <span className="t-kicker mb-[10px] block">{texto(kicker)}</span>
           {/* o texto do título continua uma frase só para leitores de tela e para o <title> */}
           <span className="sr-only">. </span>
         </>
       )}
-      {children}
+      {texto(children)}
     </Tag>
   );
 }

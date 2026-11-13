@@ -25,19 +25,13 @@ const config: Config = {
     "idx-contatos",
   ],
   theme: {
-    // Lista COMPLETA e em ordem crescente: se só estendêssemos, os breakpoints
-    // novos cairiam depois de 2xl no CSS gerado e quebrariam a cascata.
-    // sm/md/lg/xl/2xl mantêm os valores padrão (o /admin usa).
+    // Lista COMPLETA e em ordem crescente: só as larguras que o código usa (DESIGN.md: 760 e 1100;
+    // sm e lg ficam para o /admin). Media query fora destas, só em módulo e com comentário.
     screens: {
-      xs: "375px",
       sm: "640px",
       tab: "760px",
-      md: "768px",
       lg: "1024px",
       desk: "1100px",
-      xl: "1280px",
-      wide: "1440px",
-      "2xl": "1536px",
     },
     container: {
       center: true,
@@ -45,10 +39,6 @@ const config: Config = {
         DEFAULT: "1.25rem",
         sm: "1.5rem",
         lg: "2rem",
-        xl: "2.5rem",
-      },
-      screens: {
-        "2xl": "1240px",
       },
     },
     extend: {
@@ -78,56 +68,33 @@ const config: Config = {
         accent: "var(--accent)",
         rule: "var(--rule)",
 
-        /* LEGADO /admin — não usar no site */
-        brand: {
-          green: "#22513A",
-          "green-dark": "#1B4030",
-          "green-deep": "#15301F",
-          gold: "#B69050",
-          "gold-soft": "#C6A56E",
-          "gold-ink": "#7A5E28",
-          "gold-bright": "#D8BE8C",
-          bone: "#FBF8F1",
-          beige: "#EFE7DA",
-          mint: "#DDE8E1",
-          gray: "#6F6F6F",
-          ink: "#23302A",
+        /* Painel /admin: as cores do site com opacidade (`text-painel-tinta/70`). Só o painel usa;
+           no site o texto é sólido (os tokens acima não aceitam opacidade de propósito). */
+        painel: {
+          verde: "rgb(34 81 58 / <alpha-value>)",
+          tinta: "rgb(22 37 29 / <alpha-value>)",
+          osso: "rgb(251 248 241 / <alpha-value>)",
+          areia: "rgb(239 229 208 / <alpha-value>)",
+          ouro: "rgb(182 144 80 / <alpha-value>)",
         },
-        /* LEGADO (páginas antigas; remover quando todas forem refeitas) */
-        background: "#FCFCFC",
-        foreground: "#23302A",
-        ring: "#B69050",
       },
       fontFamily: {
         // As variáveis vêm de next/font em src/app/layout.tsx.
         display: ["var(--font-display)", "Didot", "Bodoni 72", "Georgia", "serif"],
         sans: ["var(--font-sans)", "system-ui", "-apple-system", "Segoe UI", "sans-serif"],
       },
-      borderRadius: {
-        /* LEGADO /admin */
-        "3xl": "2rem",
-      },
       boxShadow: {
-        /* LEGADO /admin e páginas antigas */
-        soft: "0 2px 8px -2px rgba(21, 48, 31, 0.06), 0 12px 32px -12px rgba(21, 48, 31, 0.12)",
-        card: "0 1px 2px rgba(21, 48, 31, 0.04), 0 18px 48px -24px rgba(21, 48, 31, 0.18)",
-        lift: "0 10px 24px -8px rgba(21, 48, 31, 0.14), 0 30px 60px -28px rgba(21, 48, 31, 0.22)",
-        gold: "0 6px 24px -10px rgba(182, 144, 80, 0.45)",
+        /* Painel /admin (cartões e janela de login) */
+        painel: "0 2px 8px -2px rgba(21, 48, 31, 0.06), 0 12px 32px -12px rgba(21, 48, 31, 0.12)",
+        "painel-alto":
+          "0 10px 24px -8px rgba(21, 48, 31, 0.14), 0 30px 60px -28px rgba(21, 48, 31, 0.22)",
       },
       transitionTimingFunction: {
-        /* LEGADO */
-        "out-expo": "cubic-bezier(0.16, 1, 0.3, 1)",
+        toque: "var(--ease-toque)",
       },
       /* As camadas (z-index) são variáveis CSS (--z-*) em globals.css; nenhuma classe z-* do Tailwind é usada. */
       maxWidth: {
         leitura: "34rem",
-      },
-
-      /* ============ LEGADO DAS PÁGINAS ANTIGAS ============
-         Mantido só para as páginas que ainda não foram refeitas continuarem
-         legíveis. Quem refizer a página não usa nada daqui; ao final, apagar. */
-      fontSize: {
-        "display-md": ["clamp(1.9rem, 3.4vw, 2.75rem)", { lineHeight: "1.12" }],
       },
     },
   },

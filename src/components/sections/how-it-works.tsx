@@ -48,7 +48,7 @@ export function HowItWorks({ id = "como-funciona" }: { id?: string }) {
                 eventParams={{ location: "how_it_works", target: "primeira_consulta" }}
                 className={buttonClasses("texto", "md")}
               >
-                Ver como é a primeira consulta
+                Como é a primeira consulta
                 <ArrowIcon />
               </TrackedLink>
             </div>

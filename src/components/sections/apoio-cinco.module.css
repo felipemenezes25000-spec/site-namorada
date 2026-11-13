@@ -12,14 +12,14 @@
   color: var(--accent);
 }
 .unidade {
-  margin: 12px 0 0;
+  margin: var(--s-3) 0 0;
 }
 .fio {
-  margin-top: 24px;
+  margin-top: var(--s-5);
 }
 .legenda {
   max-width: 30rem;
-  margin: 16px 0 0;
+  margin: var(--s-4) 0 0;
   color: var(--fg);
 }
 .miniRoot {

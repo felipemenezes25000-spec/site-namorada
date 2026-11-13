@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import { localeTexto } from "@/lib/site-config";
-import { breadcrumbSchema, buildMetadata, faqSchema, medicalWebPageSchema } from "@/lib/seo";
+import {
+  breadcrumbSchema,
+  buildMetadata,
+  exclusiveFaqs,
+  faqSchema,
+  medicalWebPageSchema,
+} from "@/lib/seo";
 import { respostas } from "@/lib/content";
 import { buttonClasses } from "@/components/ui/button";
 import { waMessages } from "@/lib/whatsapp";
@@ -10,7 +16,7 @@ import { ArrowIcon } from "@/components/ui/icons";
 import { IndexList } from "@/components/ui/index-list";
 import { Section } from "@/components/ui/section";
 import { TrackedLink } from "@/components/ui/tracked-link";
-import { CTA_DUVIDAS_WHATSAPP, WhatsAppCTA } from "@/components/ui/cta";
+import { WhatsAppCTA } from "@/components/ui/cta";
 import { BreathingGuide } from "@/components/sections/breathing-guide";
 import { FAQSection } from "@/components/sections/faq-section";
 import { CTASection } from "@/components/sections/cta-section";
@@ -34,7 +40,7 @@ export const metadata: Metadata = buildMetadata({
 const feelings = [
   {
     title: "Medo da dor durante o atendimento",
-    text: "É um receio comum. Aqui, o atendimento é feito com cuidado com o conforto em cada etapa, e você pode avisar quando quiser uma pausa.",
+    text: "É um receio comum. Aqui, o atendimento é feito com atenção ao conforto em cada etapa, e você pode avisar quando quiser uma pausa.",
   },
   {
     title: "Vergonha do estado atual dos dentes",
@@ -62,7 +68,8 @@ const care = [
   },
   {
     title: "Cada passo explicado",
-    description: "Tudo é dito em linguagem simples, antes de começar, para você ter clareza e controle.",
+    description:
+      "Tudo é dito em linguagem simples, antes de começar, para você ter clareza e controle.",
   },
   {
     title: "Anestesia e pausas combinadas com você",
@@ -99,8 +106,8 @@ const faqs = [
     a: `Sim. Você pode falar pelo WhatsApp para tirar dúvidas, contar o que sente e entender como funciona antes de agendar. Sem compromisso. ${respostas.orientacaoWhatsapp}`,
   },
   {
-    q: "Nada é feito sem eu saber o que vai acontecer?",
-    a: "Nada. Cada etapa é explicada antes de começar, em linguagem simples, para que você tenha clareza e controle sobre o que acontece.",
+    q: "Vou saber o que vai acontecer antes de cada etapa?",
+    a: "Sim. Cada etapa é explicada antes de começar, em linguagem simples, para que você tenha clareza e controle sobre o que acontece.",
   },
 ];
 
@@ -121,7 +128,7 @@ export default function MedoDeDentistaPage() {
       <JsonLd
         data={[
           pageSchema,
-          faqSchema(faqs),
+          faqSchema(exclusiveFaqs(faqs)),
           breadcrumbSchema([
             { name: "Início", path: "/" },
             { name: "Medo de dentista", path: PATH },
@@ -141,11 +148,7 @@ export default function MedoDeDentistaPage() {
         breadcrumbs={[{ name: "Início", href: "/" }, { name: "Medo de dentista" }]}
         actions={
           <>
-            <WhatsAppCTA
-              location="fear_hero"
-              message={waMessages.fear}
-              label={CTA_DUVIDAS_WHATSAPP}
-            />
+            <WhatsAppCTA location="fear_hero" message={waMessages.fear} />
             <TrackedLink
               href="#respirar"
               event="cta_click"
@@ -207,18 +210,14 @@ export default function MedoDeDentistaPage() {
         title="O primeiro passo é só uma conversa"
         actions={
           <>
-            <WhatsAppCTA
-              location="fear_page"
-              message={waMessages.fear}
-              label={CTA_DUVIDAS_WHATSAPP}
-            />
+            <WhatsAppCTA location="fear_page" message={waMessages.fear} />
             <TrackedLink
               href="/primeira-consulta"
               event="cta_click"
               eventParams={{ location: "fear_page", target: "primeira_consulta" }}
               className={buttonClasses("texto", "md")}
             >
-              Saiba como é a primeira consulta
+              Como é a primeira consulta
               <ArrowIcon />
             </TrackedLink>
           </>
@@ -229,8 +228,8 @@ export default function MedoDeDentistaPage() {
           precisa, nem decidir nada na hora, e não há pressão para fechar tratamento.
         </p>
         <p>
-          É um momento para a Dra. Ana entender a sua história, esclarecer dúvidas e, juntos,
-          pensar nos próximos passos com calma.
+          É um momento para a Dra. Ana entender a sua história, esclarecer dúvidas e, juntos, pensar
+          nos próximos passos com calma.
         </p>
       </ApoioDeclaracao>
 

@@ -3,7 +3,7 @@ import { situations } from "@/lib/situations";
 import { Section } from "@/components/ui/section";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { WhatsAppCTA, CTA_DUVIDAS_WHATSAPP } from "@/components/ui/cta";
+import { WhatsAppCTA } from "@/components/ui/cta";
 import { SituationProvider } from "./situation-context";
 import { SituationSelector } from "./situation-selector";
 import { TreatmentIndex, type IndexTreatment } from "./treatment-index";
@@ -81,7 +81,7 @@ export function TreatmentsSection({
         </SituationProvider>
 
         <div className={styles.convite}>
-          <WhatsAppCTA location="treatments_section" label={CTA_DUVIDAS_WHATSAPP} variant="contorno" block />
+          <WhatsAppCTA location="treatments_section" intent="duvidas" variant="contorno" block />
         </div>
       </Container>
     </Section>

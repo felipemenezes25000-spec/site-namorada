@@ -46,7 +46,12 @@ export function TratamentoGrupo({
   const Titulo = heading === "none" ? "span" : heading;
 
   return (
-    <details ref={ref} open className={`${styles.group} ${soCelular ? styles.soCelular : ""}`} id={id}>
+    <details
+      ref={ref}
+      open
+      className={`${styles.group} ${soCelular ? styles.soCelular : ""}`}
+      id={id}
+    >
       <summary
         className={styles.sum}
         onClick={(e) => {

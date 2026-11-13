@@ -51,7 +51,13 @@ export function TratamentoAbertura({
   const nomeLongo = name.length > 28;
 
   return (
-    <Section tone="osso" id="capitulo" spacing="none" className={styles.sec} aria-labelledby="capitulo-titulo">
+    <Section
+      tone="osso"
+      id="capitulo"
+      spacing="none"
+      className={styles.sec}
+      aria-labelledby="capitulo-titulo"
+    >
       <Container>
         <div className={styles.crumb}>
           <Breadcrumbs
@@ -66,6 +72,8 @@ export function TratamentoAbertura({
 
         <div className={`grid12 ${styles.grid}`}>
           <div className={styles.text}>
+            {/* celular: o desenho do tratamento acima do título (no computador ele fica ao lado do numeral) */}
+            <TratamentoFigura slug={slug} className={styles.figuraCelular} />
             <DisplayHeading
               level={1}
               size="d1i"
@@ -79,7 +87,7 @@ export function TratamentoAbertura({
             <p className={`t-lead ${styles.lede}`}>{first}</p>
             {rest && <p className={`t-lead ${styles.rest}`}>{rest}</p>}
 
-            <div className={styles.actions}>
+            <div className={styles.actions} data-hide-floating="">
               <WhatsAppCTA location="treatment_page" message={message} className={styles.btn} />
               <AgendarCTA location="treatment_page" treatment={slug} className={styles.btn} />
             </div>

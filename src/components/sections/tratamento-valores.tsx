@@ -18,7 +18,13 @@ const APOIO = [
  */
 export function TratamentoValores({ tone = "osso", texto }: { tone?: SectionTone; texto: string }) {
   return (
-    <Section tone={tone} id="valores" spacing="none" className={styles.sec} aria-labelledby="valores-titulo">
+    <Section
+      tone={tone}
+      id="valores"
+      spacing="none"
+      className={styles.sec}
+      aria-labelledby="valores-titulo"
+    >
       <Container>
         <div className="grid12">
           <div className={styles.head}>

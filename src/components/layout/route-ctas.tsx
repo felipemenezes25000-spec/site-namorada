@@ -31,10 +31,12 @@ export function useWaRoute(): WaRouteContext {
   return waContextForPath(pathname, nomes);
 }
 
-/** WhatsAppCTA com a mensagem da rota. Aceita as mesmas props, menos `message`. */
-export function RouteWhatsAppCTA(props: Omit<ComponentProps<typeof WhatsAppCTA>, "message">) {
-  const { message } = useWaRoute();
-  return <WhatsAppCTA {...props} message={message} />;
+/** WhatsAppCTA com a intenção e a mensagem da rota (o rótulo sai delas). Aceita as mesmas props, menos `message` e `intent`. */
+export function RouteWhatsAppCTA(
+  props: Omit<ComponentProps<typeof WhatsAppCTA>, "message" | "intent" | "label">,
+) {
+  const { intent, message } = useWaRoute();
+  return <WhatsAppCTA {...props} intent={intent} message={message} />;
 }
 
 /** AgendarCTA com o slug do tratamento quando a rota é /tratamentos/[slug]. */

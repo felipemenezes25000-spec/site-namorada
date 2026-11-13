@@ -44,7 +44,7 @@
 }
 .text {
   max-width: 34rem;
-  margin: 8px 0 0;
+  margin: var(--s-2) 0 0;
   color: var(--fg-2);
 }
 @media (min-width: 760px) {

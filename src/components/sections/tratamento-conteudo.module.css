@@ -116,11 +116,12 @@
   }
 }
 @media (min-width: 1100px) {
+  /* rótulo em 3 colunas e conteúdo em 9: sem a coluna larga e vazia ao lado das listas */
   .legend {
-    grid-column: 1 / 7;
+    grid-column: 1 / 4;
   }
   .body {
-    grid-column: 7 / 13;
+    grid-column: 4 / 13;
   }
   /* a coluna da legenda fica quase vazia ao lado da faixa: declaração e listas mais compactas, para a
      faixa não passar de ~340px; a legenda desce junto, presa ao topo, enquanto a faixa está na tela */
@@ -156,8 +157,14 @@
 .passosCta {
   display: none;
 }
+/* o rótulo fica em uma linha entre 768 e 1280px (a coluna é estreita): o botão ocupa a sua largura
+   natural e só quebra se for maior que a coluna inteira (texto ampliado) */
 .passosCta .passosBtn {
   margin-top: var(--s-5);
+  width: max-content;
+  max-width: 100%;
+  padding-inline: var(--s-5);
+  white-space: nowrap;
 }
 @media (min-width: 760px) {
   .passosCta {
@@ -271,19 +278,20 @@
   }
 }
 
-/* altura provisória das seções ainda não desenhadas (content-visibility: auto do globals.css, de
-   especificidade maior): perto da real, para a altura da página no celular não inflar com 720px */
-main section[data-tone].secDetalhes.secDetalhes {
-  contain-intrinsic-size: auto 800px;
+/* desenho do tratamento ao lado de "Como funciona" (computador): cada página tem o seu */
+.passosFig {
+  display: none;
 }
-main section[data-tone].secPassos.secPassos {
-  contain-intrinsic-size: auto 360px;
-}
-@media (min-width: 760px) {
-  main section[data-tone].secDetalhes.secDetalhes {
-    contain-intrinsic-size: auto 1800px;
+@media (min-width: 1100px) {
+  .passosFig {
+    display: block;
+    width: 112px;
+    height: 112px;
+    margin: 0 0 var(--s-4) -8px;
+    color: var(--ouro-tinta);
   }
-  main section[data-tone].secPassos.secPassos {
-    contain-intrinsic-size: auto 1000px;
+  :global([data-tone="verde"]) .passosFig,
+  :global([data-tone="noite"]) .passosFig {
+    color: var(--ouro-claro);
   }
 }

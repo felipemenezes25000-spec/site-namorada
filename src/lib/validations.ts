@@ -6,7 +6,11 @@ export { periods, sources };
 const onlyDigits = (v: string) => v.replace(/\D/g, "");
 
 /** Quebras de linha e outros controles viram espaço: o nome vai ao assunto do e-mail. */
-const cleanLine = (v: string) => v.replace(/[\p{Cc}\p{Zl}\p{Zp}]+/gu, " ").replace(/ {2,}/g, " ").trim();
+const cleanLine = (v: string) =>
+  v
+    .replace(/[\p{Cc}\p{Zl}\p{Zp}]+/gu, " ")
+    .replace(/ {2,}/g, " ")
+    .trim();
 
 const DATA_INVALIDA = "Informe uma data válida.";
 
@@ -17,7 +21,8 @@ function isReasonableDate(v: string): boolean {
   const [y, mo, d] = [Number(m[1]), Number(m[2]), Number(m[3])];
   const t = Date.UTC(y, mo - 1, d);
   const back = new Date(t);
-  if (back.getUTCFullYear() !== y || back.getUTCMonth() !== mo - 1 || back.getUTCDate() !== d) return false;
+  if (back.getUTCFullYear() !== y || back.getUTCMonth() !== mo - 1 || back.getUTCDate() !== d)
+    return false;
   const day = 86_400_000;
   const now = Date.now();
   return t >= now - 2 * day && t <= now + 2 * 365 * day;
@@ -33,14 +38,20 @@ export function buildAppointmentSchema(treatmentOptions: readonly string[]) {
   return z
     .object({
       fullName: z
-        .string({ required_error: "Por favor, informe seu nome completo.", invalid_type_error: "Por favor, informe seu nome completo." })
+        .string({
+          required_error: "Por favor, informe seu nome completo.",
+          invalid_type_error: "Por favor, informe seu nome completo.",
+        })
         .trim()
         .min(3, "Por favor, informe seu nome completo.")
         .max(120, "Nome muito longo.")
         .transform(cleanLine)
         .pipe(z.string().min(3, "Por favor, informe seu nome completo.")),
       whatsapp: z
-        .string({ required_error: "Informe um WhatsApp para contato.", invalid_type_error: "Informe um WhatsApp para contato." })
+        .string({
+          required_error: "Informe um WhatsApp para contato.",
+          invalid_type_error: "Informe um WhatsApp para contato.",
+        })
         .trim()
         .min(1, "Informe um WhatsApp para contato.")
         .refine((v) => {
@@ -55,10 +66,9 @@ export function buildAppointmentSchema(treatmentOptions: readonly string[]) {
         .max(160, "E-mail muito longo.")
         .optional()
         .or(z.literal("")),
-      treatmentInterest: z.string({ required_error: treatmentMsg, invalid_type_error: treatmentMsg }).refine(
-        (v) => treatmentOptions.includes(v),
-        treatmentMsg,
-      ),
+      treatmentInterest: z
+        .string({ required_error: treatmentMsg, invalid_type_error: treatmentMsg })
+        .refine((v) => treatmentOptions.includes(v), treatmentMsg),
       preferredDate: z
         .string({ invalid_type_error: DATA_INVALIDA })
         .refine(isReasonableDate, DATA_INVALIDA)
@@ -67,7 +77,9 @@ export function buildAppointmentSchema(treatmentOptions: readonly string[]) {
       preferredPeriod: z.enum(periods, {
         errorMap: () => ({ message: "Selecione um período." }),
       }),
-      hasXray: z.enum(["sim", "nao"], { errorMap: () => ({ message: "Resposta inválida." }) }).optional(),
+      hasXray: z
+        .enum(["sim", "nao"], { errorMap: () => ({ message: "Resposta inválida." }) })
+        .optional(),
       mainComplaint: z
         .string({ invalid_type_error: "Texto inválido." })
         .trim()

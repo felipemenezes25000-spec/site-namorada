@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { treatments, getTreatment, hasCareNotes, treatmentSlugs } from "@/lib/treatments";
-import { siteConfig } from "@/lib/site-config";
-import { CONTENT_UPDATED } from "@/lib/content";
-import { buildMetadata, breadcrumbSchema, faqSchema, absoluteUrl } from "@/lib/seo";
+import {
+  buildMetadata,
+  breadcrumbSchema,
+  exclusiveFaqs,
+  faqSchema,
+  medicalWebPageSchema,
+} from "@/lib/seo";
 import { waMessages } from "@/lib/whatsapp";
 import { JsonLd } from "@/components/seo/json-ld";
 import { FioRail, type RailStop } from "@/components/brand/fio-rail";
@@ -55,7 +59,9 @@ export default async function TreatmentPage({ params }: { params: Params }) {
   if (!t) notFound();
 
   const index = treatments.findIndex((x) => x.slug === t.slug);
+  // dúvida ("Tirar dúvidas no WhatsApp": passos, cuidados, perguntas) e agendamento (abertura e fecho)
   const message = waMessages.treatment(t.name.toLowerCase());
+  const bookingMessage = waMessages.treatmentBooking(t.name.toLowerCase());
   const comLimite = t.layout === "limite" && Boolean(t.notFor);
   // com o limite em declaração, `notFor` não se repete em "O que considerar com cuidado"
   const notForNoCuidado = comLimite ? undefined : t.notFor;
@@ -63,10 +69,10 @@ export default async function TreatmentPage({ params }: { params: Params }) {
     hasCareNotes(t) &&
     Boolean(
       notForNoCuidado ||
-        t.contraindications?.length ||
-        t.preparation?.length ||
-        t.aftercare?.length ||
-        t.warningSigns?.length,
+      t.contraindications?.length ||
+      t.preparation?.length ||
+      t.aftercare?.length ||
+      t.warningSigns?.length,
     );
 
   // alterna papel / osso a partir da seção logo depois da abertura (osso)
@@ -89,35 +95,32 @@ export default async function TreatmentPage({ params }: { params: Params }) {
     { id: "duvidas", label: "Dúvidas" },
   ];
 
-  const medicalSchema = {
-    "@context": "https://schema.org",
-    "@type": "MedicalWebPage",
+  // pelo helper do base: @id, isPartOf e publisher (o consultório); a mesma data da linha visível
+  const medicalSchema = medicalWebPageSchema({
+    path: `/tratamentos/${t.slug}`,
     name: t.name,
     description: t.metaDescription,
-    url: absoluteUrl(`/tratamentos/${t.slug}`),
-    inLanguage: "pt-BR",
-    // mesma data e mesma autoria que a linha visível no fim do conteúdo (<AuthorshipLine />)
-    dateModified: CONTENT_UPDATED,
-    author: { "@type": "Person", "@id": `${siteConfig.url}/#person`, name: siteConfig.doctorName },
     about: {
-      "@type": "MedicalProcedure",
       name: t.name,
       description: t.what,
-      bodyLocation: "Cavidade oral",
-      howPerformed: frases(t.steps.map((st) => `${st.title}: ${st.description}`)),
-      ...(t.preparation?.length ? { preparation: frases(t.preparation) } : {}),
-      ...(t.aftercare?.length ? { followup: frases(t.aftercare.map((c) => `${c.title}: ${c.description}`)) } : {}),
+      extra: {
+        bodyLocation: "Cavidade oral",
+        howPerformed: frases(t.steps.map((st) => `${st.title}: ${st.description}`)),
+        ...(t.preparation?.length ? { preparation: frases(t.preparation) } : {}),
+        ...(t.aftercare?.length
+          ? { followup: frases(t.aftercare.map((c) => `${c.title}: ${c.description}`)) }
+          : {}),
+      },
     },
-    provider: { "@type": "Dentist", name: siteConfig.doctorName, "@id": `${siteConfig.url}/#dentist` },
-  };
+  });
 
   return (
     <>
       <JsonLd
         data={[
           medicalSchema,
-          // a MESMA lista vai ao <FAQSection> e ao JSON-LD
-          faqSchema(t.faqs),
+          // a lista visível vai inteira ao <FAQSection>; o JSON-LD leva só as perguntas que não estão na home
+          faqSchema(exclusiveFaqs(t.faqs)),
           breadcrumbSchema([
             { name: "Início", path: "/" },
             { name: "Tratamentos", path: "/tratamentos" },
@@ -134,17 +137,24 @@ export default async function TreatmentPage({ params }: { params: Params }) {
           intro={t.intro}
           duration={t.duration}
           sessions={t.sessions}
-          message={message}
+          message={bookingMessage}
         />
         <TratamentoDetalhes
           tone={tDetalhes}
           what={t.what}
+          whatTitle={t.whatTitle}
           forWhom={t.forWhom}
           benefits={t.benefits}
           colunas={t.layout === "colunas"}
           limite={comLimite ? t.notFor : undefined}
         />
-        <TratamentoPassos tone={tPassos} steps={t.steps} message={message} linha={t.layout === "linha"} />
+        <TratamentoPassos
+          tone={tPassos}
+          steps={t.steps}
+          message={message}
+          linha={t.layout === "linha"}
+          slug={t.slug}
+        />
         {cuidados && tCuidados && (
           <TratamentoCuidados
             tone={tCuidados}
@@ -175,12 +185,12 @@ export default async function TreatmentPage({ params }: { params: Params }) {
           }))}
         >
           <p className={fecho.aviso}>
-            Este conteúdo é informativo e não substitui uma avaliação clínica: indicações e cuidados variam de
-            pessoa para pessoa e são definidos após exame presencial.
+            Este conteúdo é informativo e não substitui uma avaliação clínica: indicações e cuidados
+            variam de pessoa para pessoa e são definidos após exame presencial.
           </p>
           <AuthorshipLine className={fecho.autoria} />
         </TratamentoOutros>
-        <TratamentoFecho slug={t.slug} message={message} />
+        <TratamentoFecho slug={t.slug} message={bookingMessage} />
       </div>
       <FioRail stops={rail} />
     </>

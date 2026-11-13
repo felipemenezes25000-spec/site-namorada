@@ -43,6 +43,19 @@ const PARAM_MAP: Record<string, keyof Attribution> = {
   utm_content: "utmContent",
 };
 
+/**
+ * Página de entrada sem dado pessoal: só o caminho e os parâmetros de campanha (lista acima).
+ * Um endereço como `/agendamento?email=a@b.com&utm_source=g` vira `/agendamento?utm_source=g`.
+ */
+export function safeLandingPage(loc: { pathname: string; search: string }): string {
+  const params = new URLSearchParams(loc.search);
+  const kept = new URLSearchParams();
+  for (const [k, v] of params)
+    if (Object.prototype.hasOwnProperty.call(PARAM_MAP, k)) kept.append(k, v);
+  const qs = kept.toString();
+  return qs ? `${loc.pathname}?${qs}` : loc.pathname;
+}
+
 function readSession(): Attribution | null {
   try {
     const raw = window.sessionStorage.getItem(STORAGE_KEY);
@@ -108,16 +121,18 @@ export function captureAttribution(): void {
     }
 
     const existing = getAttribution();
-    // Novos parâmetros de campanha sobrescrevem o anterior (último clique);
-    // sem novos parâmetros, preserva o que já foi capturado.
+    // Sem novos parâmetros, preserva o que já foi capturado.
     if (Object.keys(found).length === 0 && existing) {
       if (!readSession()) window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
       return;
     }
 
+    // Novos parâmetros atualizam os anteriores campo a campo: uma visita com só `utm_source` não
+    // apaga o gclid/gbraid/wbraid de uma visita anterior (o identificador do clique do anúncio).
     const data: Attribution = {
-      ...(Object.keys(found).length ? found : existing ?? {}),
-      landingPage: (existing?.landingPage ?? window.location.pathname + window.location.search).slice(0, 300),
+      ...(existing ?? {}),
+      ...found,
+      landingPage: (existing?.landingPage ?? safeLandingPage(window.location)).slice(0, 300),
       referrer: (existing?.referrer ?? document.referrer ?? "").slice(0, 300) || undefined,
     };
     window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));

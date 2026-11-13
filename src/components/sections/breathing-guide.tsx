@@ -5,7 +5,7 @@ import { track } from "@/lib/analytics";
 import { waMessages } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 import { buttonClasses } from "@/components/ui/button";
-import { CTA_DUVIDAS_WHATSAPP, WhatsAppCTA } from "@/components/ui/cta";
+import { WhatsAppCTA } from "@/components/ui/cta";
 import { Container } from "@/components/ui/container";
 import { Monogram } from "@/components/brand/logo";
 import styles from "./breathing-guide.module.css";
@@ -127,10 +127,13 @@ export function BreathingGuide({
     }
     for (let r = 0; r < rounds; r++) {
       timers.current.push(
-        window.setTimeout(() => {
-          setRound(r + 1);
-          setPhase("inspire");
-        }, r * total * 1000),
+        window.setTimeout(
+          () => {
+            setRound(r + 1);
+            setPhase("inspire");
+          },
+          r * total * 1000,
+        ),
         window.setTimeout(() => setPhase("solte"), (r * total + inhale) * 1000),
       );
     }
@@ -195,7 +198,6 @@ export function BreathingGuide({
                     location="breathing_guide"
                     message={message}
                     variant="ouro"
-                    label={CTA_DUVIDAS_WHATSAPP}
                     className={cn(styles.wa, status === "done" && styles.waOn)}
                   />
                 </div>

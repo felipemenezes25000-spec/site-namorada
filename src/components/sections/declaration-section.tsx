@@ -10,17 +10,11 @@ import styles from "./editorial.module.css";
  */
 export function DeclarationSection({ id = "declaracao" }: { id?: string }) {
   return (
-    <Section
-      tone="noite"
-      id={id}
-      aria-label="Declaração da Dra. Ana"
-      className={styles.decl}
-    >
+    <Section tone="noite" id={id} aria-label="Declaração da Dra. Ana" className={styles.decl}>
       <Container>
         <figure className={`m-0 ${styles.declInner}`}>
           <blockquote className={`m-0 ${styles.quote}`}>
-            “Cuidar bem é somar o rigor técnico e teórico ao respeito e cuidado com cada
-            paciente.”
+            “Cuidar bem é somar o rigor técnico e teórico ao respeito e cuidado com cada paciente.”
           </blockquote>
           <figcaption className={styles.quoteBy}>
             <span className={styles.rule} aria-hidden="true" />
@@ -28,7 +22,7 @@ export function DeclarationSection({ id = "declaracao" }: { id?: string }) {
           </figcaption>
         </figure>
       </Container>
-      <Monogram tone="claro" size={420} className={styles.declMark} />
+      <Monogram tone="claro" size={420} className={styles.declMark} lazy />
     </Section>
   );
 }

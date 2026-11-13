@@ -12,21 +12,17 @@ const lattesUrl = "https://lattes.cnpq.br/3767606004982701";
 /**
  * Credenciais reais da Dra. Ana Beatriz, repartidas em tipo, nome e instituição. O registro (CRO)
  * não entra aqui: já está na abertura e no trilho da página. Decisão do diretor (B-00): as linhas
- * de ABO, APCD e IOA são "Curso", com nome neutro, nunca título de especialidade; o "Rumo à
- * Residência" é um curso preparatório, não uma residência. `place` fica vazio quando o repositório
+ * de ABO, APCD e IOA são "Curso", com nome neutro, nunca título de especialidade. O curso preparatório
+ * "Rumo à Residência" saiu do destaque até a doutora enviar o certificado (instituição e ano). `place` fica vazio quando o repositório
  * não informa a instituição.
  */
 const credentials: { kind: string; name: string; place?: string }[] = [
   { kind: "Graduação", name: "Odontologia", place: "Centro Universitário Estácio de Brasília" },
   { kind: "Aperfeiçoamento", name: "Cirurgia Oral Menor", place: "São Leopoldo Mandic" },
-  {
-    kind: "Curso",
-    name: "“Rumo à Residência”, curso preparatório em cirurgias da boca e da face",
-  },
   { kind: "Curso", name: "Implante dentário", place: "ABO Central · APCD Central" },
   {
     kind: "Curso",
-    name: "Remoção de dentes inclusos e cirurgias na boca",
+    name: "Remoção de dentes inclusos e cirurgias orais de pequeno porte",
     place: "ABO Central · IOA",
   },
 ];

@@ -1,11 +1,7 @@
 import Link from "next/link";
 
 /** Trilha de navegação (DESIGN.md 4.4): alvos de 44px, separador "/" dourado-tinta, sem chevron. */
-export function Breadcrumbs({
-  items,
-}: {
-  items: { name: string; href?: string }[];
-}) {
+export function Breadcrumbs({ items }: { items: { name: string; href?: string }[] }) {
   return (
     <nav aria-label="Trilha de navegação" className="crumb t-sm">
       <ol className="m-0 flex list-none flex-wrap items-center p-0 text-fg-2">

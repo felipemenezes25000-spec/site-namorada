@@ -8,25 +8,11 @@
 .crumb {
   margin-bottom: var(--s-2);
 }
-/* trilha em uma linha só enquanto couber: o nome do tratamento (último item) encurta com reticências;
-   com texto ampliado (200%) ela passa a duas linhas em vez de estourar a coluna */
-.crumb ol {
-  flex-wrap: wrap;
-}
-.crumb li {
-  flex: none;
-}
+/* o nome do tratamento (último item) aparece inteiro: quando não cabe, quebra em linhas
+   (nomes longos, texto ampliado) em vez de ser cortado com reticências */
 .crumb li:last-child {
-  flex: 1 1 0;
-  min-width: 4.5rem;
-}
-.crumb li:last-child > span {
-  display: block;
-  min-height: 44px;
-  line-height: 44px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  flex: 0 1 auto;
+  min-width: 0;
 }
 .grid {
   margin-top: clamp(var(--s-4), 3vw, var(--s-7));
@@ -48,19 +34,10 @@
   max-width: 18ch;
   font-size: clamp(2rem, 1rem + 3.4vw, 3.5rem);
 }
+/* a quebra dos itens e do "·" vem da própria linha de identidade (globals.css, .idt) */
 .identity {
   margin: var(--s-4) 0 0;
   color: var(--fg);
-}
-/* cada item da linha de identidade ("CRO-SP 177801") fica inteiro numa linha */
-.identity > span {
-  display: inline-block;
-  max-width: 100%;
-  overflow-wrap: anywhere;
-}
-/* só o registro fica inteiro; o endereço pode quebrar (texto ampliado a 200%) */
-.identity > span:nth-child(2) {
-  white-space: nowrap;
 }
 .lede {
   max-width: 36rem;
@@ -93,6 +70,7 @@
     margin-top: var(--s-4);
   }
 }
+/* exceção ao 760/1100: celular estreito (rótulos e espaçamento mais justos) */
 @media (max-width: 479px) {
   .actions {
     width: 100%;
@@ -111,25 +89,47 @@
 .marca {
   display: none;
 }
+/* desenho do tratamento: traço em ouro-tinta (contraste >= 3:1 sobre o osso) */
+.figura,
+.figuraCelular {
+  color: var(--ouro-tinta);
+}
 .figura {
   display: none;
-  color: var(--ouro);
+}
+.figuraCelular {
+  display: block;
+  width: 72px;
+  height: 72px;
+  margin: 0 0 var(--s-3) -6px;
+}
+@media (min-width: 760px) {
+  .figuraCelular {
+    display: none;
+  }
 }
 .ficha {
   margin: 0;
   border-bottom: 1px solid var(--ouro);
 }
+/* rótulo e valor lado a lado; quando o valor não cabe (texto ampliado) ele desce para baixo do rótulo */
 .row {
-  display: grid;
-  grid-template-columns: minmax(5.5rem, 2fr) minmax(0, 5fr);
+  display: flex;
+  flex-wrap: wrap;
   column-gap: var(--gap);
   align-items: baseline;
   padding-block: var(--s-2);
   border-top: 1px solid var(--ouro);
 }
+.row dt {
+  flex: 0 0 calc((100% - var(--gap)) * 2 / 7);
+  min-width: 5.5rem;
+}
 .row dd {
+  flex: 1 1 9rem;
   margin: 0;
   min-width: 0;
+  overflow-wrap: break-word;
   color: var(--fg);
 }
 .row dt {
@@ -172,12 +172,11 @@
   }
   /* o numeral e o desenho dividem a coluna: o desenho assenta na base do numeral */
 }
-@media (min-width: 1200px) {
+@media (min-width: 1100px) {
   .figura {
     display: block;
-    flex: 0 1 220px;
-    min-width: 120px;
-    width: 220px;
+    flex: 0 0 auto;
+    width: clamp(200px, 16vw, 240px);
     height: auto;
     margin-bottom: var(--s-2);
   }

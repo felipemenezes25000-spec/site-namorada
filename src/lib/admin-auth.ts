@@ -1,3 +1,8 @@
+/**
+ * Sessão e senha do painel /admin. O bloqueio após falhas de login (actions.ts) é por instância do
+ * servidor (memória): na Vercel cada instância conta à parte. A camada de plataforma é a regra do
+ * Vercel Firewall para /admin (README.md, seção "Variáveis de ambiente").
+ */
 import crypto from "crypto";
 import { cookies } from "next/headers";
 
@@ -8,7 +13,8 @@ const SESSION_TTL_S = 60 * 60 * 8; // 8h
 const MIN_SECRET_LENGTH = 32;
 const MIN_PASSWORD_LENGTH = 12;
 
-export type AdminStatus = "ok" | "missing_password" | "missing_secret" | "weak_secret" | "weak_password";
+export type AdminStatus =
+  "ok" | "missing_password" | "missing_secret" | "weak_secret" | "weak_password";
 
 /**
  * O painel só liga com as DUAS variáveis: senha e segredo de sessão (>= 32

@@ -16,9 +16,7 @@ export function Eyebrow({
 }) {
   return (
     <Tag className={cn("t-kicker", rule && "flex items-center gap-3", className)}>
-      {rule && (
-        <span aria-hidden="true" className="inline-block h-px w-6 bg-ouro" />
-      )}
+      {rule && <span aria-hidden="true" className="inline-block h-px w-6 bg-ouro" />}
       {children}
     </Tag>
   );

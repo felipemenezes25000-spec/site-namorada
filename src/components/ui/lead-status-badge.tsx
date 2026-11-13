@@ -2,10 +2,10 @@ import { leadStatusLabels, type LeadStatus } from "@/types/lead";
 import { cn } from "@/lib/utils";
 
 const styles: Record<LeadStatus, string> = {
-  new: "bg-brand-mint text-brand-green-dark",
+  new: "bg-papel text-verde-escuro",
   contacted: "bg-amber-100 text-amber-800",
   scheduled: "bg-blue-100 text-blue-800",
-  confirmed: "bg-brand-green/10 text-brand-green",
+  confirmed: "bg-painel-verde/10 text-verde",
   attended: "bg-emerald-100 text-emerald-800",
   rescheduled: "bg-orange-100 text-orange-800",
   canceled: "bg-red-100 text-red-700",

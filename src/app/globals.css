@@ -9,10 +9,7 @@
 @font-face {
   font-family: "Hifen";
   src:
-    local("Segoe UI"),
-    local("Roboto"),
-    local("Helvetica Neue"),
-    local("Arial"),
+    local("Segoe UI"), local("Roboto"), local("Helvetica Neue"), local("Arial"),
     local("Liberation Sans");
   unicode-range: U+002D, U+2010, U+2011;
   font-display: swap;
@@ -62,7 +59,11 @@
 
   /* ----- grade e ritmo (2.3) ----- */
   /* margem lateral; nunca menor que a área segura do aparelho (entalhe em paisagem) */
-  --pad: max(clamp(20px, 5.2vw, 72px), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+  --pad: max(
+    clamp(20px, 5.2vw, 72px),
+    env(safe-area-inset-left, 0px),
+    env(safe-area-inset-right, 0px)
+  );
   --rail: 0px; /* trilho do Fio: >= 1100px reserva 56px à esquerda em TODAS as páginas (um único gutter) */
   --wrap-max: 1480px; /* >= 1700px: 1640px */
   --gap: clamp(16px, 2.4vw, 32px);
@@ -209,18 +210,28 @@
   body {
     background: var(--osso);
     color: var(--tinta);
-    font-family: var(--font-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-family:
+      var(--font-sans),
+      system-ui,
+      -apple-system,
+      "Segoe UI",
+      sans-serif;
     font-size: 1.0625rem;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     -webkit-tap-highlight-color: transparent;
     overflow-x: clip;
+    /* palavra maior que a coluna (texto ampliado, coluna estreita) quebra em vez de vazar */
+    overflow-wrap: break-word;
+    /* contêiner da página: as regras de "texto ampliado" (@container pagina) comparam a largura da
+       tela com o tamanho do texto, o que a media query não faz quando o texto é ampliado pelo CSS */
+    container: pagina / inline-size;
   }
 
-  /* LEGADO: borda padrão do /admin. */
+  /* Borda padrão neutra (cor da tinta a 10%) para quem usa a classe "border" sem cor (o painel /admin). */
   * {
-    border-color: rgba(35, 48, 42, 0.1);
+    border-color: rgba(22, 37, 29, 0.1);
   }
 
   h1,
@@ -311,14 +322,30 @@
     }
   }
   @media (min-width: 760px) {
-    .grid12--7-5 > :first-child { grid-column: 1 / 8; }
-    .grid12--7-5 > :last-child { grid-column: 8 / 13; }
-    .grid12--5-7 > :first-child { grid-column: 1 / 6; }
-    .grid12--5-7 > :last-child { grid-column: 6 / 13; }
-    .grid12--8-4 > :first-child { grid-column: 1 / 9; }
-    .grid12--8-4 > :last-child { grid-column: 9 / 13; }
-    .grid12--3-9 > :first-child { grid-column: 1 / 4; }
-    .grid12--3-9 > :last-child { grid-column: 4 / 13; }
+    .grid12--7-5 > :first-child {
+      grid-column: 1 / 8;
+    }
+    .grid12--7-5 > :last-child {
+      grid-column: 8 / 13;
+    }
+    .grid12--5-7 > :first-child {
+      grid-column: 1 / 6;
+    }
+    .grid12--5-7 > :last-child {
+      grid-column: 6 / 13;
+    }
+    .grid12--8-4 > :first-child {
+      grid-column: 1 / 9;
+    }
+    .grid12--8-4 > :last-child {
+      grid-column: 9 / 13;
+    }
+    .grid12--3-9 > :first-child {
+      grid-column: 1 / 4;
+    }
+    .grid12--3-9 > :last-child {
+      grid-column: 4 / 13;
+    }
   }
   /* Hero das páginas internas: colunas próprias (não dependem de utilitários responsivos) */
   .pg-text,
@@ -340,13 +367,9 @@
   .sec {
     padding-block: var(--sec-y);
   }
-  /* Seções abaixo da primeira não são desenhadas até chegarem perto da tela (content-visibility).
-     contain-intrinsic-size "auto" lembra a altura real depois de desenhada. Âncoras (#hash), o trilho do Fio
-     e a busca do navegador continuam funcionando: a seção é revelada ao ser alvo. */
-  main section[data-tone]:not(:first-of-type) {
-    content-visibility: auto;
-    contain-intrinsic-size: auto 720px;
-  }
+  /* Sem content-visibility nas seções (rodada 2): a altura da página mudava ao rolar, o axe "frio" acusava
+     contraste falso nas seções não desenhadas e o ganho de desempenho era pequeno. Não reintroduzir sem
+     medir seção por seção. */
   .sec-compact {
     padding-block: calc(var(--sec-y) / 2);
   }
@@ -446,14 +469,10 @@
     color: var(--fg-2);
   }
   /* texto de apoio: 16px no celular (informação ao paciente), 15px a partir de 760px */
+  /* 16px em todas as larguras: consentimento, dicas e avisos não ficam menores no computador */
   .t-sm {
     font-size: 1rem;
     line-height: 1.5;
-  }
-  @media (min-width: 760px) {
-    .t-sm {
-      font-size: 0.9375rem;
-    }
   }
   .t-cap {
     font-size: 0.875rem; /* piso do site para legendas: 14px */
@@ -487,6 +506,55 @@
   .t-folio {
     font-size: 1.125rem;
     line-height: 1;
+    min-width: 0;
+    overflow-wrap: break-word;
+  }
+
+  /* Numeral pequeno (abaixo de 28px): Hanken tabular, peso 500. Na Bodoni itálica de filete, em 18px, o
+     "04" lia "01" (visual-201). A Bodoni fica para os numerais grandes (48px ou mais). */
+  .num-sans,
+  .idx-n {
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-optical-sizing: auto;
+    font-variation-settings: normal;
+    font-variant-numeric: lining-nums tabular-nums;
+    letter-spacing: 0.02em;
+  }
+
+  /* Nome no cartão de identificação (TrustBlock "bloco"): no máximo 30px, menor que o H1 da página */
+  .trust-nome {
+    font-size: clamp(1.5rem, 1.2rem + 0.8vw, 1.875rem);
+  }
+
+  /* Linha de identidade (ui/identity-line.tsx): itens em bloco que quebram por dentro; o "·" fica numa
+     faixa de 1.25em antes de cada item, e a faixa do primeiro item de cada linha cai fora da caixa
+     (margem negativa + overflow-x: clip). Nenhuma linha começa com "·" e nada passa da largura. */
+  .idt {
+    overflow-x: clip;
+    overflow-clip-margin: 0px;
+  }
+  .idt-in {
+    display: block;
+    margin-inline-start: -1.25em;
+    text-wrap: balance;
+  }
+  .idt-item {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    padding-inline-start: 1.25em;
+    overflow-wrap: break-word;
+  }
+  .idt-item::before {
+    content: "·";
+    content: "·" / "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1.25em;
+    text-align: center;
   }
 
   /* Numerais: Hanken tabular para dados; Bodoni itálica para sequência. */
@@ -532,10 +600,25 @@
     background: var(--verde);
     color: var(--osso);
     font-weight: 500;
+    max-width: calc(100% - 32px);
     transform: translateY(-200%);
   }
   .skip-link:focus {
     transform: none;
+  }
+
+  /* Texto ampliado (a tela tem menos de ~20 "letras" de largura: 150% a 390px, 200% a 414px ou menos):
+     nenhum rótulo de botão fica preso numa linha só, nem os que os módulos mantêm inteiros no tamanho
+     normal. No tamanho normal (a menor tela, 320px, tem 20rem) nada muda. */
+  @container pagina (max-width: 19.9rem) {
+    .btn,
+    .btn * {
+      white-space: normal !important;
+    }
+    /* cabeçalho enxuto: só o nome (o "Cirurgiã-dentista" volta no tamanho normal) */
+    .hdr .brand-sub {
+      display: none;
+    }
   }
 
   /* ------------------------------ Botões (4.2) ------------------------------ */
@@ -562,6 +645,14 @@
       color var(--d-toque) var(--ease-toque),
       border-color var(--d-toque) var(--ease-toque),
       transform var(--d-toque) var(--ease-toque);
+  }
+  /* nenhum botão passa da coluna: com o texto ampliado o rótulo quebra em vez de vazar */
+  .btn {
+    max-width: 100%;
+  }
+  .btn > span {
+    min-width: 0;
+    overflow-wrap: break-word;
   }
   .btn svg {
     flex: none;
@@ -909,8 +1000,11 @@
     font-size: 0.8125rem;
     letter-spacing: 0.04em;
     color: var(--rail-txt);
-    /* plaquinha na cor da seção: o texto vertical (140px) nunca some ao cruzar duas faixas */
-    background: var(--rail-bg);
+    /* sem plaquinha retangular: um halo na cor da seção mantém o texto legível ao cruzar duas faixas */
+    text-shadow:
+      0 0 3px var(--rail-bg),
+      0 0 3px var(--rail-bg),
+      0 0 6px var(--rail-bg);
   }
 
   /* Arco de sorriso sob o botão final (FioSmile): meia-elipse de borda, largura do botão + 20px de cada lado */
@@ -1050,7 +1144,12 @@
     .luz {
       --luz-a: var(--verde);
       --luz-b: var(--luz);
-      background-image: linear-gradient(100deg, var(--luz-a) 0 40%, var(--luz-b) 50%, var(--luz-a) 60% 100%);
+      background-image: linear-gradient(
+        100deg,
+        var(--luz-a) 0 40%,
+        var(--luz-b) 50%,
+        var(--luz-a) 60% 100%
+      );
       background-size: 300% 100%;
       background-position: 100% 0;
       -webkit-background-clip: text;
@@ -1315,6 +1414,9 @@
     left: 0;
     top: 0;
   }
+  .faq-q > span {
+    min-width: 0;
+  }
   .faq-q {
     list-style: none;
     display: flex;
@@ -1526,7 +1628,8 @@
     font-size: 1.0625rem;
     line-height: 1.1;
     color: var(--head);
-    overflow-wrap: anywhere;
+    /* o nome quebra entre palavras, nunca no meio ("Beatr/iz") */
+    overflow-wrap: normal;
   }
   .brand-sub {
     display: block;
@@ -1872,15 +1975,37 @@
   }
 
   /* ------------------------------ Aviso de cookies ------------------------------ */
+  /* Vem aberto no HTML do servidor (aparece na primeira pintura). Some sem JavaScript (os botões não
+     funcionariam) e para quem já decidiu (`consent-set`, posto no <head> antes da pintura). */
+  html:not(.js) .ck,
+  html.consent-set .ck {
+    display: none;
+  }
+  /* Enquanto o aviso está aberto a barra de ações do celular fica recolhida e não reserva espaço:
+     aviso + barra nunca disputam a tela (e o aviso nunca cobre o primeiro campo do formulário). */
+  html.js:not(.consent-set) {
+    --h-bar: 0px;
+  }
+  html.js:not(.consent-set) .abar {
+    transform: translateY(100%);
+    visibility: hidden;
+  }
   .ck {
     position: fixed;
     left: 0;
     right: 0;
     bottom: var(--h-bar);
     z-index: var(--z-cookie);
-    padding: 10px var(--pad);
+    padding: 8px var(--pad) calc(8px + env(safe-area-inset-bottom));
     background: var(--osso);
     --bg: var(--osso);
+  }
+  .ck:focus {
+    outline: none;
+  }
+  .ck:focus-visible {
+    outline: 2px solid var(--verde);
+    outline-offset: -4px;
   }
   .ck::before {
     content: "";
@@ -1892,8 +2017,8 @@
     background: var(--fio);
   }
   .ck-txt {
-    font-size: 1rem;
-    line-height: 1.4;
+    font-size: 0.9375rem;
+    line-height: 1.35;
     color: var(--tinta-2);
     max-width: 52rem;
   }
@@ -1907,7 +2032,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
-    margin-top: 8px;
+    margin-top: 6px;
   }
   /* Recusar e Aceitar: IDÊNTICOS (mesma largura, altura, fonte e peso visual). */
   .ck-btn {
@@ -1964,9 +2089,14 @@
       gap: 8px;
     }
   }
-  /* altura de 300px ou menos (zoom de 400%): 14px e entrelinha justa, para a leitura ficar com mais da metade da tela */
+  /* altura de 300px ou menos (zoom de 400%): o aviso deixa de ser fixo e vai para o fluxo, no topo,
+     para a leitura ficar com a tela inteira; 14px e entrelinha justa */
   @media (max-height: 300px) {
+    :root {
+      --h-cookie: 0px !important;
+    }
     .ck {
+      position: static;
       flex-direction: column;
       align-items: stretch;
       gap: 6px;
@@ -2056,6 +2186,14 @@
     font-size: 1rem;
     line-height: 1.4;
     color: var(--erro);
+  }
+  /* telas muito largas (1700px ou mais): dicas, erros e textos do formulário a 17px (o rótulo já tem 18px) */
+  @media (min-width: 1700px) {
+    .fld-hint,
+    .fld-erro,
+    .chk-txt .t-sm {
+      font-size: 1.0625rem;
+    }
   }
   .fld-resumo {
     padding: 14px 16px 14px 18px;
@@ -2151,6 +2289,7 @@
     outline-offset: 2px;
   }
   .chk-txt {
+    min-width: 0;
     padding-top: 10px;
   }
 
@@ -2161,10 +2300,23 @@
     align-items: center;
     min-height: 44px;
   }
-  /* "Início" e links curtos: alvo de pelo menos 44x44 */
+  /* o item corrente quebra em linhas (nomes longos, texto ampliado) em vez de passar da tela */
+  .crumb li {
+    min-width: 0;
+  }
+  .crumb [aria-current="page"] {
+    display: block;
+    min-height: 0;
+    min-width: 0;
+    padding-block: 11px;
+    line-height: 1.4;
+    overflow-wrap: break-word;
+  }
+  /* "Início" e links curtos: alvo de pelo menos 44x44; o texto começa na margem da coluna (x=128 a 1440,
+     x=20 a 390), e a sobra do alvo fica à direita */
   .crumb a {
     min-width: 44px;
-    justify-content: center;
+    justify-content: flex-start;
   }
   .crumb a {
     color: var(--fg-2);
@@ -2207,16 +2359,33 @@
     }
   }
   .ft-pad {
-    padding-block: clamp(48px, 6vw, 96px);
+    padding-block: clamp(32px, 6vw, 96px);
   }
   .ft-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     column-gap: var(--gap);
-    row-gap: 40px;
+    row-gap: 24px;
   }
-  .ft-brand {
-    min-width: 0;
+  /* celular: o rodapé é curto (sem o WhatsApp e o formulário, que estão na barra de ações) */
+  @media (min-width: 760px) {
+    .ft-so-celular {
+      display: none;
+    }
+  }
+  @media (max-width: 759px) {
+    .ft-so-desk {
+      display: none;
+    }
+    .ft-brand address {
+      margin-top: var(--s-4);
+    }
+    .ft-root .ft-wide-mobile summary {
+      min-height: 48px;
+    }
+    .ft-root .ft-legal-row {
+      margin-top: var(--s-4);
+    }
   }
   .ft-lists {
     display: grid;
@@ -2228,12 +2397,6 @@
   .ft-wide {
     grid-column: 1 / -1;
   }
-  /* 320px: duas colunas deixam só ~130px e "Preencher formulário" quebraria; uma coluna */
-  @media (max-width: 359px) {
-    .ft-lists {
-      grid-template-columns: minmax(0, 1fr);
-    }
-  }
   .ft-wide ul {
     columns: 2;
     column-gap: var(--gap);
@@ -2241,12 +2404,38 @@
   .ft-wide li {
     break-inside: avoid;
   }
+  /* celular: "Navegação" em duas colunas e "Para você" logo abaixo (menos altura, nada quebra) */
+  @media (max-width: 759px) {
+    .ft-lists {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: var(--s-4);
+    }
+    .ft-lists ul[aria-labelledby="ft-nav"] {
+      columns: 2;
+      column-gap: var(--gap);
+    }
+    .ft-lists ul[aria-labelledby="ft-nav"] li {
+      break-inside: avoid;
+    }
+  }
   /* link-texto de ação dentro das listas do rodapé: alinhado à esquerda, mesmo quando o rótulo quebra */
   .ft-lists .btn-texto,
   .ft-contacts .btn-texto {
     justify-content: flex-start;
     gap: 8px;
     text-align: left;
+  }
+  /* texto ampliado: as listas do rodapé e os contatos ficam numa coluna */
+  @container pagina (max-width: 19.9rem) {
+    .ft-lists {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .ft-lists ul[aria-labelledby="ft-nav"] {
+      columns: 1;
+    }
+  }
+  .ft-brand {
+    min-width: 0;
   }
   .ft-contacts {
     margin: 12px 0 0;
@@ -2291,7 +2480,7 @@
   }
   .ft-legal-row {
     position: relative;
-    margin-top: clamp(40px, 5vw, 72px);
+    margin-top: clamp(20px, 5vw, 72px);
   }
   .ft-legal {
     font-size: 0.875rem;
@@ -2321,6 +2510,7 @@
     }
     .ft-grid {
       grid-template-columns: repeat(12, minmax(0, 1fr));
+      row-gap: 40px;
     }
     .ft-brand {
       grid-column: 1 / 6;
@@ -2359,12 +2549,9 @@
     }
   }
 
-  /* ========================================================================
-     LEGADO /admin — não usar no site público.
-     Mantido só para o painel continuar compilando e legível.
-     ======================================================================== */
+  /* Painel /admin: cartão branco do painel (paleta "painel" do tailwind.config.ts). Não usar no site. */
   .surface {
-    @apply rounded-3xl border border-brand-ink/[0.07] bg-white shadow-card;
+    @apply rounded-[2rem] border border-painel-tinta/[0.07] bg-white shadow-painel;
   }
 }
 
@@ -2448,11 +2635,7 @@
       gap: 8px;
       font-size: 0.9375rem;
     }
-    .ck {
-      padding-block: 8px;
-    }
     .ck-acoes {
-      margin-top: 6px;
       gap: 8px;
     }
     .ck-btn {
@@ -2469,14 +2652,18 @@
   .num-md {
     font-size: 1.75rem;
   }
+  /* O mínimo dos numerais é limitado pela largura da tela: com o texto ampliado a 200% eles não
+     dobram de tamanho até passar da coluna (a 390px e texto normal o tamanho é o mesmo de antes). */
   .num-lg {
-    font-size: clamp(5rem, 12vw, 9rem);
+    font-size: clamp(min(5rem, 20.5vw), 12vw, 9rem);
     font-variation-settings: "opsz" var(--d-opsz-grande);
     color: var(--ouro-numeral);
+    max-width: 100%;
   }
   .num-xl {
-    font-size: clamp(9rem, 26vw, 18rem);
+    font-size: clamp(min(9rem, 36.9vw), 26vw, 18rem);
     font-variation-settings: "opsz" var(--d-opsz-grande);
     color: var(--ouro-numeral);
+    max-width: 100%;
   }
 }

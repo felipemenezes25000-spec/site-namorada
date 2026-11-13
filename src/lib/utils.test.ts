@@ -22,9 +22,18 @@ describe("cn", () => {
     expect(cn("a", false && "b", undefined, "c")).toBe("a c");
   });
 
-  it("não descarta o tamanho text-display-* quando vem junto de uma cor de texto", () => {
-    const out = cn("text-display-md", "text-brand-bone");
-    expect(out).toContain("text-display-md");
-    expect(out).toContain("text-brand-bone");
+  it("tamanho e cor de texto convivem (classes padrão do Tailwind)", () => {
+    const out = cn("text-lg", "text-tinta");
+    expect(out).toContain("text-lg");
+    expect(out).toContain("text-tinta");
+  });
+});
+
+describe("semQuebraNome", () => {
+  it("prende 'Dra.' ao nome e 'do Ó' à palavra anterior com espaço inseparável", async () => {
+    const { semQuebraNome } = await import("./utils");
+    expect(semQuebraNome("Fale com a Dra. Ana")).toBe("Fale com a Dra. Ana");
+    expect(semQuebraNome("na Freguesia do Ó, zona norte")).toBe("na Freguesia do Ó, zona norte");
+    expect(semQuebraNome("do Óleo")).toBe("do Óleo");
   });
 });

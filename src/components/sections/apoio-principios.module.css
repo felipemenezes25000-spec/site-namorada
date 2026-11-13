@@ -7,7 +7,7 @@
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  row-gap: 4px;
+  row-gap: var(--s-1);
   padding-block: 28px 36px;
 }
 .rule {
@@ -30,7 +30,7 @@
 .text {
   min-width: 0;
   max-width: 34rem;
-  margin: 8px 0 0;
+  margin: var(--s-2) 0 0;
   color: var(--fg-2);
 }
 .end {
@@ -40,8 +40,8 @@
   .item {
     grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
     column-gap: var(--gap);
-    row-gap: 12px;
-    padding-block: 36px 48px;
+    row-gap: var(--s-3);
+    padding-block: 36px var(--s-7);
   }
   .num {
     grid-row: span 2;

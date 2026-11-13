@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { waMessages } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 import { Section, type SectionTone } from "@/components/ui/section";
@@ -50,6 +51,7 @@ export function CTASection({
   id = "agendar",
   message = waMessages.default,
   location = "cta_final",
+  secondary,
   className,
 }: {
   /** Tipo de página: troca o texto do fecho (B-17, o fecho não é igual em todas as páginas). */
@@ -63,6 +65,8 @@ export function CTASection({
   message?: string;
   /** Valor de `location` nos eventos de clique. */
   location?: string;
+  /** Troca o segundo botão ("Preencher formulário"); a urgência usa o telefone. */
+  secondary?: ReactNode;
   className?: string;
 }) {
   const dark = tone === "noite" || tone === "verde";
@@ -96,15 +100,16 @@ export function CTASection({
                   className={styles.wa}
                 />
               </FioSmile>
-              <AgendarCTA
-                location={location}
-                variant={dark ? "contorno-claro" : "contorno"}
-                className={styles.alt}
-              />
+              {secondary ?? (
+                <AgendarCTA
+                  location={location}
+                  variant={dark ? "contorno-claro" : "contorno"}
+                  className={styles.alt}
+                />
+              )}
             </div>
           </div>
         </div>
-
       </Container>
     </Section>
   );

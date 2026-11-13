@@ -24,7 +24,11 @@ export function ApoioSentimentos({
   return (
     <ul data-reveal="" className={cn(styles.list, className)}>
       {items.map((item, i) => (
-        <li key={item.title} className={styles.cell} style={{ "--i": Math.min(i, 8) } as CSSProperties}>
+        <li
+          key={item.title}
+          className={styles.cell}
+          style={{ "--i": Math.min(i, 8) } as CSSProperties}
+        >
           <span className={cn("fio-h", styles.rule)} aria-hidden="true" />
           <span className={styles.dia} aria-hidden="true" />
           <h3 className={cn("t-d3 display", styles.title)}>{item.title}</h3>
@@ -32,7 +36,10 @@ export function ApoioSentimentos({
         </li>
       ))}
       {fecho && (
-        <li className={cn(styles.cell, styles.fecho)} style={{ "--i": Math.min(items.length, 8) } as CSSProperties}>
+        <li
+          className={cn(styles.cell, styles.fecho)}
+          style={{ "--i": Math.min(items.length, 8) } as CSSProperties}
+        >
           <span className={cn("fio-h", styles.rule)} aria-hidden="true" />
           <p className={styles.fechoTexto}>{fecho}</p>
         </li>

@@ -37,7 +37,10 @@ export function ApoioDeclaracao({
 }) {
   const grande = size === "grande";
   return (
-    <Section tone={tone} id={id} aria-labelledby={`${id}-titulo`}
+    <Section
+      tone={tone}
+      id={id}
+      aria-labelledby={`${id}-titulo`}
       hideFloating={hideFloating}
       className={styles.root}
     >

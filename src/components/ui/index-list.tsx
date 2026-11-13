@@ -32,7 +32,11 @@ export function IndexRow({
   [key: `data-${string}`]: string | undefined;
 }) {
   return (
-    <li {...data} className={cn("idx-item", className)} style={{ ...style, "--i": Math.min(i, 8) } as CSSProperties}>
+    <li
+      {...data}
+      className={cn("idx-item", className)}
+      style={{ ...style, "--i": Math.min(i, 8) } as CSSProperties}
+    >
       <span className="fio-h idx-rule" aria-hidden="true" />
       {children}
     </li>
@@ -140,15 +144,7 @@ export function IndexList({
   );
 }
 
-function SumarioLink({
-  item,
-  num,
-  size,
-}: {
-  item: IndexItem;
-  num: string;
-  size: "row" | "d3";
-}) {
+function SumarioLink({ item, num, size }: { item: IndexItem; num: string; size: "row" | "d3" }) {
   const inner = (
     <>
       <span className="it-sm idx-n" aria-hidden="true">
@@ -163,11 +159,7 @@ function SumarioLink({
     </>
   );
   return item.href ? (
-    <Link
-      href={item.href}
-      className="idx-link"
-      aria-current={item.current ? "true" : undefined}
-    >
+    <Link href={item.href} className="idx-link" aria-current={item.current ? "true" : undefined}>
       {inner}
     </Link>
   ) : (

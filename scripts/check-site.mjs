@@ -38,14 +38,22 @@ const quiet = args.includes("--quiet");
 const PUBLIC_DIR = resolve("public");
 // Em .next/server/app a pasta de build fica dois níveis acima; com --dir não há JS para medir.
 const BUILD_DIR = dirIdx >= 0 ? null : resolve(root, "..", "..");
-const JS_BUDGET_KB = Number(process.env.JS_BUDGET_KB ?? 230);
+// Orçamento de catraca: o maior JS inicial medido em 13/11/2026 é 197 kB gzip (React + Next ~100 kB e
+// /agendamento com o formulário). A meta do DESIGN.md é 150 kB; baixe este número a cada ganho.
+const JS_BUDGET_KB = Number(process.env.JS_BUDGET_KB ?? 200);
 
 const MAX_TITLE = 60;
 const MAX_DESCRIPTION = 155;
 
 // Só texto que o visitante lê (corpo, alt, aria-label, title, description): a URL do slug de cirurgia
 // e o JSON-LD ficam de fora. Comparação sem acento e em minúsculas.
-const FORBIDDEN_VISIBLE = [/implantodontia/, /buco-?maxilo/, /\bpix\b/, /\bdebito\b/, /cartao de credito/];
+const FORBIDDEN_VISIBLE = [
+  /implantodontia/,
+  /buco-?maxilo/,
+  /\bpix\b/,
+  /\bdebito\b/,
+  /cartao de credito/,
+];
 
 const FORBIDDEN = [
   "sem dor",
@@ -98,7 +106,8 @@ function walk(dir) {
 function jsonStrings(node, acc = []) {
   if (typeof node === "string") acc.push(node);
   else if (Array.isArray(node)) node.forEach((n) => jsonStrings(n, acc));
-  else if (node && typeof node === "object") Object.values(node).forEach((n) => jsonStrings(n, acc));
+  else if (node && typeof node === "object")
+    Object.values(node).forEach((n) => jsonStrings(n, acc));
   return acc;
 }
 
@@ -121,7 +130,8 @@ function checkPage(html, name = "") {
   const title = titleM ? decode(titleM[1]).trim() : "";
   if (!title) errors.push("sem <title>");
   if (hasBracket(title)) errors.push(`"[" ou "]" no título: ${title}`);
-  if (title.length > MAX_TITLE) errors.push(`título com ${title.length} caracteres (máx. ${MAX_TITLE}): ${title}`);
+  if (title.length > MAX_TITLE)
+    errors.push(`título com ${title.length} caracteres (máx. ${MAX_TITLE}): ${title}`);
 
   // meta description
   const metas = html.match(/<meta\b[^>]*>/gi) ?? [];
@@ -130,13 +140,18 @@ function checkPage(html, name = "") {
   if (!descTag && !semDescricao) errors.push("sem meta description");
   if (hasBracket(description)) errors.push(`"[" ou "]" na description: ${description}`);
   if (description.length > MAX_DESCRIPTION)
-    errors.push(`description com ${description.length} caracteres (máx. ${MAX_DESCRIPTION}): ${description}`);
+    errors.push(
+      `description com ${description.length} caracteres (máx. ${MAX_DESCRIPTION}): ${description}`,
+    );
 
   // H1
   const h1s = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)].map((m) =>
-    decode(m[1].replace(/<[^>]+>/g, " ")).replace(/\s+/g, " ").trim(),
+    decode(m[1].replace(/<[^>]+>/g, " "))
+      .replace(/\s+/g, " ")
+      .trim(),
   );
-  if (h1s.length > 1) errors.push(`${h1s.length} elementos <h1>: ${h1s.map((h) => `"${h}"`).join(", ")}`);
+  if (h1s.length > 1)
+    errors.push(`${h1s.length} elementos <h1>: ${h1s.map((h) => `"${h}"`).join(", ")}`);
   for (const h of h1s) if (hasBracket(h)) errors.push(`"[" ou "]" no H1: ${h}`);
 
   // imagens sem alt
@@ -146,7 +161,9 @@ function checkPage(html, name = "") {
 
   // canonical (páginas noindex ficam de fora)
   const noindex = metas.some(
-    (m) => (attr(m, "name") ?? "").toLowerCase() === "robots" && /noindex/i.test(attr(m, "content") ?? ""),
+    (m) =>
+      (attr(m, "name") ?? "").toLowerCase() === "robots" &&
+      /noindex/i.test(attr(m, "content") ?? ""),
   );
   const links = html.match(/<link\b[^>]*>/gi) ?? [];
   const canonical = links.find((l) => (attr(l, "rel") ?? "").toLowerCase() === "canonical");
@@ -155,7 +172,9 @@ function checkPage(html, name = "") {
   // JSON-LD
   const ldTexts = [];
   const faqNames = [];
-  for (const m of html.matchAll(/<script\b[^>]*type\s*=\s*["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
+  for (const m of html.matchAll(
+    /<script\b[^>]*type\s*=\s*["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi,
+  )) {
     let data;
     try {
       data = JSON.parse(m[1]);
@@ -165,7 +184,8 @@ function checkPage(html, name = "") {
     }
     for (const node of Array.isArray(data) ? data : [data]) {
       if (node && node["@type"] === "FAQPage") {
-        for (const q of node.mainEntity ?? []) if (typeof q?.name === "string") faqNames.push(q.name);
+        for (const q of node.mainEntity ?? [])
+          if (typeof q?.name === "string") faqNames.push(q.name);
       }
     }
     for (const s of jsonStrings(data)) {
@@ -184,12 +204,16 @@ function checkPage(html, name = "") {
   const body = decode(visible.replace(/<[^>]+>/g, " "));
   const visibleAll = [body, ...alts, ...labels.map(decode)].join(" | ");
   const marker = visibleAll.match(/\[[^\]]{0,40}\]/);
-  if (marker) errors.push(`marcador entre colchetes no texto visível, alt ou aria-label: ${marker[0]}`);
+  if (marker)
+    errors.push(`marcador entre colchetes no texto visível, alt ou aria-label: ${marker[0]}`);
   const bodyFolded = fold(body);
   for (const q of faqNames) {
-    if (!bodyFolded.includes(fold(q))) errors.push(`pergunta do FAQPage ausente do texto visível: ${q.slice(0, 80)}`);
+    if (!bodyFolded.includes(fold(q)))
+      errors.push(`pergunta do FAQPage ausente do texto visível: ${q.slice(0, 80)}`);
   }
-  const haystack = fold([body, title, description, ...alts, ...labels.map(decode), ...ldTexts].join(" \n "));
+  const haystack = fold(
+    [body, title, description, ...alts, ...labels.map(decode), ...ldTexts].join(" \n "),
+  );
   for (const term of FORBIDDEN) {
     const needle = fold(term);
     if (haystack.includes(needle)) errors.push(`termo proibido: "${term}"`);
@@ -206,7 +230,9 @@ function checkPage(html, name = "") {
 /* ------------------- links, imagens, lang, viewport, JS ------------------- */
 
 function routeOf(file) {
-  const name = relative(root, file).replaceAll(sep, "/").replace(/\.html$/, "");
+  const name = relative(root, file)
+    .replaceAll(sep, "/")
+    .replace(/\.html$/, "");
   return name === "index" ? "/" : "/" + name.replace(/\/index$/, "");
 }
 
@@ -221,7 +247,12 @@ function publicHas(pathname) {
   return full.startsWith(PUBLIC_DIR) && existsSync(full) && statSync(full).isFile();
 }
 
-const SYSTEM_PATHS = new Set(["/sitemap.xml", "/robots.txt", "/manifest.webmanifest", "/favicon.ico"]);
+const SYSTEM_PATHS = new Set([
+  "/sitemap.xml",
+  "/robots.txt",
+  "/manifest.webmanifest",
+  "/favicon.ico",
+]);
 
 /** O endereço interno existe? Páginas geradas, arquivos de public/ e rotas de sistema. */
 function internalExists(url, routes) {
@@ -232,7 +263,8 @@ function internalExists(url, routes) {
     const real = new URL(url, "http://x").searchParams.get("url") ?? "";
     return real.startsWith("/") ? publicHas(real) : true;
   }
-  if (path.startsWith("/_next/") || path.startsWith("/api/") || path.startsWith("/admin")) return true;
+  if (path.startsWith("/_next/") || path.startsWith("/api/") || path.startsWith("/admin"))
+    return true;
   const norm = path.length > 1 ? path.replace(/\/$/, "") : path;
   return (
     routes.has(norm) ||
@@ -246,11 +278,15 @@ function internalExists(url, routes) {
 function checkExtras(html, routes, jsCache) {
   const errors = [];
   const htmlTag = html.match(/<html\b[^>]*>/i)?.[0] ?? "";
-  if (!/\slang\s*=\s*["']pt-BR["']/i.test(htmlTag)) errors.push(`<html> sem lang="pt-BR": ${htmlTag.slice(0, 80)}`);
+  if (!/\slang\s*=\s*["']pt-BR["']/i.test(htmlTag))
+    errors.push(`<html> sem lang="pt-BR": ${htmlTag.slice(0, 80)}`);
   const metas = html.match(/<meta\b[^>]*>/gi) ?? [];
-  if (!metas.some((m) => (attr(m, "name") ?? "").toLowerCase() === "viewport")) errors.push("sem meta viewport");
+  if (!metas.some((m) => (attr(m, "name") ?? "").toLowerCase() === "viewport"))
+    errors.push("sem meta viewport");
 
-  const visible = html.replace(/<script\b[\s\S]*?<\/script>/gi, " ").replace(/<style\b[\s\S]*?<\/style>/gi, " ");
+  const visible = html
+    .replace(/<script\b[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style\b[\s\S]*?<\/style>/gi, " ");
   const missing = new Set();
   for (const m of visible.matchAll(/<a\b[^>]*>/gi)) {
     const href = attr(m[0], "href");
@@ -272,7 +308,9 @@ function checkExtras(html, routes, jsCache) {
   if (BUILD_DIR) {
     let total = 0;
     const seen = new Set();
-    for (const m of html.matchAll(/<script\b[^>]*\ssrc="(\/_next\/static\/[^"?]+\.js)[^"]*"[^>]*>/gi)) {
+    for (const m of html.matchAll(
+      /<script\b[^>]*\ssrc="(\/_next\/static\/[^"?]+\.js)[^"]*"[^>]*>/gi,
+    )) {
       if (seen.has(m[1])) continue;
       seen.add(m[1]);
       if (!jsCache.has(m[1])) {
@@ -282,7 +320,10 @@ function checkExtras(html, routes, jsCache) {
       total += jsCache.get(m[1]);
     }
     jsKb = total / 1024;
-    if (jsKb > JS_BUDGET_KB) errors.push(`JavaScript inicial com ${jsKb.toFixed(0)} kB gzip (orçamento ${JS_BUDGET_KB} kB)`);
+    if (jsKb > JS_BUDGET_KB)
+      errors.push(
+        `JavaScript inicial com ${jsKb.toFixed(0)} kB gzip (orçamento ${JS_BUDGET_KB} kB)`,
+      );
   }
   return { errors, jsKb };
 }
@@ -305,14 +346,19 @@ function checkSeoFiles(routes) {
       if (!routes.has(norm)) errors.push(`sitemap: ${m[1]} não é uma página gerada`);
     }
   } else if (BUILD_DIR) {
-    console.warn("aviso: sitemap não encontrado em .next/server/app (conferir o nome do arquivo gerado)");
+    console.warn(
+      "aviso: sitemap não encontrado em .next/server/app (conferir o nome do arquivo gerado)",
+    );
   }
   if (robots) {
     const txt = readFileSync(robots, "utf8");
     if (!/^Sitemap:\s*\S+/im.test(txt)) errors.push("robots sem linha Sitemap");
-    if (/^Host:/im.test(txt)) errors.push('robots com a linha "Host:" (diretiva do Yandex, sem efeito no Google)');
+    if (/^Host:/im.test(txt))
+      errors.push('robots com a linha "Host:" (diretiva do Yandex, sem efeito no Google)');
   } else if (BUILD_DIR) {
-    console.warn("aviso: robots não encontrado em .next/server/app (conferir o nome do arquivo gerado)");
+    console.warn(
+      "aviso: robots não encontrado em .next/server/app (conferir o nome do arquivo gerado)",
+    );
   }
   return errors;
 }
@@ -356,6 +402,7 @@ if (seoErrors.length) {
   console.error("FALHA  sitemap/robots");
   for (const e of seoErrors) console.error(`         - ${e}`);
 }
-if (maxJs) console.log(`\nMaior JS inicial: ${maxJs.toFixed(0)} kB gzip (orçamento ${JS_BUDGET_KB} kB)`);
+if (maxJs)
+  console.log(`\nMaior JS inicial: ${maxJs.toFixed(0)} kB gzip (orçamento ${JS_BUDGET_KB} kB)`);
 console.log(`\n${files.length} página(s) verificada(s), ${failed} com problema.`);
 process.exit(failed ? 1 : 0);

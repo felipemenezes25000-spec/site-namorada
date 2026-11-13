@@ -5,9 +5,8 @@ import { Container } from "@/components/ui/container";
 import { Numeral } from "@/components/ui/numeral";
 import { DisplayHeading } from "@/components/ui/display-heading";
 import { ButtonLink } from "@/components/ui/button";
-import { WhatsAppCTA, CTA_DUVIDAS_WHATSAPP } from "@/components/ui/cta";
+import { WhatsAppCTA } from "@/components/ui/cta";
 import { Symbol } from "@/components/brand/logo";
-import { waMessages } from "@/lib/whatsapp";
 
 /**
  * O Next já injeta `<meta name="robots" content="noindex">` em toda 404. O layout raiz declara
@@ -48,12 +47,7 @@ export default function NotFound() {
                 </ButtonLink>
               </div>
               <div className="mt-4">
-                <WhatsAppCTA
-                  location="not_found"
-                  variant="texto"
-                  message={waMessages.default}
-                  label={CTA_DUVIDAS_WHATSAPP}
-                />
+                <WhatsAppCTA location="not_found" variant="texto" intent="duvidas" />
               </div>
             </div>
             <div className="hidden tab:col-span-5 tab:block">

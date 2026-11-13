@@ -31,7 +31,11 @@ export function ApoioPassos({
   return (
     <ol data-reveal="" className={cn(styles.list, orient && styles.orient, className)}>
       {items.map((item, i) => (
-        <li key={item.title} className={styles.item} style={{ "--i": Math.min(i, 8) } as CSSProperties}>
+        <li
+          key={item.title}
+          className={styles.item}
+          style={{ "--i": Math.min(i, 8) } as CSSProperties}
+        >
           <span className={cn("fio-h", styles.rule)} aria-hidden="true" />
           <span className={cn("it-sm num num-lg", styles.num)} aria-hidden="true">
             {String(i + 1).padStart(2, "0")}

@@ -56,7 +56,9 @@ export function FioRail({ stops }: { stops: RailStop[] }) {
     const els = items.map((s) => {
       const el = document.getElementById(s.id);
       if (!el && process.env.NODE_ENV !== "production") {
-        console.warn(`FioRail: não existe elemento com id="${s.id}" (ponto "${s.label}" ignorado).`);
+        console.warn(
+          `FioRail: não existe elemento com id="${s.id}" (ponto "${s.label}" ignorado).`,
+        );
       }
       return el;
     });
@@ -104,7 +106,9 @@ export function FioRail({ stops }: { stops: RailStop[] }) {
       // tom por peça: a seção sob o centro de cada elemento do trilho
       const nav = navRef.current;
       if (nav) {
-        const secs = document.querySelectorAll<HTMLElement>("section[data-tone], footer[data-tone]");
+        const secs = document.querySelectorAll<HTMLElement>(
+          "section[data-tone], footer[data-tone]",
+        );
         const rects = Array.from(secs, (el) => ({ el, r: el.getBoundingClientRect() }));
         nav.querySelectorAll<HTMLElement>("[data-rail-piece]").forEach((piece) => {
           const pr = piece.getBoundingClientRect();

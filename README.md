@@ -17,14 +17,14 @@ Requer Node 20 ou mais novo (a CI usa o 22). O site abre **sem nenhuma variável
 
 ## Scripts
 
-| Script | O que faz |
-|---|---|
-| `npm run lint` | ESLint 9 (`next/core-web-vitals` e `next/typescript`) |
-| `npm run typecheck` | `tsc --noEmit` |
-| `npm run test` | Vitest sobre `src/lib` |
-| `npm run check:site` | verifica o HTML gerado (precisa de `npm run build` antes); ver abaixo |
-| `npm run format` / `format:check` | Prettier (finais de linha LF) |
-| `npm run verify` | lint, typecheck, test, build e check:site, nessa ordem |
+| Script                            | O que faz                                                             |
+| --------------------------------- | --------------------------------------------------------------------- |
+| `npm run lint`                    | ESLint 9 (`next/core-web-vitals` e `next/typescript`)                 |
+| `npm run typecheck`               | `tsc --noEmit`                                                        |
+| `npm run test`                    | Vitest sobre `src/lib`                                                |
+| `npm run check:site`              | verifica o HTML gerado (precisa de `npm run build` antes); ver abaixo |
+| `npm run format` / `format:check` | Prettier (finais de linha LF)                                         |
+| `npm run verify`                  | lint, typecheck, test, build e check:site, nessa ordem                |
 
 `scripts/check-site.mjs` falha quando encontra colchetes em texto publicado, título acima de 60 ou descrição acima de 155 caracteres, mais de um H1, imagem sem `alt`, canonical ausente, pergunta do FAQ que não está no texto visível, termo proibido (nome de especialidade, forma de pagamento, endereço antigo, entre outros), `lang` diferente de `pt-BR`, falta de viewport, link ou imagem interna que não existe, URL do sitemap que não é página gerada, `robots.txt` sem `Sitemap` e JavaScript inicial acima do orçamento (230 kB gzip, mudável com `JS_BUDGET_KB`). Também lê páginas baixadas: `node scripts/check-site.mjs --dir <pasta com .html>`.
 
@@ -32,32 +32,32 @@ A CI do GitHub (`.github/workflows/ci.yml`) roda a mesma sequência a cada push 
 
 ## Stack
 
-| Camada | Tecnologia |
-|---|---|
-| Framework | Next.js 15 (App Router) e React 19, em TypeScript |
-| Estilo | Tailwind CSS 3 e `src/app/globals.css` (tokens em `:root`, classes `.t-*`, `.btn-*`, `.idx-*` em `@layer components`) |
-| Tipografia | Bodoni Moda (títulos grandes) e Hanken Grotesk (texto), via `next/font` |
-| Formulário | React Hook Form e zod |
-| Leads | Supabase (opcional) e e-mail pelo Resend (opcional) |
-| Movimento | CSS puro, respeitando `prefers-reduced-motion` |
-| Deploy | Vercel |
+| Camada     | Tecnologia                                                                                                            |
+| ---------- | --------------------------------------------------------------------------------------------------------------------- |
+| Framework  | Next.js 15 (App Router) e React 19, em TypeScript                                                                     |
+| Estilo     | Tailwind CSS 3 e `src/app/globals.css` (tokens em `:root`, classes `.t-*`, `.btn-*`, `.idx-*` em `@layer components`) |
+| Tipografia | Bodoni Moda (títulos grandes) e Hanken Grotesk (texto), via `next/font`                                               |
+| Formulário | React Hook Form e zod                                                                                                 |
+| Leads      | Supabase (opcional) e e-mail pelo Resend (opcional)                                                                   |
+| Movimento  | CSS puro, respeitando `prefers-reduced-motion`                                                                        |
+| Deploy     | Vercel                                                                                                                |
 
 ## Rotas
 
-| Rota | Arquivo |
-|---|---|
-| `/` | `src/app/(site)/page.tsx` |
-| `/sobre` | `src/app/(site)/sobre/page.tsx` |
-| `/tratamentos` | `src/app/(site)/tratamentos/page.tsx` |
-| `/tratamentos/[slug]` (8 páginas) | `src/app/(site)/tratamentos/[slug]/page.tsx` |
-| `/agendamento` | `src/app/(site)/agendamento/page.tsx` |
-| `/contato` | `src/app/(site)/contato/page.tsx` |
-| `/primeira-consulta`, `/valores`, `/urgencia-odontologica`, `/medo-de-dentista` | `src/app/(site)/<rota>/page.tsx` |
-| `/obrigado` (noindex) | `src/app/(site)/obrigado/page.tsx` |
-| `/politica-de-privacidade`, `/termos-de-uso` | `src/app/(site)/<rota>/page.tsx` |
-| `/admin` (painel de leads, com senha) | `src/app/admin/page.tsx` |
-| `POST /api/leads` | `src/app/api/leads/route.ts` |
-| `/sitemap.xml`, `/robots.txt`, `/manifest.webmanifest` | `src/app/sitemap.ts`, `robots.ts`, `manifest.ts` |
+| Rota                                                                            | Arquivo                                          |
+| ------------------------------------------------------------------------------- | ------------------------------------------------ |
+| `/`                                                                             | `src/app/(site)/page.tsx`                        |
+| `/sobre`                                                                        | `src/app/(site)/sobre/page.tsx`                  |
+| `/tratamentos`                                                                  | `src/app/(site)/tratamentos/page.tsx`            |
+| `/tratamentos/[slug]` (8 páginas)                                               | `src/app/(site)/tratamentos/[slug]/page.tsx`     |
+| `/agendamento`                                                                  | `src/app/(site)/agendamento/page.tsx`            |
+| `/contato`                                                                      | `src/app/(site)/contato/page.tsx`                |
+| `/primeira-consulta`, `/valores`, `/urgencia-odontologica`, `/medo-de-dentista` | `src/app/(site)/<rota>/page.tsx`                 |
+| `/obrigado` (noindex)                                                           | `src/app/(site)/obrigado/page.tsx`               |
+| `/politica-de-privacidade`, `/termos-de-uso`                                    | `src/app/(site)/<rota>/page.tsx`                 |
+| `/admin` (painel de leads, com senha)                                           | `src/app/admin/page.tsx`                         |
+| `POST /api/leads`                                                               | `src/app/api/leads/route.ts`                     |
+| `/sitemap.xml`, `/robots.txt`, `/manifest.webmanifest`                          | `src/app/sitemap.ts`, `robots.ts`, `manifest.ts` |
 
 Slugs de tratamento: `avaliacao-odontologica`, `limpeza-dental`, `clareamento-dental`, `restauracoes`, `prevencao`, `implante`, `cirurgia-oral` e `cirurgia-buco-maxilo-facial` (o slug não muda; o nome visível é "Remoção de dentes inclusos e cirurgias na boca").
 
@@ -90,7 +90,9 @@ public/                imagens servidas (o que sai de uso vai para _arquivo/, fo
 
 ## Variáveis de ambiente
 
-Copie `.env.example` para `.env.local`. Para receber leads configure **uma** saída: Supabase (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, com o SQL de `supabase/schema.sql`) ou Resend (`RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `LEAD_NOTIFY_EMAIL`). O painel `/admin` só liga com `ADMIN_PASSWORD` (12 caracteres ou mais) **e** `ADMIN_SESSION_SECRET` (32 ou mais, diferente da senha). Medição: `NEXT_PUBLIC_GTM_ID`, `NEXT_PUBLIC_GA_MEASUREMENT_ID`, `NEXT_PUBLIC_GOOGLE_ADS_ID`, `NEXT_PUBLIC_META_PIXEL_ID` (nada carrega sem o ID; veja `GOOGLE-ADS-SETUP.md`).
+Copie `.env.example` para `.env.local`. Para receber leads configure **uma** saída: Supabase (`NEXT_PUBLIC_SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY`, com o SQL de `supabase/schema.sql`; a chave anônima pública não é usada) ou Resend (`RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `LEAD_NOTIFY_EMAIL`). O painel `/admin` só liga com `ADMIN_PASSWORD` (12 caracteres ou mais) **e** `ADMIN_SESSION_SECRET` (32 ou mais, diferente da senha). Medição: `NEXT_PUBLIC_GTM_ID`, `NEXT_PUBLIC_GA_MEASUREMENT_ID`, `NEXT_PUBLIC_GOOGLE_ADS_ID`, `NEXT_PUBLIC_META_PIXEL_ID` (nada carrega sem o ID; veja `GOOGLE-ADS-SETUP.md`).
+
+**Limite de envios na plataforma:** o limite de `/api/leads` e o bloqueio de login do `/admin` valem por instância do servidor (memória). Na Vercel, crie em **Firewall, Custom Rules** uma regra de _rate limit_ de 10 requisições por minuto por IP para os caminhos `/api/leads` e `/admin` (ação: negar com 429). É a camada que vale para todas as instâncias.
 
 ## Medição
 
@@ -98,7 +100,7 @@ Copie `.env.example` para `.env.local`. Para receber leads configure **uma** sa�
 
 ## Deploy (Vercel)
 
-1. Projeto na Vercel com o nome `site-namorada` (o redirecionamento dos endereços `*.vercel.app` em `next.config.mjs` casa com esse prefixo; se o projeto for renomeado, ajuste o `has` do redirect).
+1. Projeto na Vercel ligado a este repositório (cada push na `main` publica em produção). Em produção, qualquer endereço `*.vercel.app` do projeto redireciona (308) para o domínio oficial: a regra em `next.config.mjs` não depende do nome do projeto.
 2. Variáveis de ambiente do `.env.example` no escopo Production.
 3. Domínio: confira em **Settings, Domains** que `draanabeatrizodonto.com.br` (o apex) redireciona para `www.draanabeatrizodonto.com.br` e que o `www` é o domínio de produção. Em produção, qualquer host diferente do `www` recebe `X-Robots-Tag: noindex`, então um apex servindo conteúdo sem redirecionamento sai do índice do Google.
 4. Depois do primeiro deploy, rode `npm run verify` localmente (ou veja a CI) e envie o sitemap no Search Console.

@@ -5,9 +5,9 @@ import { cn } from "@/lib/utils";
 
 /**
  * Linha de autoria (contrato do base). Servidor puro. Saída:
- * "Conteúdo elaborado pela Dra. Ana Beatriz Lemos Souza, CRO-SP 177801. Atualizado em 12 de
- * novembro de 2026." com o nome ligado a /sobre. Nunca diz "revisado clinicamente": a data é a
- * da atualização editorial (`CONTENT_UPDATED`), a mesma que vai ao `dateModified` do JSON-LD.
+ * "Conteúdo informativo do consultório da Dra. Ana Beatriz Lemos Souza, CRO-SP 177801. Atualizado em
+ * 12 de novembro de 2026." com o nome ligado a /sobre. Não diz "elaborado" nem "revisado" pela doutora
+ * enquanto ela não revisar os textos (conteudo-etica-202); a data é a da atualização editorial (`CONTENT_UPDATED`), a mesma que vai ao `dateModified` do JSON-LD.
  *
  * Props:
  *  - `updatedAt`: data ISO ("2026-11-12"); padrão `CONTENT_UPDATED`. Só passe outra data quando
@@ -25,7 +25,7 @@ export function AuthorshipLine({
 }) {
   return (
     <p className={cn("t-cap m-0", className)}>
-      Conteúdo elaborado pela{" "}
+      Conteúdo informativo do consultório da{" "}
       <Link href="/sobre" className="link">
         {siteConfig.doctorName}
       </Link>

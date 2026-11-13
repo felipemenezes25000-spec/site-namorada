@@ -58,7 +58,7 @@ export default function HomePage() {
         <DeclarationSection />
         <AboutPreview />
         {/* textos da seção vêm do próprio AreasSection (nomes neutros, sem nome de especialidade) */}
-        <AreasSection id="implante-e-cirurgia" tone="papel" />
+        <AreasSection id="implante-e-cirurgia" tone="papel" compactMobile />
         <HowItWorks />
         <LocationSection />
         <FAQSection items={HOME_FAQS} />

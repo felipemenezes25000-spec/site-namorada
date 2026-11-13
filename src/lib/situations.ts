@@ -30,14 +30,17 @@ const byTitle = (title: string) => {
   return found;
 };
 
-function fromCare(
-  id: string,
-  title: string,
-  treatments: string[],
-  waMessage: string,
-): Situation {
+function fromCare(id: string, title: string, treatments: string[], waMessage: string): Situation {
   const n = byTitle(title);
-  return { id, label: n.title, answer: n.description, href: n.href, cta: n.cta, treatments, waMessage };
+  return {
+    id,
+    label: n.title,
+    answer: n.description,
+    href: n.href,
+    cta: n.cta,
+    treatments,
+    waMessage,
+  };
 }
 
 export const situations: Situation[] = [

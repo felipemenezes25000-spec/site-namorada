@@ -30,7 +30,7 @@ export function AboutPreview({ id = "a-doutora" }: { id?: string }) {
           <figure className={styles.aboutFig}>
             <div className={styles.arch}>
               <Image
-                src="/dra-ana-trajetoria.jpg"
+                src="/dra-ana-retrato.jpg"
                 alt={`${siteConfig.doctorName}, ${siteConfig.title.toLowerCase()}, sorrindo, de jaleco branco`}
                 fill
                 sizes="(min-width: 1100px) 460px, (min-width: 760px) 40vw, 90vw"
@@ -48,16 +48,16 @@ export function AboutPreview({ id = "a-doutora" }: { id?: string }) {
               Uma odontologia que começa pela escuta e se constrói com confiança
             </h2>
             <p className="t-body">
-              {siteConfig.doctorName} é {siteConfig.title.toLowerCase()} e acredita que cada
-              sorriso carrega uma história. Seu trabalho une técnica e sensibilidade: avaliar com
-              calma, explicar com clareza e planejar cada etapa junto com o paciente.
+              {siteConfig.doctorName} é {siteConfig.title.toLowerCase()} e acredita que cada sorriso
+              carrega uma história. Seu trabalho une técnica e sensibilidade: avaliar com calma,
+              explicar com clareza e planejar cada etapa junto com o paciente.
             </p>
             <p className={`t-body ${styles.aboutMore}`}>
-              O foco está na odontologia preventiva, na saúde bucal, na função, na estética e
-              no atendimento humanizado. A Dra. Ana também realiza cirurgias orais de pequeno e
-              médio porte. Cada decisão é tomada com segurança e transparência sobre o que cada
-              etapa pode oferecer, considerando riscos e benefícios e respeitando a autonomia do
-              paciente.
+              O foco está na odontologia preventiva, na saúde bucal, na função, na estética e no
+              atendimento humanizado. A Dra. Ana também realiza cirurgias orais de pequeno porte,
+              como a remoção de sisos e de dentes inclusos. Cada decisão é tomada com segurança e
+              transparência sobre o que cada etapa pode oferecer, considerando riscos e benefícios e
+              respeitando a autonomia do paciente.
             </p>
 
             <IndexList
@@ -68,7 +68,7 @@ export function AboutPreview({ id = "a-doutora" }: { id?: string }) {
 
             <div className={styles.more}>
               <ButtonLink href="/sobre" variant="contorno">
-                Conhecer a trajetória da Dra. Ana
+                Conhecer a Dra. Ana
                 <ArrowIcon />
               </ButtonLink>
             </div>

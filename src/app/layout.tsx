@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Bodoni_Moda, Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
 import { siteConfig, themeColor } from "@/lib/site-config";
-import { absoluteUrl, ogImage } from "@/lib/seo";
+import { ogImage, ogImageUrl } from "@/lib/seo";
 import { Analytics } from "@/components/seo/analytics";
 import { CookieConsent } from "@/components/seo/cookie-consent";
 import { SkipLink } from "@/components/seo/skip-link";
@@ -43,11 +43,19 @@ export const metadata: Metadata = {
     type: "website",
     locale: "pt_BR",
     siteName: siteConfig.doctorName,
-    images: [{ url: absoluteUrl(ogImage.path), width: ogImage.width, height: ogImage.height, alt: ogImage.alt }],
+    images: [
+      {
+        url: ogImageUrl(),
+        width: ogImage.width,
+        height: ogImage.height,
+        alt: ogImage.alt,
+        type: ogImage.type,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    images: [absoluteUrl(ogImage.path)],
+    images: [ogImageUrl()],
   },
   robots: { index: true, follow: true },
 };
@@ -63,18 +71,14 @@ export const viewport: Viewport = {
 // Marca o <html> como "com JavaScript" antes da pintura: só então os fios
 // começam recolhidos para se desenharem ao entrar na tela (nunca acima da dobra).
 // Trava de segurança: se a hidratação não acontecer em 5s, `reveal-off` mostra os fios inteiros.
+// Quem já decidiu sobre os cookies ganha `consent-set` aqui mesmo: o aviso, que vem aberto no HTML,
+// fica escondido desde a primeira pintura (sem piscar) e a barra do celular aparece (cookie-consent.tsx).
 const SCRIPT_JS =
-  "document.documentElement.classList.add('js');window.__rv=setTimeout(function(){document.documentElement.classList.add('reveal-off')},5000)";
+  "var d=document.documentElement;d.classList.add('js');window.__rv=setTimeout(function(){d.classList.add('reveal-off')},5000);try{var c=localStorage.getItem('abl_cookie_consent');if(c==='accepted'||c==='declined')d.classList.add('consent-set')}catch(e){}";
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html
-      lang="pt-BR"
-      className={`${display.variable} ${sans.variable}`}
-      suppressHydrationWarning
-    >
+    <html lang="pt-BR" className={`${display.variable} ${sans.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_JS }} />
       </head>

@@ -2,7 +2,8 @@ import { locale } from "@/lib/site-config";
 import { Section } from "@/components/ui/section";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/eyebrow";
-import { CTA_DUVIDAS_WHATSAPP, MapCTA, WhatsAppCTA } from "@/components/ui/cta";
+import { MapCTA, WhatsAppCTA } from "@/components/ui/cta";
+import { waMessages } from "@/lib/whatsapp";
 import { MapFacade } from "@/components/ui/map-facade";
 import { FioRule } from "@/components/brand/fio-rule";
 import { EnderecoLinha } from "./contato-endereco";
@@ -59,7 +60,7 @@ export function ContatoMapa({ id = "como-chegar" }: { id?: string }) {
               <MapCTA location="contact_map" variant="ouro" />
               <WhatsAppCTA
                 location="contact_map"
-                label={CTA_DUVIDAS_WHATSAPP}
+                message={waMessages.location}
                 variant="contorno-claro"
               />
             </div>

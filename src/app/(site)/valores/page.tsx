@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
-import { localeTexto } from "@/lib/site-config";
-import { breadcrumbSchema, buildMetadata, faqSchema, medicalWebPageSchema } from "@/lib/seo";
+import { locale, localeTexto } from "@/lib/site-config";
+import {
+  breadcrumbSchema,
+  buildMetadata,
+  exclusiveFaqs,
+  faqSchema,
+  medicalWebPageSchema,
+} from "@/lib/seo";
 import { waMessages } from "@/lib/whatsapp";
 import { JsonLd } from "@/components/seo/json-ld";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { AgendarCTA, CTA_DUVIDAS_WHATSAPP, WhatsAppCTA } from "@/components/ui/cta";
+import { AgendarCTA, WhatsAppCTA } from "@/components/ui/cta";
 import { FAQSection } from "@/components/sections/faq-section";
 import { CTASection } from "@/components/sections/cta-section";
 import { ApoioCabeca } from "@/components/sections/apoio-cabeca";
@@ -18,24 +24,23 @@ import { ApoioDeclaracao } from "@/components/sections/apoio-declaracao";
 import { ApoioAutoria } from "@/components/sections/apoio-autoria";
 
 const PATH = "/valores";
-const TITLE = "Quanto custa a consulta? Como funcionam os valores";
+const TITLE = "Como funcionam valores e orçamento na Freguesia do Ó";
 
 export const metadata: Metadata = buildMetadata({
   absoluteTitle: TITLE,
-  description: `Atendimento particular na ${localeTexto("bairroRegiao")}. O orçamento vem depois da avaliação clínica, sem pressão para decidir.`,
+  description: `Atendimento particular, ${localeTexto("regiaoZona")}. O valor da avaliação é informado ao agendar; o orçamento, só depois do exame.`,
   path: PATH,
 });
 
 const principles = [
   {
     title: "Atendimento exclusivamente particular",
-    description:
-      "Atendimento particular, sem convênios ou planos de saúde. Isso permite dedicar o tempo necessário a cada consulta, sem limitações de tabela ou de procedimentos cobertos.",
+    description: `Atendimento particular no consultório da ${locale.bairro}, ${locale.zona}, sem convênios ou planos de saúde. Cada consulta tem o tempo que o seu caso pede.`,
   },
   {
     title: "Orçamento só após avaliação clínica",
     description:
-      "Cada caso é único. Não é possível passar valores antes de examinar, porque o diagnóstico define o que de fato precisa ser feito. Depois da avaliação, você recebe o plano completo, com etapas e orçamento.",
+      "Cada caso é único: é o diagnóstico que define o que precisa ser feito. Depois da avaliação, você recebe o plano completo, com etapas e orçamento. O valor da consulta de avaliação é informado pelo WhatsApp ao agendar.",
   },
   {
     title: "Sem pressão para fechar na hora",
@@ -63,20 +68,19 @@ const budgetSteps = [
   },
   {
     title: "Plano e orçamento",
-    description:
-      "Você recebe o plano com etapas, prioridades e orçamento, e decide no seu tempo.",
+    description: "Você recebe o plano com etapas, prioridades e orçamento, e decide no seu tempo.",
   },
 ];
 
 /** A mesma lista vai ao <FAQ> (via FAQSection) e ao JSON-LD; nenhuma pergunta repete a da home. */
 const faqs = [
   {
-    q: "Por que a Dra. Ana não atende convênio?",
-    a: "O atendimento é exclusivamente particular. Isso permite consultas com o tempo necessário e um planejamento individual para cada caso, sem limitações de tabela ou de procedimentos cobertos.",
+    q: "O atendimento é particular?",
+    a: "Sim. O atendimento é particular, sem convênios ou planos de saúde.",
   },
   {
-    q: "Por que não passam orçamento por telefone ou WhatsApp?",
-    a: "Porque cada caso depende de exame clínico. Dar valores sem examinar poderia gerar expectativas incorretas. O orçamento é apresentado após a avaliação, de forma transparente.",
+    q: "Por que o orçamento do tratamento não é passado por WhatsApp?",
+    a: "Porque o tratamento depende do exame clínico, e um valor dado sem examinar poderia criar expectativas incorretas. O orçamento é apresentado depois da avaliação. Já o valor da consulta de avaliação é informado pelo WhatsApp ao agendar.",
   },
   {
     q: "Posso levar o orçamento para pensar?",
@@ -102,7 +106,7 @@ export default function ValoresPage() {
       <JsonLd
         data={[
           pageSchema,
-          faqSchema(faqs),
+          faqSchema(exclusiveFaqs(faqs)),
           breadcrumbSchema([
             { name: "Início", path: "/" },
             { name: "Como funcionam os valores", path: PATH },
@@ -117,17 +121,26 @@ export default function ValoresPage() {
         breadcrumbs={[{ name: "Início", href: "/" }, { name: "Como funcionam os valores" }]}
         actions={
           <>
-            <WhatsAppCTA location="valores_hero" message={waMessages.questions} label={CTA_DUVIDAS_WHATSAPP} />
+            <WhatsAppCTA location="valores_hero" message={waMessages.questions} />
             <AgendarCTA location="valores_hero" />
           </>
         }
         mobileMark={<ApoioCinco n={PRINCIPIOS_N} mini />}
-        aside={<ApoioCinco n={PRINCIPIOS_N} legenda="Não publicamos tabela de preços porque cada caso depende de avaliação clínica. Mas você merece clareza sobre como funciona." />}
+        aside={
+          <ApoioCinco
+            n={PRINCIPIOS_N}
+            legenda="Não publicamos tabela de preços porque cada caso depende de avaliação clínica. Mas você merece clareza sobre como funciona."
+          />
+        }
       />
 
       <Section tone="papel" id="principios" aria-labelledby="principios-titulo">
         <Container>
-          <ApoioCabeca id="principios-titulo" kicker="Transparência" title="O que você precisa saber antes de agendar">
+          <ApoioCabeca
+            id="principios-titulo"
+            kicker="Transparência"
+            title="O que você precisa saber antes de agendar"
+          >
             Quatro princípios que valem para toda consulta.
           </ApoioCabeca>
           <div className="mt-12">
@@ -141,7 +154,11 @@ export default function ValoresPage() {
           <ApoioDuas
             larga
             esquerda={
-              <ApoioCabeca id="orcamento-titulo" kicker="Na prática" title="Como o orçamento é apresentado" />
+              <ApoioCabeca
+                id="orcamento-titulo"
+                kicker="Na prática"
+                title="Como o orçamento é apresentado"
+              />
             }
             direita={<ApoioLinha items={budgetSteps} />}
           />
@@ -156,8 +173,8 @@ export default function ValoresPage() {
         title="Não é possível passar orçamento sem avaliação clínica."
       >
         <p>
-          Cada caso precisa ser examinado antes. Depois da avaliação, a Dra. Ana apresenta o plano de
-          tratamento e o orçamento, sem pressão para decidir na hora.
+          Cada caso precisa ser examinado antes. Depois da avaliação, a Dra. Ana apresenta o plano
+          de tratamento e o orçamento, sem pressão para decidir na hora.
         </p>
       </ApoioDeclaracao>
 

@@ -10,7 +10,7 @@ import { AreasSection } from "@/components/sections/areas-section";
 import { SobreConsultorio } from "@/components/sections/sobre-consultorio";
 import { CTASection } from "@/components/sections/cta-section";
 
-const TITLE = "Sobre a Dra. Ana Beatriz | Dentista na Vila Bruna, SP";
+const TITLE = "Sobre a Dra. Ana Beatriz | Dentista na Freguesia do Ó";
 
 // `buildMetadata` acrescenta o sufixo da marca quando o nome completo não está no título;
 // aqui o título já é o padrão do DESIGN.md 6.4 (53 caracteres), então ele é fixado por cima.

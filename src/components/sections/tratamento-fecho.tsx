@@ -15,7 +15,13 @@ import styles from "./tratamento-fecho.module.css";
 export function TratamentoFecho({ slug, message }: { slug: string; message: string }) {
   const id = "agendar";
   return (
-    <Section tone="noite" id={id} hideFloating aria-labelledby={`${id}-titulo`} className={styles.fecho}>
+    <Section
+      tone="noite"
+      id={id}
+      hideFloating
+      aria-labelledby={`${id}-titulo`}
+      className={styles.fecho}
+    >
       <Container>
         <div className="grid12">
           <div className={ctaStyles.head}>
@@ -26,8 +32,8 @@ export function TratamentoFecho({ slug, message }: { slug: string; message: stri
           </div>
           <div className={ctaStyles.action}>
             <p className={cn("t-body", ctaStyles.desc)}>
-              Escreva pelo WhatsApp ou preencha o formulário. A Dra. Ana responde e combina com você a avaliação, no
-              seu tempo.
+              Escreva pelo WhatsApp ou preencha o formulário. A Dra. Ana responde e combina com você
+              a avaliação, no seu tempo.
             </p>
             <div className={ctaStyles.buttons}>
               <FioSmile className={ctaStyles.smile}>

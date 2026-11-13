@@ -7,6 +7,7 @@ import { Numeral } from "@/components/ui/numeral";
 import { WhatsAppCTA } from "@/components/ui/cta";
 import { splitFirstSentence } from "./tratamento-util";
 import { TratamentoGrupo } from "./tratamento-grupo";
+import { TratamentoFigura } from "./tratamento-figura";
 import styles from "./tratamento-conteudo.module.css";
 
 /** Lista com fios (IndexRow): losango vazado + frase. A variante `fatos` do IndexList não tem fios. */
@@ -40,9 +41,11 @@ export function TratamentoDetalhes({
   benefits,
   colunas = false,
   limite,
+  whatTitle = "O que é",
 }: {
   tone?: SectionTone;
   what: string;
+  whatTitle?: string;
   forWhom: string[];
   benefits: string[];
   colunas?: boolean;
@@ -59,7 +62,7 @@ export function TratamentoDetalhes({
           <div className={`grid12 ${styles.row}`}>
             <span className={`fio-h ${styles.rule}`} data-reveal="" aria-hidden="true" />
             <div className={styles.legend}>
-              <h2 className="t-kicker">O que é</h2>
+              <h2 className="t-kicker">{whatTitle}</h2>
             </div>
             <div className={styles.body}>
               {declaracao ? (
@@ -79,11 +82,19 @@ export function TratamentoDetalhes({
               <h2 className="t-kicker">Para quem é indicado</h2>
             </div>
             <div className={styles.body}>
-              <TratamentoGrupo id="para-quem-lista" title={`Ver os ${forWhom.length} itens`} heading="none" soCelular>
+              <TratamentoGrupo
+                id="para-quem-lista"
+                title={`Ver para quem é indicado (${forWhom.length})`}
+                heading="none"
+                soCelular
+              >
                 {colunas ? (
                   <div className={styles.duas}>
                     <Lista items={forWhom.slice(0, metade)} className={styles.lead} />
-                    <Lista items={forWhom.slice(metade)} className={`${styles.lead} ${styles.segunda}`} />
+                    <Lista
+                      items={forWhom.slice(metade)}
+                      className={`${styles.lead} ${styles.segunda}`}
+                    />
                   </div>
                 ) : (
                   <Lista items={forWhom} className={styles.lead} />
@@ -100,7 +111,11 @@ export function TratamentoDetalhes({
               </div>
               <div className={styles.body}>
                 <TratamentoGrupo id="limite-texto" title="Ler os limites" heading="none" soCelular>
-                  <p className={`${limFirst.length > 70 ? "t-d3" : "t-d2"} display ${styles.limDecl}`}>{limFirst}</p>
+                  <p
+                    className={`${limFirst.length > 70 ? "t-d3" : "t-d2"} display ${styles.limDecl}`}
+                  >
+                    {limFirst}
+                  </p>
                   {limRest && <p className={`t-lead ${styles.limRest}`}>{limRest}</p>}
                 </TratamentoGrupo>
               </div>
@@ -113,7 +128,12 @@ export function TratamentoDetalhes({
               <h2 className="t-kicker">O que você encontra no atendimento</h2>
             </div>
             <div className={styles.body}>
-              <TratamentoGrupo id="encontra-lista" title={`Ver os ${benefits.length} itens`} heading="none" soCelular>
+              <TratamentoGrupo
+                id="encontra-lista"
+                title={`Ver o que você encontra (${benefits.length})`}
+                heading="none"
+                soCelular
+              >
                 <Lista items={benefits} />
               </TratamentoGrupo>
             </div>
@@ -136,31 +156,40 @@ export function TratamentoPassos({
   steps,
   message,
   linha = false,
+  slug,
 }: {
   tone?: SectionTone;
   steps: Passo[];
   message: string;
   linha?: boolean;
+  /** Slug do tratamento: o desenho próprio dele acompanha o título "Como funciona" (computador). */
+  slug?: string;
 }) {
+  const figura = slug ? <TratamentoFigura slug={slug} className={styles.passosFig} /> : null;
   // no celular o convite ao WhatsApp não se repete aqui (o botão fixo e o fecho já o oferecem)
   const cta = (
     <div className={styles.passosCta}>
       <WhatsAppCTA
         location="treatment_steps"
         message={message}
-        label="Tirar dúvidas no WhatsApp"
         variant="contorno"
         className={styles.passosBtn}
       />
     </div>
   );
   return (
-    <Section tone={tone} id="passos" aria-labelledby="passos-titulo" className={`${styles.sec} ${styles.secPassos}`}>
+    <Section
+      tone={tone}
+      id="passos"
+      aria-labelledby="passos-titulo"
+      className={`${styles.sec} ${styles.secPassos}`}
+    >
       <Container>
         {linha ? (
           <>
             <div className="grid12">
               <div className={styles.linhaHead}>
+                {figura}
                 <Eyebrow>Passo a passo</Eyebrow>
                 <h2 id="passos-titulo" className="t-d2">
                   Como funciona
@@ -168,44 +197,61 @@ export function TratamentoPassos({
               </div>
               <div className={styles.linhaAside}>
                 <p className="t-body">
-                  Veja o caminho, etapa por etapa. Ficou com dúvida? É só falar com a Dra. Ana pelo WhatsApp.
+                  Veja o caminho, etapa por etapa. Ficou com dúvida? É só falar com a Dra. Ana pelo
+                  WhatsApp.
                 </p>
                 {cta}
               </div>
             </div>
-            <TratamentoGrupo id="passos-lista" title={`Ver as ${steps.length} etapas`} heading="none" soCelular>
-            <ol
-              data-reveal=""
-              className={styles.linha}
-              style={{ "--n": steps.length } as CSSProperties}
+            <TratamentoGrupo
+              id="passos-lista"
+              title={`Ver as ${steps.length} etapas`}
+              heading="none"
+              soCelular
             >
-              {steps.map((s, i) => (
-                <li key={s.title} className={styles.passo} style={{ "--i": Math.min(i, 8) } as CSSProperties}>
-                  <span className={`fio-h ${styles.fio}`} aria-hidden="true" />
-                  <Numeral size="lg" decorative className={styles.passoNum}>
-                    {String(i + 1).padStart(2, "0")}
-                  </Numeral>
-                  <h3 className="t-d3 display">{s.title}</h3>
-                  <p className="t-body">{s.description}</p>
-                </li>
-              ))}
-            </ol>
+              <ol
+                data-reveal=""
+                className={styles.linha}
+                style={{ "--n": steps.length } as CSSProperties}
+              >
+                {steps.map((s, i) => (
+                  <li
+                    key={s.title}
+                    className={styles.passo}
+                    style={{ "--i": Math.min(i, 8) } as CSSProperties}
+                  >
+                    <span className={`fio-h ${styles.fio}`} aria-hidden="true" />
+                    <Numeral size="lg" decorative className={styles.passoNum}>
+                      {String(i + 1).padStart(2, "0")}
+                    </Numeral>
+                    <h3 className="t-d3 display">{s.title}</h3>
+                    <p className="t-body">{s.description}</p>
+                  </li>
+                ))}
+              </ol>
             </TratamentoGrupo>
           </>
         ) : (
           <div className="grid12">
             <div className={styles.passosHead}>
+              {figura}
               <Eyebrow>Passo a passo</Eyebrow>
               <h2 id="passos-titulo" className="t-d2">
                 Como funciona
               </h2>
               <p className="t-body">
-                Veja o caminho, etapa por etapa. Ficou com dúvida? É só falar com a Dra. Ana pelo WhatsApp.
+                Veja o caminho, etapa por etapa. Ficou com dúvida? É só falar com a Dra. Ana pelo
+                WhatsApp.
               </p>
               {cta}
             </div>
             <div className={styles.passosList}>
-              <TratamentoGrupo id="passos-lista" title={`Ver as ${steps.length} etapas`} heading="none" soCelular>
+              <TratamentoGrupo
+                id="passos-lista"
+                title={`Ver as ${steps.length} etapas`}
+                heading="none"
+                soCelular
+              >
                 <IndexList
                   variant="passos"
                   items={steps.map((s) => ({ title: s.title, description: s.description }))}

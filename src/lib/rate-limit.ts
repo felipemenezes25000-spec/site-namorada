@@ -7,7 +7,9 @@
  * Para um limite global, troque `rateLimit` por um armazenamento compartilhado
  * (Upstash Redis, Vercel KV, tabela no Supabase) mantendo a assinatura
  * rateLimit(key, limit, windowMs). Nenhuma outra parte do código precisa mudar.
- * Decisão pendente do dono: qual armazenamento compartilhado usar.
+ * Decisão pendente do dono: qual armazenamento compartilhado usar. Enquanto isso, a camada que vale
+ * para todas as instâncias é a regra do Vercel Firewall (10 requisições por minuto por IP em
+ * /api/leads e /admin), descrita no README.md, seção "Variáveis de ambiente".
  *
  * Comportamento (coberto por rate-limit.test.ts): a janela começa na primeira chamada e NÃO desliza;
  * passado o prazo o contador reinicia; com 5000 chaves a limpeza remove primeiro as expiradas e, se

@@ -34,11 +34,20 @@ export function TratamentoCuidados({
   warningSigns?: string[];
   message: string;
 }) {
-  const groups: { key: string; title: string; items: { title: ReactNode }[]; extra?: boolean }[] = [];
+  const groups: { key: string; title: string; items: { title: ReactNode }[]; extra?: boolean }[] =
+    [];
   if (contraindications?.length)
-    groups.push({ key: "atencao", title: "Quando é preciso atenção", items: contraindications.map((c) => ({ title: c })) });
+    groups.push({
+      key: "atencao",
+      title: "Quando é preciso atenção",
+      items: contraindications.map((c) => ({ title: c })),
+    });
   if (preparation?.length)
-    groups.push({ key: "antes", title: "Antes do procedimento", items: preparation.map((c) => ({ title: c })) });
+    groups.push({
+      key: "antes",
+      title: "Antes do procedimento",
+      items: preparation.map((c) => ({ title: c })),
+    });
   if (aftercare?.length)
     groups.push({
       key: "depois",
@@ -74,7 +83,12 @@ export function TratamentoCuidados({
           {groups.length > 0 && (
             <div className={styles.groups}>
               {groups.map((g) => (
-                <TratamentoGrupo key={g.key} id={`cuidados-${g.key}`} title={g.title} abertoNoCelular={false}>
+                <TratamentoGrupo
+                  key={g.key}
+                  id={`cuidados-${g.key}`}
+                  title={g.title}
+                  abertoNoCelular={false}
+                >
                   {g.extra && (
                     <p className={`t-body ${styles.alerta}`}>
                       Se aparecer algum destes sinais, fale com a Dra. Ana sem demora.
@@ -88,7 +102,6 @@ export function TratamentoCuidados({
                         <WhatsAppCTA
                           location="treatment_warning"
                           message={message}
-                          label="Tirar dúvidas no WhatsApp"
                           variant="texto"
                         />
                         <Link href="/urgencia-odontologica" className={`link ${styles.urgencia}`}>

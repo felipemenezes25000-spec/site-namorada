@@ -14,8 +14,9 @@ import { DisplayHeading } from "@/components/ui/display-heading";
 import { Numeral } from "@/components/ui/numeral";
 import { IndexRow, IndexEnd } from "@/components/ui/index-list";
 import { TrustBlock } from "@/components/ui/trust-block";
-import { WhatsAppCTA } from "@/components/ui/cta";
-import { Monogram } from "@/components/brand/logo";
+import Link from "next/link";
+import { PhoneCTA, WhatsAppCTA } from "@/components/ui/cta";
+import { FioRule } from "@/components/brand/fio-rule";
 import styles from "./agendamento-page.module.css";
 
 export const metadata: Metadata = buildMetadata({
@@ -49,7 +50,8 @@ const expect = [
  * identificação): o primeiro campo aparece acima da barra fixa sem rolar. O painel de WhatsApp é uma
  * <section data-hide-floating>: enquanto ele está na tela, a barra fixa se esconde, sem dois botões
  * iguais. Sem JavaScript o formulário dá lugar ao WhatsApp e ao telefone (appointment-form.tsx).
- * Assinatura do desktop: arco com monograma ao lado do título.
+ * Abertura na família das páginas internas: trilha e fio duplo a partir de 760px, sem ornamento solto.
+ * Logo abaixo do lede, o atalho para quem está com dor: telefone e a página de urgência.
  */
 export default function AgendamentoPage() {
   return (
@@ -64,30 +66,37 @@ export default function AgendamentoPage() {
         <Container>
           <div className={styles.trilha}>
             <Breadcrumbs items={[{ name: "Início", href: "/" }, { name: "Agendamento" }]} />
+            <FioRule double reveal={false} />
           </div>
 
           <div className={styles.layout}>
             <div className={styles.main}>
               <header className={styles.intro}>
-                <div className={`arch-line ${styles.assinatura}`} aria-hidden="true">
-                  <svg viewBox="0 0 1072 1100" preserveAspectRatio="xMidYMid meet" focusable="false">
-                    <path pathLength={1} d="M1.5 1100V536A534.5 534.5 0 0 1 1070.5 536V1100" />
-                  </svg>
-                  <Monogram size={44} className="arch-mono" lazy />
-                </div>
                 <Eyebrow>Avaliação</Eyebrow>
                 <DisplayHeading level={1} size="d1i" className={styles.titulo}>
                   Vamos marcar a sua avaliação
                 </DisplayHeading>
                 <p className={`t-lead ${styles.lede}`}>
-                  Preencha com tranquilidade. A&nbsp;Dra.&nbsp;Ana confirma com você o melhor dia e
-                  horário.
+                  A&nbsp;Dra.&nbsp;Ana confirma com você o melhor dia e horário, sem pressa.
+                </p>
+                {/* links dentro da frase (sem a altura de 44px dos botões): a linha fica curta e o formulário sobe */}
+                <p className={`t-sm ${styles.urgente}`}>
+                  Com dor forte ou inchaço?{" "}
+                  <PhoneCTA as="texto" location="appointment_urgency" className="inline min-h-0" />{" "}
+                  ou veja a{" "}
+                  <Link href="/urgencia-odontologica" className="link">
+                    página de urgência
+                  </Link>
+                  .
                 </p>
               </header>
 
               <div className={styles.form}>
                 <h2 className="sr-only">Formulário de agendamento</h2>
-                <AppointmentForm treatmentOptions={treatmentOptions} treatmentBySlug={treatmentBySlug} />
+                <AppointmentForm
+                  treatmentOptions={treatmentOptions}
+                  treatmentBySlug={treatmentBySlug}
+                />
               </div>
 
               <TrustBlock variant="linha" className={styles.trust} />

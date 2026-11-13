@@ -1,5 +1,11 @@
 import { siteConfig } from "@/lib/site-config";
-import { whatsappLink, waMessages } from "@/lib/whatsapp";
+import {
+  whatsappLink,
+  waMessages,
+  waMessageForIntent,
+  waIntentForMessage,
+  type WaIntent,
+} from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 import { buttonClasses, type ButtonSize, type ButtonVariant } from "./button";
 import { TrackedLink } from "./tracked-link";
@@ -10,13 +16,17 @@ import { CalendarIcon, MapPinIcon, PhoneIcon, WhatsAppIcon } from "./icons";
  * telefone, mapa e agendamento usa UM destes textos; não invente variações ("Agendar",
  * "Falar com a Dra.", "Marcar consulta"…). O ícone sozinho leva o mesmo texto no nome acessível.
  *  - WhatsApp que leva a marcar: "Agendar pelo WhatsApp" (padrão de WhatsAppCTA);
- *  - WhatsApp que só tira dúvida (medo, valores, primeira consulta…): "Tirar dúvidas no WhatsApp";
+ *  - WhatsApp que só tira dúvida (medo, valores, contato…): "Tirar dúvidas no WhatsApp";
+ *  - WhatsApp de urgência (/urgencia-odontologica): "Falar agora pelo WhatsApp";
+ *  - o rótulo do WhatsApp sai da intenção do botão (agendar, duvidas, urgencia, continuar), que também
+ *    escolhe a mensagem: rótulo e mensagem nunca se contradizem (src/lib/whatsapp.ts);
  *  - formulário de agendamento: "Preencher formulário" (padrão de AgendarCTA);
  *  - mapa: "Como chegar" (padrão de MapCTA); telefone: "Ligar" (padrão de PhoneCTA);
  *  - EXCEÇÃO única: "Continuar no WhatsApp", só na etapa seguinte ao envio do formulário.
  */
 export const CTA_AGENDAR_WHATSAPP = "Agendar pelo WhatsApp";
 export const CTA_DUVIDAS_WHATSAPP = "Tirar dúvidas no WhatsApp";
+export const CTA_URGENCIA_WHATSAPP = "Falar agora pelo WhatsApp";
 export const CTA_FORMULARIO = "Preencher formulário";
 export const CTA_COMO_CHEGAR = "Como chegar";
 export const CTA_LIGAR = "Ligar";
@@ -26,6 +36,7 @@ export const CTA_CONTINUAR_WHATSAPP = "Continuar no WhatsApp";
 export const CTA_LABELS = {
   agendarWhatsapp: CTA_AGENDAR_WHATSAPP,
   duvidasWhatsapp: CTA_DUVIDAS_WHATSAPP,
+  urgenciaWhatsapp: CTA_URGENCIA_WHATSAPP,
   formulario: CTA_FORMULARIO,
   comoChegar: CTA_COMO_CHEGAR,
   ligar: CTA_LIGAR,
@@ -34,11 +45,21 @@ export const CTA_LABELS = {
 
 const ROTULOS_PERMITIDOS: readonly string[] = Object.values(CTA_LABELS);
 
+/** Rótulo de cada intenção do WhatsApp. */
+export const WA_LABELS: Readonly<Record<WaIntent, string>> = {
+  agendar: CTA_AGENDAR_WHATSAPP,
+  duvidas: CTA_DUVIDAS_WHATSAPP,
+  urgencia: CTA_URGENCIA_WHATSAPP,
+  continuar: CTA_CONTINUAR_WHATSAPP,
+};
+
 /** Em desenvolvimento, avisa quando alguém foge do vocabulário fechado. Não faz nada em produção. */
 function confereRotulo(label: string | undefined, origem: string) {
   if (process.env.NODE_ENV === "production" || label === undefined) return;
   if (!ROTULOS_PERMITIDOS.includes(label)) {
-    console.warn(`[cta] rótulo fora do vocabulário em ${origem}: "${label}". Use CTA_LABELS (src/components/ui/cta.tsx).`);
+    console.warn(
+      `[cta] rótulo fora do vocabulário em ${origem}: "${label}". Use CTA_LABELS (src/components/ui/cta.tsx).`,
+    );
   }
 }
 
@@ -57,10 +78,17 @@ interface BaseProps {
   block?: boolean;
 }
 
+/**
+ * Botão de WhatsApp. A intenção define rótulo e mensagem: `intent="duvidas"` sozinho já dá
+ * "Tirar dúvidas no WhatsApp" com a mensagem de dúvida; com `message` e sem `intent`, a intenção é
+ * deduzida da mensagem (pedir para agendar, urgência ou conversa). `label` só para a exceção
+ * "Continuar no WhatsApp" do formulário.
+ */
 export function WhatsAppCTA({
   location,
-  message = waMessages.default,
-  label = CTA_AGENDAR_WHATSAPP,
+  intent: intentProp,
+  message: messageProp,
+  label: labelProp,
   compactLabel,
   variant = "primario",
   size = "md",
@@ -68,13 +96,22 @@ export function WhatsAppCTA({
   block,
   iconOnly,
 }: BaseProps & {
+  intent?: WaIntent;
   message?: string;
   label?: string;
-  /** Rótulo curto abaixo de 375px (só na barra do celular). O nome acessível segue completo. */
+  /** Rótulo curto (barra do celular, cabeçalho estreito). O nome acessível segue completo. */
   compactLabel?: string;
   iconOnly?: boolean;
 }) {
+  const message = messageProp ?? (intentProp ? waMessageForIntent[intentProp] : waMessages.default);
+  const intent = intentProp ?? waIntentForMessage(message);
+  const label = labelProp ?? WA_LABELS[intent];
   confereRotulo(label, "WhatsAppCTA");
+  if (process.env.NODE_ENV !== "production" && labelProp && labelProp !== WA_LABELS[intent]) {
+    console.warn(
+      `[cta] rótulo "${labelProp}" não combina com a mensagem do WhatsApp em ${location}.`,
+    );
+  }
   return (
     <TrackedLink
       href={whatsappLink(message)}

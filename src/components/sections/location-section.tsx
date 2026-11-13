@@ -17,7 +17,12 @@ import styles from "./editorial.module.css";
  */
 export function LocationSection({ tone = "osso" }: { tone?: SectionTone }) {
   return (
-    <Section tone={tone} id="localizacao" aria-labelledby="localizacao-titulo" className={styles.secM}>
+    <Section
+      tone={tone}
+      id="localizacao"
+      aria-labelledby="localizacao-titulo"
+      className={styles.secM}
+    >
       <Container>
         <div className="grid12">
           <div className={styles.locHead}>
@@ -26,8 +31,8 @@ export function LocationSection({ tone = "osso" }: { tone?: SectionTone }) {
               Um espaço acolhedor, pensado para&nbsp;o&nbsp;seu conforto
             </h2>
             <p className="t-lead">
-              Consultório em uma travessa da Av. Edgar Facó, na {localeTexto("regiaoZona")}.
-              Venha conhecer ou fale com a Dra. Ana para combinar o melhor horário.
+              Consultório em uma travessa da Av. Edgar Facó, na {localeTexto("regiaoZona")}. Venha
+              conhecer ou fale com a Dra. Ana para combinar o melhor horário.
             </p>
           </div>
 

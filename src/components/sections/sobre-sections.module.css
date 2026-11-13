@@ -33,10 +33,12 @@
   margin: var(--s-5) 0 0;
   padding: 0;
 }
+/* rótulo e valor lado a lado; quando o valor não cabe (texto ampliado) ele desce para baixo do rótulo */
 .fact {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
-  gap: var(--s-4);
+  column-gap: var(--s-4);
   padding-block: var(--s-3);
   min-width: 0;
   border-top: 1px solid var(--rule);
@@ -49,8 +51,10 @@
   min-width: 6.5rem;
 }
 .fact dd {
+  flex: 1 1 9rem;
   margin: 0;
   min-width: 0;
+  overflow-wrap: break-word;
   font-weight: 500;
   color: var(--head);
 }
@@ -66,6 +70,7 @@
 .heroCtas > a {
   white-space: nowrap;
 }
+/* exceção ao 760/1100: celular largo e paisagem (duas colunas curtas cabem) */
 @media (min-width: 560px) {
   .heroCtas {
     flex-direction: row;
@@ -87,7 +92,8 @@
 .archFrame::before {
   content: "";
   position: absolute;
-  inset: 14px -14px -14px 14px;
+  /* deslocada para a esquerda e para baixo: o fio nunca passa da margem direita da página (x=1368 a 1440) */
+  inset: 14px 14px -14px -14px;
   border: 1px solid var(--ouro);
   border-radius: 999px 999px 0 0;
   pointer-events: none;
@@ -106,27 +112,6 @@
   object-fit: cover;
   object-position: 50% 22%;
 }
-/* Os números de sala (14 e 19) no fundo da foto viram manchas suaves. As posições são
-   porcentagens do arco (proporção fixa 4/5, object-fit: cover); aria-hidden no HTML. */
-.sala {
-  position: absolute;
-  top: 11%;
-  height: 17%;
-  width: 17%;
-  border-radius: 50%;
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
-  /* borda esfumada: a mancha não aparece como um disco */
-  -webkit-mask-image: radial-gradient(closest-side, #000 45%, transparent 100%);
-  mask-image: radial-gradient(closest-side, #000 45%, transparent 100%);
-  pointer-events: none;
-}
-.salaEsq {
-  left: 10%;
-}
-.salaDir {
-  left: 71%;
-}
 .figCap {
   display: block;
   margin-top: var(--s-3);
@@ -143,8 +128,10 @@
     margin-top: var(--s-7);
     align-items: end;
   }
+  /* até 3 linhas no computador (com 5.25rem o título ia a 4 linhas e empurrava o retrato) */
   .heroTitle {
-    font-size: clamp(2.75rem, 1.1rem + 5vw, 5.25rem);
+    max-width: 20ch;
+    font-size: clamp(2.75rem, 1.1rem + 3.6vw, 4.25rem);
   }
   .heroHead {
     grid-column: 1 / 8;
@@ -312,6 +299,7 @@
 .fFechoBtns > a {
   white-space: nowrap;
 }
+/* exceção ao 760/1100: celular largo e paisagem (duas colunas curtas cabem) */
 @media (min-width: 560px) {
   .fFechoBtns {
     flex-direction: row;
@@ -401,8 +389,9 @@
   grid-column: 1 / -1;
   min-width: 0;
   margin-top: var(--s-8);
-  --mf-min-desk: 30rem;
+  --mf-min-desk: 20rem; /* arco do mapa com no máximo 320px de altura */
 }
+/* exceção ao 760/1100: celular largo e paisagem (duas colunas curtas cabem) */
 @media (min-width: 560px) {
   .officeBtns {
     flex-direction: row;

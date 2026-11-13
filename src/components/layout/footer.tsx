@@ -54,12 +54,9 @@ export function Footer() {
             </address>
             {siteConfig.hours && <p className="t-sm mt-2 text-fg-2">{siteConfig.hours}</p>}
             <ul className="ft-contacts">
-              <li>
-                <RouteWhatsAppCTA
-                  location="footer"
-                  variant="texto"
-                  className="t-sm"
-                />
+              {/* no celular a barra de ações já tem o WhatsApp: a linha some do rodapé */}
+              <li className="ft-so-desk">
+                <RouteWhatsAppCTA location="footer" variant="texto" className="t-sm" />
               </li>
               <li>
                 <PhoneCTA location="footer" as="texto" className="t-sm" />
@@ -99,10 +96,18 @@ export function Footer() {
                     </Link>
                   </li>
                 ))}
+                {/* celular: os links de "Para você" entram nesta lista (duas colunas, sem um bloco quase vazio) */}
+                {supportNav.map((item) => (
+                  <li key={item.href} className="ft-so-celular">
+                    <Link href={item.href} prefetch={false} className="foot-link t-sm">
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
 
-            <div>
+            <div className="ft-so-desk">
               <ColTitle id="ft-apoio">Para você</ColTitle>
               <ul aria-labelledby="ft-apoio" className="m-0 mt-2 list-none p-0">
                 {supportNav.map((item) => (
@@ -112,6 +117,7 @@ export function Footer() {
                     </Link>
                   </li>
                 ))}
+                {/* no celular o formulário está na barra de ações (e no menu) */}
                 <li>
                   <AgendarCTA location="footer" variant="texto" className="t-sm" />
                 </li>
@@ -123,7 +129,11 @@ export function Footer() {
               <ul aria-labelledby="ft-trat" className="m-0 mt-2 list-none p-0">
                 {treatments.map((t) => (
                   <li key={t.slug}>
-                    <Link href={`/tratamentos/${t.slug}`} prefetch={false} className="foot-link t-sm">
+                    <Link
+                      href={`/tratamentos/${t.slug}`}
+                      prefetch={false}
+                      className="foot-link t-sm"
+                    >
                       {t.name}
                     </Link>
                   </li>
@@ -140,7 +150,11 @@ export function Footer() {
               <ul className="m-0 list-none p-0">
                 {treatments.map((t) => (
                   <li key={t.slug}>
-                    <Link href={`/tratamentos/${t.slug}`} prefetch={false} className="foot-link t-sm">
+                    <Link
+                      href={`/tratamentos/${t.slug}`}
+                      prefetch={false}
+                      className="foot-link t-sm"
+                    >
                       {t.name}
                     </Link>
                   </li>
@@ -152,11 +166,13 @@ export function Footer() {
 
         <div className="ft-legal-row">
           <span className="fio-h" aria-hidden="true" />
-          <div className={`ft-legal flex flex-col gap-x-8 pt-4 tab:flex-row tab:flex-wrap tab:items-center tab:justify-between`}>
+          <div
+            className={`ft-legal flex flex-col gap-x-8 pt-4 tab:flex-row tab:flex-wrap tab:items-center tab:justify-between`}
+          >
             <p className="m-0 text-nevoa">
-              © {year} {siteConfig.doctorName}. Todos os direitos reservados.
+              © {year} {siteConfig.doctorName}
             </p>
-            <ul className="m-0 flex list-none flex-col p-0 tab:flex-row tab:flex-wrap tab:items-center tab:gap-x-6">
+            <ul className="m-0 flex list-none flex-row flex-wrap items-center gap-x-6 p-0">
               {legal.map((l) => (
                 <li key={l.href}>
                   <Link href={l.href} prefetch={false} className="foot-link">

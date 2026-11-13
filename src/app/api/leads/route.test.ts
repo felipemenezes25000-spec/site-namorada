@@ -33,7 +33,12 @@ function chamar(body: unknown, headers: Record<string, string> = {}, ip = novoIp
   return POST(
     new Request("http://localhost:3100/api/leads", {
       method: "POST",
-      headers: { "content-type": "application/json", host: "localhost:3100", "x-real-ip": ip, ...headers },
+      headers: {
+        "content-type": "application/json",
+        host: "localhost:3100",
+        "x-real-ip": ip,
+        ...headers,
+      },
       body: typeof body === "string" ? body : JSON.stringify(body),
     }),
   );

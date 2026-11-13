@@ -29,6 +29,7 @@ export function ApoioHero({
   mobileMark,
   ampla = false,
   actionsRow = false,
+  asideIdentifica = false,
   className,
 }: {
   kicker: ReactNode;
@@ -48,6 +49,11 @@ export function ApoioHero({
   ampla?: boolean;
   /** Os dois botões lado a lado também no celular (rótulos curtos). */
   actionsRow?: boolean;
+  /**
+   * O `aside` já mostra nome, registro e endereço (cartão TrustBlock): a linha de identidade some onde
+   * o cartão aparece (a partir de 760px), para a página não repetir a assinatura.
+   */
+  asideIdentifica?: boolean;
   className?: string;
 }) {
   return (
@@ -69,10 +75,14 @@ export function ApoioHero({
               {title}
             </DisplayHeading>
             <p className={cn("t-lead", styles.lede)}>{lede}</p>
-            <IdentityLine className={styles.identidade} />
+            <IdentityLine
+              className={cn(styles.identidade, asideIdentifica && styles.identidadeSoCelular)}
+            />
             {aviso && <div className={styles.aviso}>{aviso}</div>}
             {actions && (
-              <div className={cn(styles.actions, actionsRow && styles.row)}>{actions}</div>
+              <div className={cn(styles.actions, actionsRow && styles.row)} data-hide-floating="">
+                {actions}
+              </div>
             )}
             {note && <p className={cn("t-cap", styles.note)}>{note}</p>}
           </div>

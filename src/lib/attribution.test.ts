@@ -61,9 +61,9 @@ describe("captureAttribution", () => {
       utmSource: "google",
       utmMedium: "cpc",
       utmCampaign: "implante",
-      // a página de entrada guarda o caminho com a query, como foi aberta
+      // a página de entrada guarda o caminho e só os parâmetros de campanha (o "x=1" sai)
       landingPage:
-        "/tratamentos/implante?gclid=ABC123&utm_source=google&utm_medium=cpc&utm_campaign=implante&x=1",
+        "/tratamentos/implante?gclid=ABC123&utm_source=google&utm_medium=cpc&utm_campaign=implante",
       referrer: "https://www.google.com/",
     });
   });
@@ -96,6 +96,20 @@ describe("captureAttribution", () => {
     vi.stubGlobal("window", { ...w, location: { search: "?gclid=SEGUNDO", pathname: "/" } });
     captureAttribution();
     expect(getAttribution()?.gclid).toBe("SEGUNDO");
+  });
+
+  it("uma visita nova só com utm_source mantém o gclid da anterior", () => {
+    const w = montar("?gclid=A");
+    captureAttribution();
+    vi.stubGlobal("window", { ...w, location: { search: "?utm_source=x", pathname: "/" } });
+    captureAttribution();
+    expect(getAttribution()).toMatchObject({ gclid: "A", utmSource: "x" });
+  });
+
+  it("a página de entrada nunca leva dado pessoal da URL (só caminho e campanha)", () => {
+    montar("?email=a@b.com&nome=Maria&utm_source=g");
+    captureAttribution();
+    expect(getAttribution()?.landingPage).toBe("/tratamentos/implante?utm_source=g");
   });
 
   it("sem parâmetros novos, preserva o que já foi capturado", () => {

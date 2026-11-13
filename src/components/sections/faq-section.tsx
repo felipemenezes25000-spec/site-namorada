@@ -3,7 +3,7 @@ import { Section, type SectionTone } from "@/components/ui/section";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { FAQ } from "@/components/ui/faq";
-import { CTA_DUVIDAS_WHATSAPP, WhatsAppCTA } from "@/components/ui/cta";
+import { WhatsAppCTA } from "@/components/ui/cta";
 import styles from "./editorial.module.css";
 
 /** Perguntas abertas à vista; as outras ficam em "Ver todas" (mesma lista vai ao JSON-LD). */
@@ -46,12 +46,7 @@ export function FAQSection({
             </h2>
             <p className="t-body">{description}</p>
             <div className={styles.faqAsk}>
-              <WhatsAppCTA
-                location="faq"
-                label={CTA_DUVIDAS_WHATSAPP}
-                message={whatsappMessage}
-                variant="contorno"
-              />
+              <WhatsAppCTA location="faq" message={whatsappMessage} variant="contorno" />
             </div>
           </div>
           <div className={styles.faqList}>
@@ -60,7 +55,9 @@ export function FAQSection({
               // As demais perguntas continuam no HTML (e no JSON-LD): só ficam recolhidas.
               <details className={styles.faqRest}>
                 <summary className={`link t-label ${styles.faqRestSum}`}>
-                  <span className={styles.faqRestOpen}>Ver todas as perguntas ({items.length})</span>
+                  <span className={styles.faqRestOpen}>
+                    Ver todas as perguntas ({items.length})
+                  </span>
                   <span className={styles.faqRestClose}>Mostrar menos perguntas</span>
                 </summary>
                 <FAQ items={items.slice(FAQ_VISIVEIS)} />

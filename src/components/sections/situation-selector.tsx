@@ -1,11 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useId, useRef, useState, type CSSProperties, type KeyboardEvent, type FocusEvent } from "react";
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type CSSProperties,
+  type KeyboardEvent,
+  type FocusEvent,
+} from "react";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import { buttonClasses } from "@/components/ui/button";
-import { CTA_DUVIDAS_WHATSAPP, WhatsAppCTA } from "@/components/ui/cta";
+import { WhatsAppCTA } from "@/components/ui/cta";
 import { ArrowIcon } from "@/components/ui/icons";
 import { IndexEnd, IndexRow } from "@/components/ui/index-list";
 import { TrackedLink } from "@/components/ui/tracked-link";
@@ -150,130 +158,134 @@ export function SituationSelector({
 
       <fieldset className={styles.group} onBlur={onGroupBlur} aria-labelledby={headId}>
         <div className={styles.stage}>
-        <p className={styles.lede} data-hidden={chosen ? "" : undefined}>
-          {lede}
-        </p>
-        {/* desktop, sem escolha: a coluna da direita não fica vazia (cartão noite com o convite) */}
-        <div className={styles.vazio} data-tone="noite" data-hidden={chosen ? "" : undefined}>
-          <img
-            src="/brand/monograma-claro.svg"
-            alt=""
-            width={446}
-            height={450}
-            loading="lazy"
-            decoding="async"
-            className={styles.vazioMarca}
-          />
-          <p className={cn("t-d3 display", styles.vazioTxt)}>{lede}</p>
-        </div>
-        <ul
-          data-reveal=""
-          className={cn("idx", styles.list)}
-          style={{ "--row": `${ROW}px`, "--gap-col": `${GAP}px`, "--n": total } as CSSProperties}
-        >
-          {situations.map((s, i) => {
-            const on = s.id === chosenId;
-            return (
-              <IndexRow
-                key={s.id}
-                i={i}
-                className={styles.row}
-                data-on={on ? "" : undefined}
-                style={{ "--idx": i } as CSSProperties}
-              >
-                <label className={styles.label}>
-                  <input
-                    ref={i === 0 ? firstRadio : undefined}
-                    type="radio"
-                    name="situacao"
-                    value={s.id}
-                    checked={on}
-                    onChange={(e) => choose(s, (e.nativeEvent as MouseEvent).detail > 0)}
-                    onKeyDown={onRadioKey}
-                    aria-controls={on && open ? answerId : undefined}
-                    className={styles.radio}
-                  />
-                  <span className={styles.ring} aria-hidden="true" />
-                  <span className={cn("it-sm", styles.n)} aria-hidden="true">
-                    {String.fromCharCode(65 + i)}
-                  </span>
-                  <span className={styles.text}>{s.label}</span>
-                  <span className={styles.dot} aria-hidden="true" />
-                </label>
+          <p className={styles.lede} data-hidden={chosen ? "" : undefined}>
+            {lede}
+          </p>
+          {/* desktop, sem escolha: a coluna da direita não fica vazia (cartão noite com o convite) */}
+          <div className={styles.vazio} data-tone="noite" data-hidden={chosen ? "" : undefined}>
+            {/* eslint-disable-next-line @next/next/no-img-element -- SVG estático da marca: next/image não otimiza SVG */}
+            <img
+              src="/brand/monograma-claro.svg"
+              alt=""
+              width={446}
+              height={450}
+              loading="lazy"
+              decoding="async"
+              className={styles.vazioMarca}
+            />
+            <p className={cn("t-d3 display", styles.vazioTxt)}>{lede}</p>
+          </div>
+          <ul
+            data-reveal=""
+            className={cn("idx", styles.list)}
+            style={{ "--row": `${ROW}px`, "--gap-col": `${GAP}px`, "--n": total } as CSSProperties}
+          >
+            {situations.map((s, i) => {
+              const on = s.id === chosenId;
+              return (
+                <IndexRow
+                  key={s.id}
+                  i={i}
+                  className={styles.row}
+                  data-on={on ? "" : undefined}
+                  style={{ "--idx": i } as CSSProperties}
+                >
+                  <label className={styles.label}>
+                    <input
+                      ref={i === 0 ? firstRadio : undefined}
+                      type="radio"
+                      name="situacao"
+                      value={s.id}
+                      checked={on}
+                      onChange={(e) => choose(s, (e.nativeEvent as MouseEvent).detail > 0)}
+                      onKeyDown={onRadioKey}
+                      aria-controls={on && open ? answerId : undefined}
+                      className={styles.radio}
+                    />
+                    <span className={styles.ring} aria-hidden="true" />
+                    <span className={cn("it-sm", styles.n)} aria-hidden="true">
+                      {String.fromCharCode(65 + i)}
+                    </span>
+                    <span className={styles.text}>{s.label}</span>
+                    <span className={styles.dot} aria-hidden="true" />
+                  </label>
 
-                {on && open && (
-                  <div
-                    ref={answerRef}
-                    id={answerId}
-                    role="region"
-                    aria-label={`Resposta: ${s.label}`}
-                    className={styles.answer}
-                  >
-                    <div className={styles.panel}>
-                      <p className="t-lead">{s.answer}</p>
-                      <div className={styles.actions}>
-                        <WhatsAppCTA
-                          location="situation"
-                          message={s.waMessage}
-                          label={CTA_DUVIDAS_WHATSAPP}
-                          className={styles.wa}
-                        />
-                        {GUIA_RESPIRAR_NA_PAGINA && s.id === "receio" && (
-                          <TrackedLink
-                            href="/medo-de-dentista#respirar"
-                            event="cta_click"
-                            eventParams={{ location: "situation", target: "breathing_guide" }}
-                            className={buttonClasses("contorno", "md", styles.wa)}
-                          >
-                            Exercício de respiração
-                          </TrackedLink>
-                        )}
-                      </div>
-                      <div className={styles.more}>
-                        <TrackedLink
-                          href={s.href}
-                          event="care_need_click"
-                          eventParams={{ need: s.id, href: s.href }}
-                          className="link t-label inline-flex min-h-[44px] items-center gap-2"
-                        >
-                          {s.cta}
-                          <ArrowIcon size={18} />
-                        </TrackedLink>
-                        <button type="button" onClick={clear} className={cn("link t-label", styles.clear)}>
-                          Limpar escolha
-                        </button>
-                      </div>
-                    </div>
-                    <ul className={cn(styles.picks)} aria-label="Tratamentos indicados">
-                      {s.treatments.map((slug) => {
-                        const t = bySlug.get(slug);
-                        if (!t) return null;
-                        return (
-                          <li key={slug} className={styles.pick}>
-                            <Link
-                              href={`/tratamentos/${slug}`}
-                              className={styles.pickLink}
-                              onClick={() => track("treatment_card_click", { treatment: t.shortName })}
+                  {on && open && (
+                    <div
+                      ref={answerRef}
+                      id={answerId}
+                      role="region"
+                      aria-label={`Resposta: ${s.label}`}
+                      className={styles.answer}
+                    >
+                      <div className={styles.panel}>
+                        <p className="t-lead">{s.answer}</p>
+                        <div className={styles.actions}>
+                          <WhatsAppCTA
+                            location="situation"
+                            message={s.waMessage}
+                            className={styles.wa}
+                          />
+                          {GUIA_RESPIRAR_NA_PAGINA && s.id === "receio" && (
+                            <TrackedLink
+                              href="/medo-de-dentista#respirar"
+                              event="cta_click"
+                              eventParams={{ location: "situation", target: "breathing_guide" }}
+                              className={buttonClasses("contorno", "md", styles.wa)}
                             >
-                              <span className={cn("t-row", styles.pickName)}>{t.name}</span>
-                              <ArrowIcon size={20} className={styles.pickArrow} />
-                            </Link>
-                          </li>
-                        );
-                      })}
-                    </ul>
+                              Exercício de respiração
+                            </TrackedLink>
+                          )}
+                        </div>
+                        <div className={styles.more}>
+                          <TrackedLink
+                            href={s.href}
+                            event="care_need_click"
+                            eventParams={{ need: s.id, href: s.href }}
+                            className="link t-label inline-flex min-h-[44px] items-center gap-2"
+                          >
+                            {s.cta}
+                            <ArrowIcon size={18} />
+                          </TrackedLink>
+                          <button
+                            type="button"
+                            onClick={clear}
+                            className={cn("link t-label", styles.clear)}
+                          >
+                            Limpar escolha
+                          </button>
+                        </div>
+                      </div>
+                      <ul className={cn(styles.picks)} aria-label="Tratamentos indicados">
+                        {s.treatments.map((slug) => {
+                          const t = bySlug.get(slug);
+                          if (!t) return null;
+                          return (
+                            <li key={slug} className={styles.pick}>
+                              <Link
+                                href={`/tratamentos/${slug}`}
+                                className={styles.pickLink}
+                                onClick={() =>
+                                  track("treatment_card_click", { treatment: t.shortName })
+                                }
+                              >
+                                <span className={cn("t-row", styles.pickName)}>{t.name}</span>
+                                <ArrowIcon size={20} className={styles.pickArrow} />
+                              </Link>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  )}
+                </IndexRow>
+              );
+            })}
+            <IndexEnd i={total} />
+          </ul>
 
-                  </div>
-                )}
-              </IndexRow>
-            );
-          })}
-          <IndexEnd i={total} />
-
-        </ul>
-
-        {/* O Fio: da situação escolhida a cada tratamento indicado (só desktop). */}
-        {chosen && (
+          {/* O Fio: da situação escolhida a cada tratamento indicado (só desktop). */}
+          {chosen && (
             <svg
               key={chosen.id}
               className={styles.thread}
@@ -296,7 +308,7 @@ export function SituationSelector({
                 );
               })}
             </svg>
-        )}
+          )}
         </div>
 
         {/* Anúncio para leitores de tela: o rótulo, a contagem e onde está a resposta. */}

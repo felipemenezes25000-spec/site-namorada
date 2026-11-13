@@ -10,7 +10,11 @@ import styles from "./hero-statement.module.css";
  * Títulos e descrições vêm de `differentials` (content.ts): nada de texto novo.
  * Sem animação além dos fios que se desenham ao entrar na tela.
  */
-const COLUMNS = ["Consulta de 40 a 60 minutos", "Orçamento após avaliação, sem pressão", "WhatsApp direto com a Dra. Ana"];
+const COLUMNS = [
+  "Consulta de 40 a 60 minutos",
+  "Orçamento após avaliação, sem pressão",
+  "WhatsApp direto com a Dra. Ana",
+];
 
 export function HeroStatement({ className }: { className?: string }) {
   const cols = COLUMNS.map((title) => differentials.find((d) => d.title === title)).filter(

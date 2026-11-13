@@ -82,15 +82,11 @@ create trigger trg_appointment_leads_updated_at
 -- ------------------------------------------------------------
 alter table public.appointment_leads enable row level security;
 
--- Permite que o site (chave anon) INSIRA novos leads,
--- mas NÃO permite leitura pública (dados ficam protegidos).
+-- Nenhuma política para o papel anon: a chave pública NÃO insere nem lê leads.
+-- Quem grava é só o servidor (/api/leads, com validação, armadilha de robôs e limite
+-- de envios), usando a SERVICE ROLE KEY, que ignora RLS. Em bancos criados com a versão
+-- anterior deste arquivo, a linha abaixo remove a política antiga que deixava qualquer
+-- pessoa inserir linhas direto pela API REST do Supabase.
 drop policy if exists "anon can insert leads" on public.appointment_leads;
-create policy "anon can insert leads"
-  on public.appointment_leads
-  for insert
-  to anon
-  with check (true);
 
--- A leitura/edição é feita apenas pelo servidor com a
--- SERVICE ROLE KEY, que ignora RLS por padrão.
--- (Não criamos policy de SELECT para anon de propósito.)
+-- A leitura/edição (painel /admin) também é feita só pelo servidor com a service role.

@@ -21,11 +21,27 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+      - run: npm run format:check
       - run: npm run lint
+      - run: npm run check:css
       - run: npm run typecheck
-      - run: npm run test
+      - run: npm run test -- --coverage
       - run: npm run build
       - run: npm run check:site
+
+  # Auditoria de dependências: informa sem bloquear (vulnerabilidade de produção em nível alto ou crítico).
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm audit --omit=dev --audit-level=high

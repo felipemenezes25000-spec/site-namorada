@@ -34,11 +34,7 @@ export function ContactMethods({ className }: { className?: string }) {
       <IndexRow i={1} className={styles.row}>
         <p className={cn("t-folio", styles.label)}>Telefone</p>
         <div className="min-w-0">
-          <PhoneCTA
-            as="texto"
-            location="contact_page"
-            className={cn(styles.big, styles.stretch)}
-          />
+          <PhoneCTA as="texto" location="contact_page" className={cn(styles.big, styles.stretch)} />
         </div>
       </IndexRow>
 

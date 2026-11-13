@@ -46,13 +46,14 @@ export function Hint({
 }
 
 /**
- * Erro do campo: prefixo "Atenção:" (não depende só de cor) e role="alert", para o leitor de tela
- * anunciar o erro assim que ele aparece (também quando o campo perde o foco, sem novo envio).
+ * Erro do campo: prefixo "Atenção:" (não depende só de cor). SEM role="alert": o texto fica ligado
+ * ao campo por `aria-describedby` (lido junto com o campo, com `aria-invalid`), e só o resumo de
+ * erros do topo é anunciado no envio. Vários alertas ao mesmo tempo se atropelavam no leitor de tela.
  */
 export function FieldError({ message, id }: { message?: string; id?: string }) {
   if (!message) return null;
   return (
-    <p id={id} role="alert" className="fld-erro">
+    <p id={id} className="fld-erro">
       <strong>Atenção:</strong> {message}
     </p>
   );

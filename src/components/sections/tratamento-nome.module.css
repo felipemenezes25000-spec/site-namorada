@@ -1,6 +1,7 @@
 .nb {
   white-space: nowrap;
 }
+/* exceção ao 760/1100: celular muito estreito (nome longo em duas linhas) */
 @media (max-width: 399px) {
   .nb {
     white-space: normal;

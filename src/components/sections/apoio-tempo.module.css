@@ -4,10 +4,13 @@
 }
 .numeral {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
+  min-width: 0;
   gap: 0.15em;
   margin: 0;
-  font-size: clamp(4.5rem, 2.4rem + 6.4vw, 8.5rem);
+  /* o mínimo e o meio são limitados pela largura da tela: com o texto ampliado o numeral não passa da coluna */
+  font-size: clamp(min(4.5rem, 18.5vw), min(2.4rem + 6.4vw, 24vw), 8.5rem);
   line-height: 0.9;
   font-variation-settings: "opsz" var(--d-opsz);
   color: var(--accent);
@@ -19,23 +22,27 @@
   font-size: 0.4em;
 }
 .fio {
-  margin-top: 24px;
+  margin-top: var(--s-5);
 }
 .legenda {
   max-width: 30rem;
-  margin: 16px 0 0;
+  margin: var(--s-4) 0 0;
   color: var(--fg);
 }
 /* celular: numeral e unidade na mesma linha, acima do título */
 .miniRoot {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
-  gap: 14px;
-  margin: 0 0 14px;
+  gap: 0 var(--s-3);
+  min-width: 0;
+  margin: 0 0 var(--s-3);
 }
 .mini {
   font-size: 3.5rem;
 }
 .unidade {
   margin: 0;
+  min-width: 0;
+  overflow-wrap: break-word;
 }

@@ -9,7 +9,7 @@ import { ContactMethods } from "@/components/sections/contact-methods";
 import { ContatoMapa } from "@/components/sections/contato-mapa";
 import { ContatoFecho } from "@/components/sections/contato-fecho";
 
-const TITLE = "Contato da Dra. Ana Beatriz | Dentista na Vila Bruna, SP";
+const TITLE = "Contato da Dra. Ana Beatriz | Dentista na Freguesia do Ó";
 
 // O título fixado segue o DESIGN.md 6.4 (56 caracteres, com o nome da doutora). title, og:title e
 // twitter:title são o mesmo texto: `buildMetadata` ainda não aceita `absoluteTitle`, então os três
@@ -43,7 +43,13 @@ export default function ContatoPage() {
       />
       <ContatoHero />
 
-      <Section tone="papel" id="canais" hideFloating aria-labelledby="canais-titulo" spacing="compact">
+      <Section
+        tone="papel"
+        id="canais"
+        hideFloating
+        aria-labelledby="canais-titulo"
+        spacing="compact"
+      >
         <Container>
           <h2 id="canais-titulo" className="sr-only">
             Formas de contato

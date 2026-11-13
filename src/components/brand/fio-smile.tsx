@@ -8,13 +8,7 @@ import { cn } from "@/lib/utils";
  * Desenha ao entrar na tela (varredura da esquerda para a direita, 1,6s, uma vez). Sem o fio,
  * o botão continua sozinho.
  */
-export function FioSmile({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
+export function FioSmile({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <div data-reveal="" className={cn("smile", className)}>
       <div className="relative z-10">{children}</div>

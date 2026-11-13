@@ -77,8 +77,8 @@ export function MapFacade({
         ) : (
           <div className={styles.conteudo}>
             <MapPinIcon size={28} className={styles.pino} />
+            {/* só a rua: o endereço por extenso já está ao lado (no máximo duas vezes por tela) */}
             <p className={cn("t-label", styles.rua)}>{locale.ruaNumero}</p>
-            <p className={cn("t-sm", styles.local)}>{localeTexto("bairroRegiaoCidade")}</p>
             {url ? (
               <>
                 <button
@@ -88,7 +88,7 @@ export function MapFacade({
                 >
                   Ver mapa
                 </button>
-                <p className={cn("t-cap", styles.aviso)}>
+                <p className={cn("t-sm", styles.aviso)}>
                   O mapa só é carregado do Google depois do seu toque.
                 </p>
               </>

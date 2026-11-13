@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { siteConfig, locale } from "@/lib/site-config";
 import { waMessages } from "@/lib/whatsapp";
 import { Section } from "@/components/ui/section";
@@ -43,19 +44,32 @@ export function ContatoHero() {
             <p className={`t-lead ${styles.heroLede}`}>
               O atendimento é acolhedor desde a primeira mensagem.
             </p>
+            {/* atalho para quem está com dor: telefone e a página de urgência, ainda na primeira tela */}
+            <p className={`t-sm ${styles.heroUrgente}`}>
+              Com dor forte ou inchaço?{" "}
+              <PhoneCTA as="texto" location="contact_urgency" className="inline min-h-0" /> ou veja
+              a{" "}
+              <Link href="/urgencia-odontologica" className="link">
+                página de urgência
+              </Link>
+              .
+            </p>
 
-            <div className={styles.heroActions}>
+            <div className={styles.heroActions} data-hide-floating="">
               <WhatsAppCTA location="contact_page" message={waMessages.default} />
               <p className={styles.heroPhoneWrap}>
+                Prefere ligar?{" "}
                 <PhoneCTA as="texto" location="contact_page" className={styles.heroPhone} />
               </p>
             </div>
           </div>
 
           <div className={styles.heroFig}>
+            {/* lazy: no celular o retrato fica oculto (display: none) e não é baixado; no computador ele está
+                na primeira tela e entra logo depois do CSS, com prioridade alta */}
             <ArchPortrait
               priority={false}
-              loading="eager"
+              loading="lazy"
               fetchPriority="high"
               fig={1}
               sizes="(min-width: 1100px) 440px, (min-width: 760px) 40vw, 1px"

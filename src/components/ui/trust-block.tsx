@@ -42,7 +42,7 @@ export function TrustBlock({
   }
   return (
     <div className={cn("trust", className)}>
-      <p className="t-d3 display">{siteConfig.doctorName}</p>
+      <p className="t-d3 display trust-nome">{siteConfig.doctorName}</p>
       <dl data-reveal="" className="m-0 mt-6">
         {rows.map((r) => (
           <div key={r.dt} className="trust-linha t-body min-w-0">

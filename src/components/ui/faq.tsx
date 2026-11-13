@@ -34,7 +34,11 @@ export function FAQ({
       {stacks.map((stack, s) => (
         <div key={s} data-reveal="">
           {stack.map((item, i) => (
-            <details key={item.q} className="faq-item" style={{ "--i": Math.min(i, 8) } as CSSProperties}>
+            <details
+              key={item.q}
+              className="faq-item"
+              style={{ "--i": Math.min(i, 8) } as CSSProperties}
+            >
               <span
                 className="fio-h"
                 aria-hidden="true"

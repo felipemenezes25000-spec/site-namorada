@@ -27,7 +27,7 @@ export function TratamentoSumario({ items }: { items: SumarioItem[] }) {
         const meta = [t.duration, t.sessions].filter(Boolean).join(" · ");
         return (
           <IndexRow key={t.slug} i={i} className={styles.item}>
-            <span className={`it-sm ${styles.n}`} aria-hidden="true">
+            <span className={`num-sans ${styles.n}`} aria-hidden="true">
               {String(i + 1).padStart(2, "0")}
             </span>
             <span className={`t-row ${styles.nome}`}>

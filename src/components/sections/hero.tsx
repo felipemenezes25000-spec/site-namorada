@@ -40,9 +40,7 @@ export function Hero({ children }: { children?: ReactNode }) {
         <div className={styles.grid}>
           <div className={styles.mast}>
             <div className={styles.mastRow}>
-              <p className={styles.mastLeft}>
-                Cirurgiã-dentista · {siteConfig.cro}
-              </p>
+              <p className={styles.mastLeft}>Cirurgiã-dentista · {siteConfig.cro}</p>
               <p className={styles.mastRight}>
                 <span className={styles.mastShort}>{locale.bairro}</span>
                 <span className={styles.mastLong}>
@@ -73,10 +71,16 @@ export function Hero({ children }: { children?: ReactNode }) {
               </span>
             </p>
 
-            <div className={styles.actions}>
+            {/* data-hide-floating: enquanto estes botões estão na tela a barra do celular se recolhe (um só WhatsApp por tela) */}
+            <div className={styles.actions} data-hide-floating="">
               <WhatsAppCTA location="hero" className={styles.wa} />
               {/* celular: link de texto logo abaixo do botão, ainda na primeira tela */}
-              <ButtonLink href="#tratamentos" variant="texto" size="md" className={styles.verMobile}>
+              <ButtonLink
+                href="#tratamentos"
+                variant="texto"
+                size="md"
+                className={styles.verMobile}
+              >
                 Ver tratamentos
                 <ArrowIcon />
               </ButtonLink>

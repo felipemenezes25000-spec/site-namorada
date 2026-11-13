@@ -85,12 +85,7 @@ export function MenuSheet() {
         <i aria-hidden="true" />
       </button>
 
-      <dialog
-        ref={ref}
-        id="menu-folha"
-        className="sheet"
-        aria-label="Menu de navegação"
-      >
+      <dialog ref={ref} id="menu-folha" className="sheet" aria-label="Menu de navegação">
         <div className="sheet-top">
           <Logo onNavigate={go} lazy />
           <button ref={closeRef} type="button" className="menu-btn" onClick={close}>
@@ -102,7 +97,9 @@ export function MenuSheet() {
         <div className="wrap pb-10 pt-5">
           <div className="sheet-acoes">
             <RouteWhatsAppCTA location="mobile_menu" block className="min-h-[56px]" />
-            <RouteAgendarCTA location="mobile_menu" block />
+            {pathname !== "/agendamento" && pathname !== "/obrigado" && (
+              <RouteAgendarCTA location="mobile_menu" block />
+            )}
             <PhoneCTA location="mobile_menu" as="texto" className="justify-center" />
           </div>
 
@@ -119,8 +116,15 @@ export function MenuSheet() {
                       aria-current={active ? "page" : undefined}
                       onClick={go}
                     >
-                      <span className={cn("display", item.destaque && "text-ouro-tinta")}>{item.label}</span>
-                      <span className={cn("t-cap shrink-0 items-center gap-2 text-right", item.destaque ? "flex" : "hidden sm:flex")}>
+                      <span className={cn("display", item.destaque && "text-ouro-tinta")}>
+                        {item.label}
+                      </span>
+                      <span
+                        className={cn(
+                          "t-cap shrink-0 items-center gap-2 text-right",
+                          item.destaque ? "flex" : "hidden sm:flex",
+                        )}
+                      >
                         {item.destaque && (
                           <span
                             aria-hidden="true"
@@ -154,9 +158,7 @@ export function MenuSheet() {
             ))}
           </ul>
 
-          <p className="t-cap mt-6 max-w-leitura">
-            {localeTexto("endereco")}
-          </p>
+          <p className="t-cap mt-6 max-w-leitura">{localeTexto("endereco")}</p>
         </div>
       </dialog>
     </div>

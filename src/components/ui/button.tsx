@@ -7,12 +7,7 @@ import { cn } from "@/lib/utils";
  *  - fundo claro: primario (WhatsApp, ação principal), contorno, texto;
  *  - dentro de noite/verde: ouro e contorno-claro.
  */
-export type ButtonVariant =
-  | "primario"
-  | "contorno"
-  | "ouro"
-  | "contorno-claro"
-  | "texto";
+export type ButtonVariant = "primario" | "contorno" | "ouro" | "contorno-claro" | "texto";
 export type ButtonSize = "md" | "sm";
 
 const variantClass = {

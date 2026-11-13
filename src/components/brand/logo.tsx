@@ -28,6 +28,7 @@ export function Monogram({
   lazy?: boolean;
 }) {
   return (
+    // eslint-disable-next-line @next/next/no-img-element -- SVG estático da marca: next/image não otimiza SVG
     <img
       src={tone === "claro" ? "/brand/monograma-claro.svg" : "/brand/monograma.svg"}
       width={size}
@@ -62,13 +63,18 @@ export function Symbol({
   // proporção do arquivo: 863 x 701
   const height = Math.round((size * 701) / 863);
   return (
+    // eslint-disable-next-line @next/next/no-img-element -- SVG estático da marca: next/image não otimiza SVG
     <img
       src={tone === "claro" ? "/brand/simbolo-claro.svg" : "/brand/simbolo.svg"}
       width={size}
       height={height}
       alt={decorative ? "" : alt}
       aria-hidden={decorative || undefined}
-      className={cn("block max-w-none", decorative && "pointer-events-none select-none opacity-[0.07]", className)}
+      className={cn(
+        "block max-w-none",
+        decorative && "pointer-events-none select-none opacity-[0.07]",
+        className,
+      )}
       decoding="async"
       loading={lazy ? "lazy" : undefined}
       fetchPriority={lazy ? "low" : undefined}

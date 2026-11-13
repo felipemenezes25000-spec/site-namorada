@@ -27,13 +27,21 @@ export function localize(text: string): string {
  */
 export const ogImage = {
   path: "/opengraph-image.jpg",
+  /** Sufixo de versão: troque quando a imagem mudar, para o WhatsApp e as redes buscarem a nova. */
+  version: "2026-11",
+  type: "image/jpeg",
   width: 1200,
   height: 630,
   alt: `${siteConfig.doctorName}, ${siteConfig.title.toLowerCase()} (${siteConfig.cro}). Dentista particular na ${localeTexto("bairroRegiaoCidade")}.`,
 } as const;
 
+/** URL absoluta e versionada da imagem de compartilhamento (og:image e twitter:image iguais). */
+export function ogImageUrl(): string {
+  return `${absoluteUrl(ogImage.path)}?v=${ogImage.version}`;
+}
+
 /** Foto da Dra. exibida em /sobre (menos de 300 kB): imagem do Person e do Dentist no JSON-LD. */
-const FOTO_DRA = "/dra-ana-trajetoria.jpg";
+const FOTO_DRA = "/dra-ana-retrato.jpg";
 /** Logo leve (512 px, menos de 100 kB) para o JSON-LD. */
 const LOGO = "/brand/logo-512.png";
 
@@ -53,10 +61,7 @@ type MetaBase = {
  * `twitter:title` são o MESMO texto.
  */
 type MetaInput = MetaBase &
-  (
-    | { title: string; absoluteTitle?: string }
-    | { absoluteTitle: string; title?: string }
-  );
+  ({ title: string; absoluteTitle?: string } | { absoluteTitle: string; title?: string });
 
 /** Marca curta no fim do título (o nome completo estoura os 60 caracteres). */
 const brandSuffix = siteConfig.doctorFirstName;
@@ -82,16 +87,14 @@ export function buildMetadata({
     const locTitle = localize(title ?? "");
     fullTitle = hasBrand(locTitle) ? locTitle : `${locTitle} | ${brandSuffix}`;
   }
-  const imageUrl = absoluteUrl(ogImage.path);
+  const imageUrl = ogImageUrl();
 
   return {
     // `absolute` evita que o template do layout raiz duplique a marca no título.
     title: { absolute: fullTitle },
     description: locDescription,
     alternates: { canonical: url },
-    robots: noindex
-      ? { index: false, follow: false }
-      : { index: true, follow: true },
+    robots: noindex ? { index: false, follow: false } : { index: true, follow: true },
     openGraph: {
       type: "website",
       locale: "pt_BR",
@@ -101,7 +104,15 @@ export function buildMetadata({
       description: locDescription,
       // Declarada explicitamente: a convenção de arquivo (src/app/opengraph-image.jpg)
       // não injeta a meta tag no HTML em produção quando openGraph é sobrescrito por página.
-      images: [{ url: imageUrl, width: ogImage.width, height: ogImage.height, alt: ogImage.alt }],
+      images: [
+        {
+          url: imageUrl,
+          width: ogImage.width,
+          height: ogImage.height,
+          alt: ogImage.alt,
+          type: ogImage.type,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
@@ -123,15 +134,16 @@ const ID = {
   website: `${siteConfig.url}/#website`,
 };
 
-/** Assuntos da profissional, só o que o site já apresenta. */
+/**
+ * Assuntos da profissional. Sem "Implante dentário" e "Cirurgia oral": sem o registro de especialidade
+ * confirmado no CRO, o JSON-LD não atribui essas áreas à pessoa (os serviços continuam no catálogo).
+ */
 const KNOWS_ABOUT = [
   "Odontologia",
   "Saúde bucal",
   "Prevenção odontológica",
   "Clareamento dental",
   "Estética do sorriso",
-  "Cirurgia oral",
-  "Implante dentário",
 ];
 
 /** Schema principal: Dentist + LocalBusiness. Sem preço e sem aggregateRating (não há avaliações reais). */
@@ -165,7 +177,7 @@ export function dentistSchema() {
     logo: absoluteUrl(LOGO),
     ...(hasPhone ? { telephone: `+${siteConfig.phone}` } : {}),
     ...(isPlaceholder(siteConfig.email) ? {} : { email: siteConfig.email }),
-    medicalSpecialty: "Dentistry",
+    medicalSpecialty: "https://schema.org/Dentistry",
     address: {
       "@type": "PostalAddress",
       streetAddress: address.street,
@@ -216,15 +228,25 @@ export function dentistSchema() {
   };
 }
 
-export function faqSchema(items: { q: string; a: string }[]) {
+/**
+ * Perguntas que ficam só no HTML, fora de qualquer FAQPage: forma de pagamento (Código de Ética
+ * Odontológica, art. 44, I: modalidade de pagamento não vai a destaque nem a dado estruturado).
+ */
+export const FAQ_FORA_DO_SCHEMA: ReadonlySet<string> = new Set([
+  "Quais são as formas de pagamento?",
+]);
+
+export function faqSchema(items: readonly { q: string; a: string }[]) {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: items.map((i) => ({
-      "@type": "Question",
-      name: i.q,
-      acceptedAnswer: { "@type": "Answer", text: localize(i.a) },
-    })),
+    mainEntity: items
+      .filter((i) => !FAQ_FORA_DO_SCHEMA.has(i.q))
+      .map((i) => ({
+        "@type": "Question",
+        name: i.q,
+        acceptedAnswer: { "@type": "Answer", text: localize(i.a) },
+      })),
   };
 }
 
@@ -254,19 +276,22 @@ export function breadcrumbSchema(items: { name: string; path: string }[]) {
 /**
  * Página de conteúdo informativo (tratamentos e páginas de apoio). `dateModified` é a MESMA data
  * da linha visível `<AuthorshipLine updatedAt />` (padrão `CONTENT_UPDATED`): passe a mesma aos dois.
- * `author` aponta para o `@id` do Person e leva o nome, porque o Person completo só está em /sobre.
- * Sem `reviewedBy`: o texto visível diz "elaborado pela", nunca "revisado clinicamente".
+ * Quem publica é o consultório (`publisher`); a doutora NÃO aparece como `author` nem `reviewedBy`
+ * enquanto ela não revisar os textos (a linha visível diz "Conteúdo informativo do consultório").
+ * `about` (opcional): o procedimento da página, como MedicalProcedure (páginas de tratamento).
  */
 export function medicalWebPageSchema({
   path,
   name,
   description,
   updatedAt = CONTENT_UPDATED,
+  about,
 }: {
   path: string;
   name: string;
   description: string;
   updatedAt?: string;
+  about?: { name: string; description?: string; extra?: Readonly<Record<string, string>> };
 }) {
   const url = absoluteUrl(path);
   return {
@@ -280,12 +305,17 @@ export function medicalWebPageSchema({
     dateModified: updatedAt,
     isPartOf: { "@id": ID.website },
     publisher: { "@id": ID.dentist },
-    author: {
-      "@type": "Person",
-      "@id": ID.person,
-      name: siteConfig.doctorName,
-      url: absoluteUrl("/sobre"),
-    },
+    ...(about
+      ? {
+          about: {
+            "@type": "MedicalProcedure",
+            name: localize(about.name),
+            ...(about.description ? { description: localize(about.description) } : {}),
+            ...(about.extra ?? {}),
+            provider: { "@id": ID.dentist },
+          },
+        }
+      : {}),
   };
 }
 

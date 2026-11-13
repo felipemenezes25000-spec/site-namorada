@@ -24,7 +24,7 @@ export function Header() {
           <RouteWhatsAppCTA
             size="sm"
             location="header"
-            compactLabel="Agendar"
+            compactLabel="WhatsApp"
             className="hdr-cta"
           />
           <MenuSheet />

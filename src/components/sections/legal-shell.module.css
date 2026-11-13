@@ -25,7 +25,10 @@
 /* ----- títulos de seção: fio curto em ouro e numeral próprio ----- */
 .prose .h2 {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.25em;
+  overflow-wrap: break-word;
+  hyphens: auto;
   margin-top: 1.7em;
   padding-top: 0;
   border-top: 0;
@@ -163,6 +166,7 @@
   overflow-wrap: anywhere;
 }
 
+/* exceção ao 760/1100: as notas laterais só cabem a partir daqui */
 @media (min-width: 960px) {
   .grid {
     grid-template-columns: repeat(12, minmax(0, 1fr));

@@ -43,7 +43,7 @@
   min-width: 0;
 }
 .aboutTitle {
-  margin: 12px 0 0;
+  margin: var(--s-3) 0 0;
   max-width: 20ch;
 }
 .aboutText > p {
@@ -55,7 +55,7 @@
   max-width: 36rem;
 }
 .more {
-  margin-top: 32px;
+  margin-top: var(--s-6);
 }
 @media (min-width: 760px) {
   .aboutFig {
@@ -101,7 +101,7 @@
 .quoteBy {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--s-4);
   margin-top: clamp(28px, 4vw, 56px);
 }
 .quoteBy .rule {
@@ -133,7 +133,7 @@
   min-width: 0;
 }
 .areaTitle {
-  margin: 12px 0 0;
+  margin: var(--s-3) 0 0;
   max-width: 22ch;
 }
 .areaLede {
@@ -147,7 +147,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   row-gap: 18px;
-  padding-block: 32px 36px;
+  padding-block: var(--s-6) 36px;
 }
 .areaNum {
   font-size: 1.125rem;
@@ -165,13 +165,25 @@
   margin: 14px 0 0;
 }
 .areaCap {
-  margin-top: 16px;
+  margin-top: var(--s-4);
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--fg);
 }
 .areasCta {
   margin-top: clamp(32px, 4vw, 48px);
+}
+/* home no celular: a seção vira uma faixa curta (nome e link de cada área) */
+@media (max-width: 759px) {
+  .areasCompact .areaLede,
+  .areasCompact .areaDesc,
+  .areasCompact .areaCap,
+  .areasCompact .areasCta {
+    display: none;
+  }
+  .areasCompact .areas {
+    margin-top: var(--s-5);
+  }
 }
 @media (min-width: 1100px) {
   .areasSec {
@@ -181,7 +193,7 @@
 .areaActions {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--s-3);
   min-width: 0;
 }
 .areaActions > :global(.btn),
@@ -245,10 +257,16 @@
   min-width: 0;
   margin-top: 40px;
 }
+/* celular: cada passo em uma linha de título (o detalhe fica em /primeira-consulta, no link abaixo) */
+@media (max-width: 759px) {
+  .howList :global(.idx-sub) {
+    display: none;
+  }
+}
 .howActions {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--s-3);
   margin-top: 40px;
 }
 .howActions > a {
@@ -310,19 +328,25 @@
   padding-block: 20px 22px;
 }
 .locValue {
-  margin-top: 4px;
+  margin-top: var(--s-1);
   color: var(--fg);
   overflow-wrap: anywhere;
 }
 .locBtns {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--s-3);
   margin-top: 28px;
 }
 .locBtns > a {
   width: 100%;
   white-space: nowrap;
+}
+/* celular: sem a fachada do mapa (o endereço está na lista e "Como chegar" abre o trajeto) */
+@media (max-width: 759px) {
+  .map {
+    display: none;
+  }
 }
 .map {
   grid-column: 1 / -1;
@@ -375,7 +399,7 @@
   margin-top: 36px;
 }
 .faqRest {
-  margin-top: 8px;
+  margin-top: var(--s-2);
 }
 .faqRestSum {
   display: inline-flex;
@@ -443,7 +467,7 @@
     margin-bottom: 28px;
   }
   .aboutText > p {
-    margin-top: 16px;
+    margin-top: var(--s-4);
   }
   .facts {
     margin-top: 20px;
@@ -459,7 +483,7 @@
     display: none;
   }
   .more {
-    margin-top: 24px;
+    margin-top: var(--s-5);
   }
   .more > a {
     width: 100%;
@@ -472,8 +496,8 @@
     margin-top: 28px;
   }
   .area {
-    row-gap: 12px;
-    padding-block: 22px 24px;
+    row-gap: var(--s-3);
+    padding-block: 22px var(--s-5);
   }
   .areaBody p {
     margin-top: 10px;
@@ -506,9 +530,9 @@
   flex: 1;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: var(--s-4);
   min-height: 64px;
-  padding-block: 12px;
+  padding-block: var(--s-3);
   color: var(--head);
 }
 .areaLineName {
@@ -544,9 +568,9 @@
   }
   .howList :global(.idx-passos .idx-item) {
     grid-template-columns: 2.75rem minmax(0, 1fr);
-    column-gap: 12px;
-    row-gap: 4px;
-    padding-block: 16px;
+    column-gap: var(--s-3);
+    row-gap: var(--s-1);
+    padding-block: var(--s-4);
   }
   .howList :global(.idx-passos .idx-num) {
     grid-row: span 2;
@@ -565,22 +589,22 @@
     margin-top: 20px;
   }
   .howHead > p {
-    margin-top: 16px;
+    margin-top: var(--s-4);
   }
 }
 
 /* ------------------------------ Localização no celular (B-16) ------------------------------ */
 @media (max-width: 759px) {
   .locInfo {
-    margin-top: 24px;
+    margin-top: var(--s-5);
   }
   .locRow {
-    padding-block: 14px 16px;
+    padding-block: 14px var(--s-4);
   }
   .locBtns {
     margin-top: 20px;
   }
   .map {
-    margin-top: 24px;
+    margin-top: var(--s-5);
   }
 }

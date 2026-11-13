@@ -57,32 +57,34 @@ export default function TermosPage() {
         notes={
           <>
             <p>
-              <strong>Em resumo.</strong> O site informa e facilita o contato. Ele não substitui a consulta,
-              e o envio do formulário é um pedido de agendamento, que só vale depois da confirmação.
+              <strong>Em resumo.</strong> O site informa e facilita o contato. Ele não substitui a
+              consulta, e o envio do formulário é um pedido de agendamento, que só vale depois da
+              confirmação.
             </p>
             <p>
-              Sobre os seus dados, veja a <Link href="/politica-de-privacidade">Política de Privacidade</Link>.
+              Sobre os seus dados, veja a{" "}
+              <Link href="/politica-de-privacidade">Política de Privacidade</Link>.
             </p>
           </>
         }
       >
         <p>
-          Estes termos explicam como o site funciona. Se você continuar usando o site, entendemos que
-          leu as condições descritas abaixo.
+          Estes termos explicam como o site funciona. Se você continuar usando o site, entendemos
+          que leu as condições descritas abaixo.
         </p>
 
         <LegalHeading id="sobre" sections={SECOES} />
         <p>
           Este site é mantido por <strong>{siteConfig.doctorName}</strong> ({siteConfig.title},{" "}
-          {siteConfig.cro}) e tem caráter <strong>informativo</strong>. Ele apresenta a profissional e os
-          tratamentos e facilita o contato e o agendamento.
+          {siteConfig.cro}) e tem caráter <strong>informativo</strong>. Ele apresenta a profissional
+          e os tratamentos e facilita o contato e o agendamento.
         </p>
 
         <LegalHeading id="informativo" sections={SECOES} />
         <p>
-          As informações publicadas aqui não são diagnóstico, prescrição nem indicação de tratamento.
-          Qualquer decisão clínica depende de avaliação individual e presencial. Não há promessa de
-          resultado: cada caso é único e avaliado de forma personalizada.
+          As informações publicadas aqui não são diagnóstico, prescrição nem indicação de
+          tratamento. Qualquer decisão clínica depende de avaliação individual e presencial. Não há
+          promessa de resultado: cada caso é único e avaliado de forma personalizada.
         </p>
 
         <LegalHeading id="uso" sections={SECOES} />
@@ -108,15 +110,16 @@ export default function TermosPage() {
         <LegalHeading id="agendamentos" sections={SECOES} />
         <p>
           O envio do formulário ou o contato pelo WhatsApp é uma <strong>solicitação</strong> de
-          agendamento, confirmada diretamente pela equipe. O envio, por si só, não garante data e horário
-          até a confirmação.
+          agendamento, confirmada diretamente pela equipe. O envio, por si só, não garante data e
+          horário até a confirmação.
         </p>
 
         <LegalHeading id="etica" sections={SECOES} />
         <p>
-          Buscamos seguir o Código de Ética Odontológica e as normas de publicidade do Conselho Federal
-          de Odontologia, como a Resolução CFO-196/2019. Por isso, evitamos promessas de resultado,
-          expressões sensacionalistas e a divulgação de técnicas ou equipamentos como exclusivos.
+          Buscamos seguir o Código de Ética Odontológica e as normas de publicidade do Conselho
+          Federal de Odontologia, como a Resolução CFO-196/2019. Por isso, evitamos promessas de
+          resultado, expressões sensacionalistas e a divulgação de técnicas ou equipamentos como
+          exclusivos.
         </p>
         <p>
           Quando imagens de pacientes forem publicadas, será com autorização formal, seguindo as

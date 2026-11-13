@@ -86,6 +86,12 @@ describe("track", () => {
     expect(win.fbq).toHaveBeenCalledWith("track", "Contact", { location: "hero" });
   });
 
+  it("o Meta Pixel não recebe o tratamento de interesse (dado de saúde)", async () => {
+    const { track } = await carregar();
+    track("lead_created", { location: "obrigado", treatment: "Implante dentário" } as never);
+    expect(win.fbq).toHaveBeenCalledWith("track", "Lead", { location: "obrigado" });
+  });
+
   it("o gtag recebe `need` (identificador neutro) e nunca dado pessoal", async () => {
     const { track } = await carregar();
     track("situation_select", { location: "home", need: "dor", email: "x@y.com" } as never);

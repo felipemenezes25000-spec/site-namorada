@@ -4,8 +4,17 @@ import { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
-  Search, Copy, Check, MessageCircle, LogOut, Inbox, RefreshCw, ChevronDown, AlertTriangle,
-  ChevronLeft, ChevronRight,
+  Search,
+  Copy,
+  Check,
+  MessageCircle,
+  LogOut,
+  Inbox,
+  RefreshCw,
+  ChevronDown,
+  AlertTriangle,
+  ChevronLeft,
+  ChevronRight,
 } from "./admin-icons";
 import type { AppointmentLead, LeadStatus } from "@/types/lead";
 import { leadStatuses, leadStatusLabels } from "@/types/lead";
@@ -22,7 +31,9 @@ function leadWa(raw: string): string {
 
 function fmtDate(iso: string): string {
   try {
-    return new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(iso));
+    return new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(
+      new Date(iso),
+    );
   } catch {
     return iso;
   }
@@ -98,7 +109,9 @@ export function AdminDashboard({
           router.refresh(); // sem sessão, a página volta para o login
           return;
         }
-        setNotice(`Não foi possível salvar o status de ${lead.full_name}. Nada foi alterado; tente de novo.`);
+        setNotice(
+          `Não foi possível salvar o status de ${lead.full_name}. Nada foi alterado; tente de novo.`,
+        );
       } catch {
         forget(lead.id);
         setNotice(`Sem conexão com o servidor: o status de ${lead.full_name} não foi alterado.`);
@@ -107,20 +120,20 @@ export function AdminDashboard({
   }
 
   return (
-    <main className="min-h-screen bg-brand-bone">
+    <main className="min-h-screen bg-osso">
       {/* Topo */}
-      <header className="sticky top-0 z-10 border-b border-brand-ink/[0.07] bg-brand-bone/85 backdrop-blur-md">
+      <header className="sticky top-0 z-10 border-b border-tinta/[0.07] bg-painel-osso/85 backdrop-blur-md">
         <div className="container flex h-16 items-center justify-between">
           <div>
-            <h1 className="font-display text-xl text-brand-green">Painel de leads</h1>
-            <p className="text-xs text-brand-ink/70">
+            <h1 className="font-display text-xl text-verde">Painel de leads</h1>
+            <p className="text-xs text-painel-tinta/70">
               {total} {total === 1 ? "solicitação" : "solicitações"}
               {statusFilter ? ` com status “${leadStatusLabels[statusFilter]}”` : " no total"}
               {query ? ` para “${query}”` : ""}
             </p>
           </div>
           <form action={logout}>
-            <button className="inline-flex min-h-11 items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-brand-ink/70 ring-1 ring-inset ring-brand-ink/10 transition hover:bg-brand-green/[0.05] hover:text-brand-green">
+            <button className="inline-flex min-h-11 items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-painel-tinta/70 ring-1 ring-inset ring-painel-tinta/10 transition hover:bg-verde/[0.05] hover:text-verde">
               <LogOut className="size-4" /> Sair
             </button>
           </form>
@@ -133,8 +146,8 @@ export function AdminDashboard({
             <AlertTriangle className="mt-0.5 size-5 shrink-0" />
             <span>
               Banco de leads não conectado. Defina{" "}
-              <code className="rounded bg-amber-100 px-1">SUPABASE_SERVICE_ROLE_KEY</code>{" "}
-              (e <code className="rounded bg-amber-100 px-1">NEXT_PUBLIC_SUPABASE_URL</code>) no
+              <code className="rounded bg-amber-100 px-1">SUPABASE_SERVICE_ROLE_KEY</code> (e{" "}
+              <code className="rounded bg-amber-100 px-1">NEXT_PUBLIC_SUPABASE_URL</code>) no
               ambiente para listar e gerenciar os agendamentos recebidos pelo site.
             </span>
           </div>
@@ -152,8 +165,8 @@ export function AdminDashboard({
                   className={cn(
                     "inline-flex min-h-11 items-center whitespace-nowrap rounded-full px-4 text-sm font-medium transition",
                     active
-                      ? "bg-brand-green text-brand-bone"
-                      : "bg-white text-brand-ink/75 ring-1 ring-inset ring-brand-ink/10 hover:text-brand-green",
+                      ? "bg-verde text-osso"
+                      : "bg-white text-painel-tinta/75 ring-1 ring-inset ring-painel-tinta/10 hover:text-verde",
                   )}
                 >
                   {s === "all" ? "Todos" : leadStatusLabels[s]}
@@ -165,7 +178,7 @@ export function AdminDashboard({
           <form method="get" action="/admin" role="search" className="flex w-full gap-2 lg:w-96">
             {statusFilter && <input type="hidden" name="status" value={statusFilter} />}
             <div className="relative min-w-0 flex-1">
-              <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-brand-ink/60" />
+              <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-painel-tinta/60" />
               <input
                 type="search"
                 name="q"
@@ -173,12 +186,12 @@ export function AdminDashboard({
                 maxLength={60}
                 placeholder="Buscar por nome ou telefone"
                 aria-label="Buscar por nome ou telefone, em todas as páginas"
-                className="h-11 w-full rounded-xl border border-brand-ink/10 bg-white pl-10 pr-4 text-sm focus:border-brand-gold/60 focus:outline-none focus:ring-2 focus:ring-brand-gold/40"
+                className="h-11 w-full rounded-xl border border-painel-tinta/10 bg-white pl-10 pr-4 text-sm focus:border-painel-ouro/60 focus:outline-none focus:ring-2 focus:ring-painel-ouro/40"
               />
             </div>
             <button
               type="submit"
-              className="inline-flex min-h-11 items-center rounded-full bg-brand-green px-5 text-sm font-semibold text-brand-bone transition hover:bg-brand-green-dark"
+              className="inline-flex min-h-11 items-center rounded-full bg-verde px-5 text-sm font-semibold text-osso transition hover:bg-verde-escuro"
             >
               Buscar
             </button>
@@ -186,9 +199,12 @@ export function AdminDashboard({
         </div>
 
         {query && (
-          <p className="mt-3 text-sm text-brand-ink/70">
+          <p className="mt-3 text-sm text-painel-tinta/70">
             Resultado da busca em todos os leads.{" "}
-            <Link href={listHref(1, statusFilter, "")} className="font-medium text-brand-green underline underline-offset-2">
+            <Link
+              href={listHref(1, statusFilter, "")}
+              className="font-medium text-verde underline underline-offset-2"
+            >
               Limpar busca
             </Link>
           </p>
@@ -206,7 +222,7 @@ export function AdminDashboard({
 
         <div role="status" aria-live="polite">
           {pending && (
-            <p className="mt-4 flex items-center gap-2 text-sm text-brand-ink/70">
+            <p className="mt-4 flex items-center gap-2 text-sm text-painel-tinta/70">
               <RefreshCw className="size-3.5 animate-spin" /> Atualizando…
             </p>
           )}
@@ -214,12 +230,12 @@ export function AdminDashboard({
 
         {/* Lista */}
         {leads.length === 0 ? (
-          <div className="mt-10 flex flex-col items-center justify-center rounded-3xl border border-dashed border-brand-ink/15 bg-white/60 p-16 text-center">
-            <Inbox className="size-10 text-brand-ink/50" strokeWidth={1.4} />
-            <p className="mt-4 font-display text-xl text-brand-green">
+          <div className="mt-10 flex flex-col items-center justify-center rounded-[2rem] border border-dashed border-painel-tinta/15 bg-white/60 p-16 text-center">
+            <Inbox className="size-10 text-painel-tinta/50" strokeWidth={1.4} />
+            <p className="mt-4 font-display text-xl text-verde">
               {query ? "Nenhum lead encontrado" : "Nenhum lead por aqui"}
             </p>
-            <p className="mt-1 max-w-sm text-sm text-brand-ink/70">
+            <p className="mt-1 max-w-sm text-sm text-painel-tinta/70">
               {query
                 ? "Nenhum nome ou telefone corresponde a essa busca. Confira a grafia ou limpe a busca."
                 : "Os agendamentos enviados pelo site aparecem nesta lista assim que o Supabase estiver configurado."}
@@ -232,44 +248,50 @@ export function AdminDashboard({
                 <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-start sm:justify-between sm:p-6">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-3">
-                      <h2 className="font-display text-xl text-brand-green">{lead.full_name}</h2>
+                      <h2 className="font-display text-xl text-verde">{lead.full_name}</h2>
                       <LeadStatusBadge status={chosen[lead.id] ?? lead.status} />
                     </div>
-                    <p className="mt-1 text-xs text-brand-ink/70">Recebido em {fmtDate(lead.created_at)}</p>
+                    <p className="mt-1 text-xs text-painel-tinta/70">
+                      Recebido em {fmtDate(lead.created_at)}
+                    </p>
 
                     <dl className="mt-4 grid gap-x-8 gap-y-2 text-sm sm:grid-cols-2">
                       <div className="flex items-center gap-2">
-                        <dt className="text-brand-ink/70">WhatsApp:</dt>
-                        <dd className="font-medium text-brand-ink/90">{formatPhone(lead.whatsapp)}</dd>
+                        <dt className="text-painel-tinta/70">WhatsApp:</dt>
+                        <dd className="font-medium text-painel-tinta/90">
+                          {formatPhone(lead.whatsapp)}
+                        </dd>
                       </div>
                       {lead.email && (
                         <div className="flex items-center gap-2">
-                          <dt className="text-brand-ink/70">E-mail:</dt>
-                          <dd className="truncate text-brand-ink/90">{lead.email}</dd>
+                          <dt className="text-painel-tinta/70">E-mail:</dt>
+                          <dd className="truncate text-painel-tinta/90">{lead.email}</dd>
                         </div>
                       )}
                       {lead.treatment_interest && (
                         <div className="flex items-center gap-2">
-                          <dt className="text-brand-ink/70">Interesse:</dt>
-                          <dd className="text-brand-ink/90">{lead.treatment_interest}</dd>
+                          <dt className="text-painel-tinta/70">Interesse:</dt>
+                          <dd className="text-painel-tinta/90">{lead.treatment_interest}</dd>
                         </div>
                       )}
                       <div className="flex items-center gap-2">
-                        <dt className="text-brand-ink/70">Preferência:</dt>
-                        <dd className="text-brand-ink/90">
-                          {[lead.preferred_date, lead.preferred_period].filter(Boolean).join(" · ") || "—"}
+                        <dt className="text-painel-tinta/70">Preferência:</dt>
+                        <dd className="text-painel-tinta/90">
+                          {[lead.preferred_date, lead.preferred_period]
+                            .filter(Boolean)
+                            .join(" · ") || "—"}
                         </dd>
                       </div>
                       {lead.source && (
                         <div className="flex items-center gap-2">
-                          <dt className="text-brand-ink/70">Origem:</dt>
-                          <dd className="text-brand-ink/90">{lead.source}</dd>
+                          <dt className="text-painel-tinta/70">Origem:</dt>
+                          <dd className="text-painel-tinta/90">{lead.source}</dd>
                         </div>
                       )}
                     </dl>
 
                     {lead.main_complaint && (
-                      <p className="mt-3 rounded-xl bg-brand-beige/40 p-3 text-sm text-brand-ink/80">
+                      <p className="mt-3 rounded-xl bg-painel-areia/40 p-3 text-sm text-painel-tinta/80">
                         “{lead.main_complaint}”
                       </p>
                     )}
@@ -281,16 +303,20 @@ export function AdminDashboard({
                       href={leadWa(lead.whatsapp)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-brand-green px-4 py-2.5 text-sm font-semibold text-brand-bone transition hover:bg-brand-green-dark"
+                      className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-verde px-4 py-2.5 text-sm font-semibold text-osso transition hover:bg-verde-escuro"
                     >
                       <MessageCircle className="size-4" /> Abrir WhatsApp
                       <span className="sr-only"> (abre em nova aba)</span>
                     </a>
                     <button
                       onClick={() => copy(formatPhone(lead.whatsapp), lead.id)}
-                      className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium text-brand-green ring-1 ring-inset ring-brand-green/20 transition hover:bg-brand-green/[0.05]"
+                      className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium text-verde ring-1 ring-inset ring-painel-verde/20 transition hover:bg-verde/[0.05]"
                     >
-                      {copied === lead.id ? <Check className="size-4" /> : <Copy className="size-4" />}
+                      {copied === lead.id ? (
+                        <Check className="size-4" />
+                      ) : (
+                        <Copy className="size-4" />
+                      )}
                       {copied === lead.id ? "Copiado!" : "Copiar número"}
                     </button>
                     <div className="relative">
@@ -299,13 +325,15 @@ export function AdminDashboard({
                         onChange={(e) => changeStatus(lead, e.target.value)}
                         disabled={pending}
                         aria-label={`Alterar status de ${lead.full_name}`}
-                        className="h-11 w-full cursor-pointer appearance-none rounded-full border border-brand-ink/15 bg-white pl-4 pr-9 text-sm font-medium text-brand-ink/90 focus:border-brand-gold/60 focus:outline-none focus:ring-2 focus:ring-brand-gold/40"
+                        className="h-11 w-full cursor-pointer appearance-none rounded-full border border-painel-tinta/15 bg-white pl-4 pr-9 text-sm font-medium text-painel-tinta/90 focus:border-painel-ouro/60 focus:outline-none focus:ring-2 focus:ring-painel-ouro/40"
                       >
                         {leadStatuses.map((s) => (
-                          <option key={s} value={s}>{leadStatusLabels[s]}</option>
+                          <option key={s} value={s}>
+                            {leadStatusLabels[s]}
+                          </option>
                         ))}
                       </select>
-                      <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 size-4 -translate-y-1/2 text-brand-green/70" />
+                      <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 size-4 -translate-y-1/2 text-painel-verde/70" />
                     </div>
                   </div>
                 </div>
@@ -315,24 +343,27 @@ export function AdminDashboard({
         )}
 
         {pageCount > 1 && (
-          <nav aria-label="Paginação" className="mt-8 flex items-center justify-between gap-3 text-sm">
+          <nav
+            aria-label="Paginação"
+            className="mt-8 flex items-center justify-between gap-3 text-sm"
+          >
             {page > 1 ? (
               <Link
                 href={listHref(page - 1, statusFilter, query)}
-                className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-4 py-2 font-medium text-brand-green ring-1 ring-inset ring-brand-green/20 hover:bg-brand-green/[0.05]"
+                className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-4 py-2 font-medium text-verde ring-1 ring-inset ring-painel-verde/20 hover:bg-verde/[0.05]"
               >
                 <ChevronLeft className="size-4" /> Anteriores
               </Link>
             ) : (
               <span />
             )}
-            <span className="text-brand-ink/70">
+            <span className="text-painel-tinta/70">
               Página {page} de {pageCount}
             </span>
             {page < pageCount ? (
               <Link
                 href={listHref(page + 1, statusFilter, query)}
-                className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-4 py-2 font-medium text-brand-green ring-1 ring-inset ring-brand-green/20 hover:bg-brand-green/[0.05]"
+                className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-4 py-2 font-medium text-verde ring-1 ring-inset ring-painel-verde/20 hover:bg-verde/[0.05]"
               >
                 Próximas <ChevronRight className="size-4" />
               </Link>

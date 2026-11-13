@@ -37,6 +37,7 @@
   gap: var(--s-2) var(--s-5);
   margin-top: var(--s-4);
 }
+/* exceção ao 760/1100: celular estreito (rótulos e espaçamento mais justos) */
 @media (max-width: 479px) {
   .actions > .btn {
     width: 100%;
@@ -54,15 +55,5 @@
 @media (min-width: 1100px) {
   .sec {
     padding-block: var(--s-4);
-  }
-}
-
-/* altura provisória (content-visibility: auto do globals.css, que tem especificidade maior): perto da real */
-main section[data-tone].sec.sec {
-  contain-intrinsic-size: auto 484px;
-}
-@media (min-width: 1100px) {
-  main section[data-tone].sec.sec {
-    contain-intrinsic-size: auto 200px;
   }
 }

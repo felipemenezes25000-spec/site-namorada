@@ -10,6 +10,29 @@ Sumário: 0 Estado vigente · 1 Princípios · 2 Tokens · 3 Elementos-assinatur
 
 **Precedência.** 0 vale mais que 13, que vale mais que o apêndice A (antigas seções 10 a 12), que vale mais que 1 a 9. O apêndice A é o histórico das correções: o que ainda vale delas já está refletido aqui e em 13. Onde o texto antigo e o código discordarem, vale o código, e o texto deve ser corrigido.
 
+### 0.0 Rodada 2 de correções (reconciliado em 13/11/2026)
+
+Vale mais que o resto da seção 0 onde houver conflito. Medido no build de produção local (`next start`) e no site no ar.
+
+- **Aviso de cookies.** Vem aberto no HTML do servidor (aparece na primeira pintura e deixou de ser o maior elemento tardio de `/agendamento`) e some para quem já decidiu pela classe `consent-set`, posta no `<html>` pelo script do `<head>` antes da pintura. Sem JavaScript ele não aparece. Enquanto está aberto, a barra de ações do celular fica recolhida e `--h-bar` vale 0 (aviso e barra nunca disputam a tela). Reaberto por "Gerenciar cookies", o foco entra no aviso; ao decidir, volta a quem abriu (ou ao `<main>`) e um `role="status"` anuncia "Preferências de cookies salvas.". Altura no celular: 107 px a 360x640 (2 linhas de 15 px e botões de 44 px; a meta de 90 px não cabe sem tirar os alvos de 44 px). O campo "Nome completo" de `/agendamento` fica acima do aviso a 360x640 e 375x667; a 320x568, não.
+- **Texto ampliado.** Com `html { font-size: 200% }` nenhuma das 21 rotas passa da largura a 390, 360 e 320 px (nem a 150% a 390). Ferramentas: `body { overflow-wrap: break-word }`, `container: pagina` no `<body>` e a regra `@container pagina (max-width: 19.9rem)` (rótulos de botão quebram, cabeçalho sem "Cirurgiã-dentista", listas do rodapé numa coluna); `.num-lg` e `.num-xl` com mínimo limitado pela largura da tela; linhas rótulo/valor (`dt`/`dd`) em flex com quebra.
+- **Linha de identidade** (`.idt`): itens em bloco que quebram por dentro; o "·" é desenhado antes de cada item e o do começo de cada linha fica fora da caixa (nenhuma linha começa com "·"). "Dra. Ana", "CRO-SP 177801" e "Freguesia do Ó" não se separam. Títulos de `DisplayHeading` passam por `semQuebraNome` (`utils.ts`): "Dra." nunca termina linha.
+- **Sem `content-visibility`** nas seções: a altura da página mudava ao rolar e o axe "frio" acusava contraste falso. Não reintroduzir sem medir seção por seção.
+- **WhatsApp com intenção** (`WaIntent` em `whatsapp.ts`): `agendar`, `duvidas`, `urgencia` e `continuar` definem rótulo e mensagem juntos; `WhatsAppCTA` deduz a intenção pela mensagem quando não recebe `intent`. Por rota: urgência = "Falar agora pelo WhatsApp" (rótulo novo do vocabulário); medo, valores e contato = "Tirar dúvidas no WhatsApp"; tratamento = agendar a avaliação daquele tratamento (`waMessages.treatmentBooking`); `/obrigado` = "Continuar no WhatsApp" (sem "Preencher formulário" na barra e no menu).
+- **Barra fixa do celular:** some enquanto qualquer `[data-hide-floating]` está na tela: fechos, rodapé e os botões das aberturas (home, tratamentos, apoio, sobre e contato). Um só botão de WhatsApp por tela.
+- **Numeral pequeno** (abaixo de 28 px): `.num-sans` e `.idx-n` (Hanken tabular 500). A Bodoni itálica fica para os numerais grandes.
+- **Autoria e dados estruturados:** a linha visível diz "Conteúdo informativo do consultório da Dra. Ana Beatriz Lemos Souza, CRO-SP 177801. Atualizado em {data}.". `MedicalWebPage` não tem `author`; tem `@id`, `isPartOf`, `publisher` e, nos tratamentos, `about` (MedicalProcedure). `knowsAbout` sem implante e cirurgia. FAQPage sem a pergunta de pagamento e sem perguntas que já estão na home (`exclusiveFaqs`). Imagem de compartilhamento com `?v=` e tipo JPEG.
+- **Sitemap:** `lastmod` só nas páginas que mostram a data (tratamentos, apoio e legais).
+- **Formulário:** o envio está em `forms/use-lead-submit.ts` (tempo limite de 20 s e `submissionId` repetido nas tentativas) e os campos em `forms/appointment-form-campos.tsx`. A API descarta o envio repetido e, sem banco, responde `emailed: "pending"` quando o e-mail passa de 8 s (ele termina com `after()`). O e-mail de aviso leva o registro do consentimento: data, hora, versão da política e consentimento de saúde.
+- **Supabase:** só a chave de serviço grava e lê; a política "anon can insert leads" sai (`drop policy` em `supabase/schema.sql`).
+- **Foto de /sobre e da home:** `public/dra-ana-retrato.jpg` (600x800), recorte de rosto e ombros do original, sem os números de sala e sem remendo em CSS.
+- **Tailwind:** larguras `sm`, `tab`, `lg` e `desk`; o /admin usa a paleta `painel` (cores do site com opacidade) e as sombras `shadow-painel` e `shadow-painel-alto`. Saíram `brand.*`, `shadow-card`, `shadow-gold`, `text-display-md` e `ease-out-expo`.
+- **public/:** `symbol.png` (909 kB) e `dra-ana.webp` foram para `_arquivo/`; um só ícone de 512 px (`src/app/icon.png`, 11 kB) e o maskable com 9 kB.
+- **Desempenho (medido):** `deviceSizes` [390, 640, 828, 1080, 1440]; tags de medição com `lazyOnload` (fila no `dataLayer` e no `fbq` desde a hidratação). `experimental.inlineCss` foi testado e **rejeitado**: com Slow 4G aplicado e CPU 4x o LCP caiu de 2,26 para 1,68 s (home), de 1,86 para 1,22 s (implante), de 1,72 para 1,06 s (agendamento) e de 2,07 para 1,34 s (sobre), mas o HTML foi a cerca de 95 a 100 kB em gzip por página (o CSS vai no `<style>` e de novo no payload do React), contra o teto de 35 kB, e cada navegação baixaria o CSS outra vez. `cssChunking: "strict"` não reduz o número de CSS bloqueantes (3 a 4 arquivos) e não foi adotado. O `browserslist` moderno não mudou o pacote compartilhado (46 kB). JS inicial máximo: 197 kB gzip (`check:site` falha acima de 200; a meta é 150). A divisão do `globals.css` (127 kB, de 19 a 31% usados por página) continua pendente de decisão.
+- **Altura no celular:** home com 8.261 px a 390 (8.483 a 360 e 8.932 a 320); rodapé com 861 px a 390 e 906 px a 320.
+- **CSS dos módulos:** `scripts/check-css.mjs` (`npm run check:css`, na CI) não deixa crescer o número de espaçamentos em px (108 hoje) e exige comentário em media query fora de 760/1100.
+- **Pendências desta rodada:** o aviso de cookies cobre o primeiro campo a 320x568; o JS inicial está acima da meta de 150 kB; 108 espaçamentos em px ainda não viraram token (só os que batiam exatamente com a escala foram trocados); o rodapé passa 11 px da meta de 850 px a 390; o build local no Windows não gera o preload das fontes (o da Vercel gera), então o CLS medido localmente (0,05 nos tratamentos) vem da troca de fonte e deve ser conferido depois da publicação.
+
 ### 0.1 Decisões do diretor
 
 1. **Nomes neutros.** Rótulos visíveis: "Implante dentário" e "Remoção de dentes inclusos e cirurgias na boca". O slug `cirurgia-buco-maxilo-facial` não muda. Linhas de currículo de ABO, APCD e IOA dizem "Curso". Nenhum nome de especialidade em texto visível.
@@ -27,12 +50,12 @@ Sumário: 0 Estado vigente · 1 Princípios · 2 Tokens · 3 Elementos-assinatur
 
 ### 0.2 Contratos do núcleo
 
-- **Vocabulário de CTA** (`ui/cta.tsx`, constantes exportadas): `CTA_AGENDAR_WHATSAPP` "Agendar pelo WhatsApp", `CTA_DUVIDAS_WHATSAPP` "Tirar dúvidas no WhatsApp", `CTA_FORMULARIO` "Preencher formulário", `CTA_COMO_CHEGAR` "Como chegar", `CTA_LIGAR` "Ligar". Única exceção: `CTA_CONTINUAR_WHATSAPP` "Continuar no WhatsApp", só depois do envio do formulário. Em desenvolvimento um `console.warn` avisa quando um rótulo foge da lista. "Falar pelo WhatsApp", "Agendar avaliação" e "Falar agora pelo WhatsApp" **deixam de existir** (substituem o que 13.5 e 12 dizem).
+- **Vocabulário de CTA** (`ui/cta.tsx`, constantes exportadas): `CTA_AGENDAR_WHATSAPP` "Agendar pelo WhatsApp", `CTA_DUVIDAS_WHATSAPP` "Tirar dúvidas no WhatsApp", `CTA_FORMULARIO` "Preencher formulário", `CTA_COMO_CHEGAR` "Como chegar", `CTA_LIGAR` "Ligar" e `CTA_URGENCIA_WHATSAPP` "Falar agora pelo WhatsApp" (só na urgência, ver 0.0). Única exceção: `CTA_CONTINUAR_WHATSAPP` "Continuar no WhatsApp", só depois do envio do formulário. Em desenvolvimento um `console.warn` avisa quando um rótulo foge da lista ou não combina com a mensagem. "Falar pelo WhatsApp" e "Agendar avaliação" **deixam de existir**.
 - `AgendarCTA` aceita `treatment` (slug): o link vira `/agendamento?tratamento=<slug>` e o slug segue em `eventParams.treatment` do `scheduling_intent`. `PhoneCTA` sem `label` mostra "Ligar (11) 93922-2289".
 - `MapFacade` (`ui/map-facade.tsx`): fachada em arco; o iframe do Google só entra depois do clique em "Ver mapa" (`cta_click`, `target: "map_embed"`). Antes do clique não há requisição a google nem gstatic. Props: `location`, `tone`, `minHeight` (padrão 320, mínimo 220), `showDirections`, `className`.
-- `IdentityLine` e `AuthorshipLine` (servidor): "Dra. Ana Beatriz Lemos Souza · CRO-SP 177801 · Vila Bruna, região da Freguesia do Ó" e "Conteúdo elaborado pela Dra. Ana Beatriz Lemos Souza, CRO-SP 177801. Atualizado em {data}." A data vem de `CONTENT_UPDATED` (`content.ts`); nunca "revisado clinicamente".
+- `IdentityLine` e `AuthorshipLine` (servidor): "Dra. Ana Beatriz Lemos Souza · CRO-SP 177801 · Vila Bruna, região da Freguesia do Ó" e "Conteúdo informativo do consultório da Dra. Ana Beatriz Lemos Souza, CRO-SP 177801. Atualizado em {data}." A data vem de `CONTENT_UPDATED` (`content.ts`); nunca "revisado clinicamente".
 - **Localização em um só lugar:** `locale` e `localeTexto(forma)` em `site-config.ts` (formas `bairroRegiao`, `bairroRegiaoCidade`, `regiaoZona`, `endereco`, `enderecoCurto`). Não escreva bairro, região ou endereço por extenso em componente novo.
-- **Respostas canônicas** (`respostas` em `content.ts`): `avaliacao` (custo), `avaliacaoInclui` (o que a consulta tem) e `pagamento`. A pergunta "O que inclui a avaliação?" usa `${respostas.avaliacaoInclui} ${respostas.avaliacao}`.
+- **Respostas canônicas** (`respostas` em `content.ts`): `avaliacao` (custo), `avaliacaoInclui` (o que a consulta tem) e `pagamento`. A pergunta "O que inclui a avaliação?" usa `respostas.avaliacaoCompleta` (o que é, quanto custa e quando vem o orçamento).
 - **Escala de espaço** (`globals.css`, `:root`): `--s-1` 4, `--s-2` 8, `--s-3` 12, `--s-4` 16, `--s-5` 24, `--s-6` 32, `--s-7` 48, `--s-8` 64, `--s-9` 96, `--s-10` 128 (px). Dois breakpoints de layout: 760 e 1100.
 - **Numerais em ouro:** `--ouro-numeral` `#8a6a28` (4,74 sobre osso, 4,31 sobre papel, 4,02 sobre areia) para `.num-lg`, `.num-xl` e `.passoNum`; sob tom escuro o token vira `--ouro-claro`. `--ouro` continua só para fios.
 - **WhatsApp por rota:** `RouteCtaProvider`, `RouteWhatsAppCTA`, `RouteAgendarCTA` e `useWaRoute()` (`layout/route-ctas.tsx`; função pura `waContextForPath` em `whatsapp.ts`). Barra, cabeçalho, menu e rodapé levam a mensagem e o tratamento da rota.
@@ -40,7 +63,7 @@ Sumário: 0 Estado vigente · 1 Princípios · 2 Tokens · 3 Elementos-assinatur
 
 ### 0.3 Correções ao texto antigo
 
-- `Section` aceita `folio` mas ignora (sem `data-folio`; o trilho usa os `id`s). Remover a prop é pendência de `section.tsx`.
+- `Section` não tem mais a prop `folio` (o trilho usa os `id`s); `SectionHeading` mantém `folio` (texto à direita do título).
 - `Reveal` e `WhatsAppFloatingButton` foram apagados. `PhotoPlaceholder`, `TreatmentIcon`, `testimonials` e os apelidos antigos de `Button`, `PageHero` e `SectionHeading` também.
 - `BreathingGuide` está em uso: `/medo-de-dentista` o monta e o seletor de situações aponta para ele. A "pendência" de 12 está resolvida.
 - "A doutora" na home usa o recorte `dra-ana-recorte.webp` (o arquivo da capa) com enquadramento fechado diferente; não existe mais o retrato `dra-ana-cirurgia.webp`.
@@ -62,14 +85,14 @@ Sumário: 0 Estado vigente · 1 Princípios · 2 Tokens · 3 Elementos-assinatur
 
 ### 0.5 Imagens e `public/`
 
-- Em uso: `dra-ana-recorte.webp` (capa e "A doutora"), `dra-ana-trajetoria.jpg` (`/sobre` e JSON-LD); `dra-ana.webp` ficou sem uso no código, mas continua em `public/` por ordem do diretor; `brand/*.svg`, `brand/icon-512.png`, `brand/icon-maskable-512.png`, `brand/symbol.png` (painel `/admin`).
-- Logo dos dados estruturados: `brand/logo-512.png` (10 kB, símbolo AB em fundo branco chapado, gerado de `symbol.png`). O logotipo pesado `logo-vertical-bg.png` (1,2 MB) foi para `_arquivo/`.
+- Em uso: `dra-ana-recorte.webp` (capa), `dra-ana-retrato.jpg` (`/sobre`, "A doutora" na home e JSON-LD); `brand/*.svg` (o painel `/admin` usa `brand/simbolo.svg`) e `brand/icon-maskable-512.png`; o ícone de 512 px é `src/app/icon.png`.
+- Logo dos dados estruturados: `brand/logo-512.png` (10 kB, símbolo AB em fundo branco chapado; o `symbol.png` de origem está em `_arquivo/`). O logotipo pesado `logo-vertical-bg.png` (1,2 MB) foi para `_arquivo/`.
 - `_arquivo/` (ignorada pelo Git) guarda o que saiu: `consultorio-1..3.png`, `dra-ana-cirurgia.webp`, `tratamentos/*` e os logos PNG pesados sem uso. Nada foi apagado.
 
 ### 0.6 Ferramentas e qualidade
 
-- Scripts: `lint` (ESLint 9, `next/core-web-vitals` e `next/typescript`), `typecheck`, `test` (Vitest, `src/lib`), `check:site`, `format`, `format:check` e `verify` (lint, typecheck, test, build, check:site). A CI (`.github/workflows/ci.yml`) roda a mesma sequência.
-- `scripts/check-site.mjs` falha com: colchetes, título e descrição acima do limite, mais de um H1, imagem sem `alt`, canonical ausente, FAQ que não está no texto visível, termos proibidos (inclusive nome de especialidade e forma de pagamento), `lang` diferente de `pt-BR`, falta de viewport, link interno ou imagem que não existe (inclusive `/_next/image?url=`), URL do sitemap que não é página gerada, robots sem `Sitemap` ou com `Host:`, e JS inicial acima de 230 kB gzip (`JS_BUDGET_KB` muda o limite; calibrar no primeiro build de produção).
+- Scripts: `lint` (ESLint 9, `next/core-web-vitals` e `next/typescript`, `--max-warnings 0`), `check:css`, `typecheck`, `test` (Vitest, com cobertura v8 de `src/lib`, `src/app/api` e das ações do painel), `check:site`, `format`, `format:check` e `verify` (format:check, lint, check:css, typecheck, test, build e check:site). A CI roda a mesma sequência e uma auditoria de dependências que avisa sem bloquear; o Dependabot abre atualizações semanais.
+- `scripts/check-site.mjs` falha com: colchetes, título e descrição acima do limite, mais de um H1, imagem sem `alt`, canonical ausente, FAQ que não está no texto visível, termos proibidos (inclusive nome de especialidade e forma de pagamento), `lang` diferente de `pt-BR`, falta de viewport, link interno ou imagem que não existe (inclusive `/_next/image?url=`), URL do sitemap que não é página gerada, robots sem `Sitemap` ou com `Host:`, e JS inicial acima de 200 kB gzip (catraca: `JS_BUDGET_KB` muda o limite; a meta é 150).
 - O servidor de desenvolvimento não relê `tailwind.config.ts` ao salvar: reinicie para ver cores, breakpoints e `safelist` novos.
 - Classes `.t-*`, `.btn-*` e `.idx-*` vivem em `@layer components`: nunca monte o nome com template string.
 
@@ -78,7 +101,7 @@ Sumário: 0 Estado vigente · 1 Princípios · 2 Tokens · 3 Elementos-assinatur
 - **Dra. Ana confirmar:** horário (`hours`, vazio); estacionamento e acessibilidade (a FAQ ainda afirma "acesso adequado" e "mobilidade reduzida" sem fonte, e a seção de localização diz "fácil acesso pela Av. Edgar Facó" sem fonte); registro de especialidade no CRO, caso queira voltar a usar nome de especialidade; revisão de conteúdo (reativa `lastReviewed`).
 - **Jurídico:** prazo de retenção, Encarregado (DPO), base legal da atribuição de campanha, transferência internacional, nota sobre as tags do Google sem cookies.
 - **Produção:** `ADMIN_PASSWORD` (12 ou mais) e `ADMIN_SESSION_SECRET` (32 ou mais) na Vercel; conferir o apex e o nome do projeto na Vercel; IDs de medição só depois de a Política de Privacidade descrever as tags; rate limit continua por instância.
-- **Diretor:** preload de fontes e flags `cssChunking` e `inlineCss` (exigem build de produção); divisão do `globals.css` e passada do Prettier em `src` (etapa mecânica final).
+- **Diretor:** divisão do `globals.css` (as flags `cssChunking` e `inlineCss` foram testadas, ver 0.0). O Prettier passou no repositório inteiro na rodada 2 e entrou na CI (`format:check`).
 
 ---
 

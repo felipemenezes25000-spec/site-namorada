@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import { locale, localeTexto } from "@/lib/site-config";
-import { breadcrumbSchema, buildMetadata, faqSchema, medicalWebPageSchema } from "@/lib/seo";
+import {
+  breadcrumbSchema,
+  buildMetadata,
+  exclusiveFaqs,
+  faqSchema,
+  medicalWebPageSchema,
+} from "@/lib/seo";
 import { respostas } from "@/lib/content";
 import { waMessages } from "@/lib/whatsapp";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -18,19 +24,18 @@ import { ApoioDeclaracao } from "@/components/sections/apoio-declaracao";
 import { ApoioAutoria } from "@/components/sections/apoio-autoria";
 
 const PATH = "/primeira-consulta";
-const TITLE = `Primeira consulta no dentista | Dra. Ana Beatriz, ${locale.bairro}`;
+const TITLE = `Primeira consulta no dentista na ${locale.regiao} | Dra. Ana`;
 
 export const metadata: Metadata = buildMetadata({
   absoluteTitle: TITLE,
-  description: `Como é a primeira consulta com a Dra. Ana Beatriz, na ${localeTexto("bairroRegiao")}: conversa, exame clínico, diagnóstico e plano de cuidado.`,
+  description: `Como é a primeira consulta com a Dra. Ana Beatriz, na ${localeTexto("regiaoZona")}: conversa, exame, diagnóstico e plano de cuidado.`,
   path: PATH,
 });
 
 const steps = [
   {
     title: "Acolhimento e conversa",
-    description:
-      "Um momento para entender a sua história, a sua rotina e o que trouxe você até aqui. Você fala sem pressa.",
+    description: `No consultório da ${locale.bairro}, ${locale.zona}: um momento para entender a sua história, a sua rotina e o que trouxe você até aqui. Você fala sem pressa.`,
   },
   {
     title: "Exame clínico detalhado",
@@ -100,7 +105,7 @@ export default function PrimeiraConsultaPage() {
       <JsonLd
         data={[
           medicalSchema,
-          faqSchema(faqs),
+          faqSchema(exclusiveFaqs(faqs)),
           breadcrumbSchema([
             { name: "Início", path: "/" },
             { name: "Primeira consulta", path: PATH },
@@ -125,7 +130,11 @@ export default function PrimeiraConsultaPage() {
 
       <Section tone="verde" id="passo-a-passo" aria-labelledby="passo-a-passo-titulo">
         <Container>
-          <ApoioCabeca id="passo-a-passo-titulo" kicker="Passo a passo" title="O que acontece na primeira consulta">
+          <ApoioCabeca
+            id="passo-a-passo-titulo"
+            kicker="Passo a passo"
+            title="O que acontece na primeira consulta"
+          >
             Cada etapa tem um propósito: acolher você, entender o seu caso e construir um caminho
             claro, sempre com o seu consentimento.
           </ApoioCabeca>
@@ -137,7 +146,11 @@ export default function PrimeiraConsultaPage() {
 
       <Section tone="osso" id="perguntas-praticas" aria-labelledby="perguntas-praticas-titulo">
         <Container>
-          <ApoioCabeca id="perguntas-praticas-titulo" kicker="Antes de agendar" title="Perguntas práticas, respondidas" />
+          <ApoioCabeca
+            id="perguntas-praticas-titulo"
+            kicker="Antes de agendar"
+            title="Perguntas práticas, respondidas"
+          />
           <div className="mt-12">
             <ApoioQA items={practicalQuestions} />
           </div>
@@ -166,13 +179,10 @@ export default function PrimeiraConsultaPage() {
         tone="osso"
         eyebrow="Dúvidas sobre a primeira consulta"
         title="Perguntas frequentes"
-        whatsappMessage={waMessages.firstVisit}
+        whatsappMessage={waMessages.questions}
       />
 
-      <CTASection
-        tone="papel"
-        message={waMessages.firstVisit}
-      />
+      <CTASection tone="papel" message={waMessages.firstVisit} />
 
       <ApoioAutoria tone="osso" />
     </>

@@ -32,12 +32,14 @@ export function TratamentoCapa({ total }: { total: number }) {
           <div className={styles.text}>
             <Eyebrow className={styles.kicker}>Tratamentos</Eyebrow>
             <DisplayHeading level={1} size="d1i" id="tratamentos-titulo" className={styles.title}>
-              Cuidados completos para&nbsp;a&nbsp;saúde e&nbsp;a&nbsp;estética do&nbsp;seu&nbsp;sorriso
+              Cuidados completos para&nbsp;a&nbsp;saúde e&nbsp;a&nbsp;estética
+              do&nbsp;seu&nbsp;sorriso
             </DisplayHeading>
             <p className={`t-lead ${styles.lede}`}>
-              Cada tratamento começa com uma avaliação. Veja abaixo o que cada um envolve e escolha por onde começar.
+              Cada tratamento começa com uma avaliação. Veja abaixo o que cada um envolve e escolha
+              por onde começar.
             </p>
-            <div className={styles.actions}>
+            <div className={styles.actions} data-hide-floating="">
               <WhatsAppCTA location="treatments_hero" className={styles.btn} />
               <AgendarCTA location="treatments_hero" className={styles.btn} />
             </div>

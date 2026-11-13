@@ -66,7 +66,15 @@ export type NewAppointmentLead = Omit<
  * Compartilhado entre a rota e o formulário. A 429 traz também o cabeçalho Retry-After.
  */
 export type LeadsResponse =
-  | { ok: true; persisted: boolean; emailed: boolean; trap?: true }
+  | {
+      ok: true;
+      persisted: boolean;
+      /** "pending": o e-mail demorou mais que o prazo e segue sendo enviado em segundo plano. */
+      emailed: boolean | "pending";
+      trap?: true;
+      /** Repetição do mesmo envio (mesmo submissionId): nada foi gravado nem enviado de novo. */
+      duplicate?: true;
+    }
   | { ok: false; error: "invalid_json" | "forbidden" | "payload_too_large" | "delivery_failed" }
   | {
       ok: false;

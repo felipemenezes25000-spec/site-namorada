@@ -32,7 +32,13 @@ export function TratamentoOutros({
   children?: ReactNode;
 }) {
   return (
-    <Section tone={tone} id="outros" spacing="none" className={styles.sec} aria-labelledby="outros-titulo">
+    <Section
+      tone={tone}
+      id="outros"
+      spacing="none"
+      className={styles.sec}
+      aria-labelledby="outros-titulo"
+    >
       <Container>
         <div className="grid12">
           <div className={styles.head}>

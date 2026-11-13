@@ -22,8 +22,9 @@ const FACTS = [
  * do título; no desktop fica na coluna da direita. Os dois botões entram nas três primeiras telas.
  * Servidor, sem Reveal: tudo está no HTML. O fio de cada fato é desenhado em CSS.
  *
- * O fundo da foto mostra números de sala; dois borrões em CSS (`.sala`) os cobrem. As posições são
- * porcentagens do arco, que tem proporção fixa 4/5 e `object-fit: cover`.
+ * A foto (public/dra-ana-retrato.jpg, 600 x 800) é um recorte fechado, de rosto e ombros, do
+ * original: os números de sala do fundo ficaram fora do quadro, sem remendo nem borrão. A home usa o
+ * mesmo arquivo.
  */
 export function SobreHero({ id = "abertura" }: { id?: string }) {
   return (
@@ -48,20 +49,18 @@ export function SobreHero({ id = "abertura" }: { id?: string }) {
 
           <figure className={`m-0 ${styles.heroFig}`}>
             <div className={styles.archFrame}>
-            <div className={styles.arch}>
-              <Image
-                src="/dra-ana-trajetoria.jpg"
-                alt={`${siteConfig.doctorName}, cirurgiã-dentista, sorrindo, de jaleco branco, em ambiente de atendimento`}
-                width={1200}
-                height={1600}
-                sizes="(min-width: 1100px) 480px, (min-width: 760px) 40vw, 92vw"
-                quality={72}
-                priority
-                fetchPriority="high"
-              />
-              <span className={`${styles.sala} ${styles.salaEsq}`} aria-hidden="true" />
-              <span className={`${styles.sala} ${styles.salaDir}`} aria-hidden="true" />
-            </div>
+              <div className={styles.arch}>
+                <Image
+                  src="/dra-ana-retrato.jpg"
+                  alt={`${siteConfig.doctorName}, cirurgiã-dentista, sorrindo, de jaleco branco, em ambiente de atendimento`}
+                  width={600}
+                  height={800}
+                  sizes="(min-width: 1100px) 480px, (min-width: 760px) 40vw, 92vw"
+                  quality={72}
+                  priority
+                  fetchPriority="high"
+                />
+              </div>
             </div>
             <figcaption className={styles.figCap}>
               <span className="t-cap">{siteConfig.doctorName}, cirurgiã-dentista.</span>
@@ -83,7 +82,7 @@ export function SobreHero({ id = "abertura" }: { id?: string }) {
               ))}
             </dl>
 
-            <div className={styles.heroCtas}>
+            <div className={styles.heroCtas} data-hide-floating="">
               <WhatsAppCTA location="sobre_hero" />
               <AgendarCTA location="sobre_hero" />
             </div>

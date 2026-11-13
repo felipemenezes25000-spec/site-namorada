@@ -27,5 +27,12 @@ export default defineConfig({
     environment: "node",
     include: ["src/**/*.test.ts"],
     exclude: ["node_modules/**", ...testesDoNode(path.join(__dirname, "src"))],
+    // `npm run test -- --coverage` (a CI usa): cobertura do que tem regra de negócio.
+    coverage: {
+      provider: "v8",
+      include: ["src/lib/**/*.ts", "src/app/api/**/*.ts", "src/app/admin/actions.ts"],
+      exclude: ["**/*.test.ts"],
+      reporter: ["text-summary", "text"],
+    },
   },
 });

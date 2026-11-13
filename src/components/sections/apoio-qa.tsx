@@ -6,7 +6,13 @@ import styles from "./apoio-qa.module.css";
  * Perguntas práticas respondidas à vista (sem acordeão): a pergunta curta à esquerda, em Hanken 500,
  * e a resposta ao lado, em duas colunas a partir de 760px. Lista de definição com fios. Servidor.
  */
-export function ApoioQA({ items, className }: { items: { q: string; a: string }[]; className?: string }) {
+export function ApoioQA({
+  items,
+  className,
+}: {
+  items: { q: string; a: string }[];
+  className?: string;
+}) {
   return (
     <dl data-reveal="" className={cn(styles.list, className)}>
       {items.map((item, i) => (
@@ -17,7 +23,10 @@ export function ApoioQA({ items, className }: { items: { q: string; a: string }[
         </div>
       ))}
       <div className={styles.end} aria-hidden="true">
-        <span className="fio-h" style={{ "--fio-delay": `${Math.min(items.length, 8) * 40}ms` } as CSSProperties} />
+        <span
+          className="fio-h"
+          style={{ "--fio-delay": `${Math.min(items.length, 8) * 40}ms` } as CSSProperties}
+        />
       </div>
     </dl>
   );

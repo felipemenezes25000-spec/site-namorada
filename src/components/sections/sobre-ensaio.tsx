@@ -38,12 +38,12 @@ export function SobreEnsaio({ id = "trajetoria" }: { id?: string }) {
             <p className={`t-body ${styles.essayBody}`}>
               Para ela, a Odontologia vai além do dente. O cuidado considera a identidade de cada
               pessoa, a função da mastigação e da fala e o modo como ela se sente com o próprio
-              sorriso. O sorriso está presente em todas as esferas da vida: de comer e falar com clareza até a
-              autoestima e a estética.
+              sorriso. O sorriso está presente em todas as esferas da vida: de comer e falar com
+              clareza até a autoestima e a estética.
             </p>
             <p className={`t-body ${styles.essayBody}`}>
-              Cuidar do sorriso é, essencialmente, cuidar do que move o seu <BemEstar /> todos
-              os dias.
+              Cuidar do sorriso é, essencialmente, cuidar do que move o seu <BemEstar /> todos os
+              dias.
             </p>
           </div>
 

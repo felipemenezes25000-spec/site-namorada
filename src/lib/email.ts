@@ -1,8 +1,6 @@
 import { Resend } from "resend";
 
-const resend = process.env.RESEND_API_KEY
-  ? new Resend(process.env.RESEND_API_KEY)
-  : null;
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 /** E-mail de destino para notificações de lead. */
 const NOTIFY_EMAIL = process.env.LEAD_NOTIFY_EMAIL || "draanabeatrizodontologia@gmail.com";
@@ -14,7 +12,7 @@ export function isEmailConfigured(): boolean {
   return Boolean(resend);
 }
 
-interface LeadEmailData {
+export interface LeadEmailData {
   fullName: string;
   whatsapp: string;
   email?: string | null;
@@ -30,42 +28,98 @@ interface LeadEmailData {
   utmMedium?: string | null;
   utmCampaign?: string | null;
   landingPage?: string | null;
+  /**
+   * Registro do consentimento (LGPD), o mesmo que vai ao banco quando ele está ativo. Sem banco,
+   * o e-mail é o registro: a Política de Privacidade promete data, hora e versão do texto aceito.
+   */
+  consentAt: string;
+  privacyPolicyVersion: string;
+  /** Consentimento para dado de saúde (queixa ou exame): "sim", ou "não se aplica" sem esses dados. */
+  healthConsent: "sim" | "nao" | "nao_se_aplica";
 }
 
 /** Uma linha só: quebra de linha no assunto abriria cabeçalho novo no e-mail. */
 const oneLine = (v: string) => v.replace(/[\p{Cc}\p{Zl}\p{Zp}]+/gu, " ").trim();
 
-export async function sendLeadNotification(data: LeadEmailData) {
-  if (!resend) return { ok: false, reason: "not_configured" };
+/** Escapa HTML — os valores vêm do formulário e de parâmetros de URL (UTM). */
+export const escapeHtml = (v: string) =>
+  v
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 
-  // Escapa HTML — os valores vêm do formulário e de parâmetros de URL (UTM).
-  const esc = (v: string) =>
-    v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const TD_LABEL = "padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee";
+const TD_VALUE = "padding:8px 12px;border-bottom:1px solid #eee";
 
-  const rows = [
-    `<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Nome</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${esc(data.fullName)}</td></tr>`,
-    `<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">WhatsApp</td><td style="padding:8px 12px;border-bottom:1px solid #eee"><a href="https://wa.me/55${data.whatsapp.replace(/\D/g, "")}" style="color:#25D366">${esc(data.whatsapp)}</a></td></tr>`,
+/** Uma linha da tabela. O valor SEMPRE passa pelo escape (o HTML só entra por `link`). */
+function row(label: string, value: string, opts: { link?: string; small?: boolean } = {}) {
+  const v = escapeHtml(value);
+  const conteudo = opts.link
+    ? `<a href="${escapeHtml(opts.link)}" style="color:#25D366">${v}</a>`
+    : v;
+  const estilo = opts.small ? `${TD_VALUE};font-size:11px;word-break:break-all` : TD_VALUE;
+  return `<tr><td style="${TD_LABEL}">${escapeHtml(label)}</td><td style="${estilo}">${conteudo}</td></tr>`;
+}
+
+/** "2026-11-13T14:05:09.123Z" -> "13/11/2026 11:05 (horário de Brasília)". */
+function dataHoraBrasilia(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  const f = new Intl.DateTimeFormat("pt-BR", {
+    timeZone: "America/Sao_Paulo",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  return `${f.format(d).replace(",", "")} (horário de Brasília)`;
+}
+
+const SAUDE: Record<LeadEmailData["healthConsent"], string> = {
+  sim: "sim",
+  nao: "não",
+  nao_se_aplica: "não se aplica (sem queixa nem exame informados)",
+};
+
+/** Monta assunto e corpo do aviso (função pura, testada em email.test.ts). */
+export function buildLeadEmail(data: LeadEmailData): { subject: string; html: string } {
+  const whatsappNumber = data.whatsapp.replace(/\D/g, "");
+  const pares: [string, string, Parameters<typeof row>[2]?][] = [
+    ["Nome", data.fullName],
+    ["WhatsApp", data.whatsapp, { link: `https://wa.me/55${whatsappNumber}` }],
   ];
-
-  if (data.email) rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">E-mail</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${esc(data.email)}</td></tr>`);
-  rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Tratamento</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${esc(data.treatmentInterest)}</td></tr>`);
-  if (data.preferredPeriod) rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Período</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${esc(data.preferredPeriod)}</td></tr>`);
-  if (data.preferredDate) rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Melhor dia</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${esc(data.preferredDate)}</td></tr>`);
-  if (data.hasXray) rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Exame radiográfico</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${data.hasXray === "sim" ? "Sim" : "Não"}</td></tr>`);
-  if (data.mainComplaint) rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Queixa</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${esc(data.mainComplaint)}</td></tr>`);
-  if (data.source) rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Como conheceu</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${esc(data.source)}</td></tr>`);
+  if (data.email) pares.push(["E-mail", data.email]);
+  pares.push(["Tratamento", data.treatmentInterest]);
+  if (data.preferredPeriod) pares.push(["Período", data.preferredPeriod]);
+  if (data.preferredDate) pares.push(["Melhor dia", data.preferredDate]);
+  if (data.hasXray) pares.push(["Exame radiográfico", data.hasXray === "sim" ? "Sim" : "Não"]);
+  if (data.mainComplaint) pares.push(["Queixa", data.mainComplaint]);
+  if (data.source) pares.push(["Como conheceu", data.source]);
 
   // Origem de campanha — mostra de qual anúncio/campanha o lead veio.
-  const originParts: string[] = [];
-  if (data.gclid) originParts.push("Google Ads");
-  if (data.utmSource) originParts.push(`${data.utmSource}${data.utmMedium ? ` / ${data.utmMedium}` : ""}`);
-  if (data.utmCampaign) originParts.push(`campanha: ${data.utmCampaign}`);
-  if (originParts.length) rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Origem (anúncio)</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${esc(originParts.join(" · "))}</td></tr>`);
-  if (data.landingPage) rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">Página de entrada</td><td style="padding:8px 12px;border-bottom:1px solid #eee">${esc(data.landingPage)}</td></tr>`);
-  if (data.gclid) rows.push(`<tr><td style="padding:8px 12px;font-weight:600;color:#1a3c2a;border-bottom:1px solid #eee">ID do clique (gclid)</td><td style="padding:8px 12px;border-bottom:1px solid #eee;font-size:11px;word-break:break-all">${esc(data.gclid)}</td></tr>`);
+  const origem: string[] = [];
+  if (data.gclid) origem.push("Google Ads");
+  if (data.utmSource)
+    origem.push(`${data.utmSource}${data.utmMedium ? ` / ${data.utmMedium}` : ""}`);
+  if (data.utmCampaign) origem.push(`campanha: ${data.utmCampaign}`);
+  if (origem.length) pares.push(["Origem (anúncio)", origem.join(" · ")]);
+  if (data.landingPage) pares.push(["Página de entrada", data.landingPage]);
+  if (data.gclid) pares.push(["ID do clique (gclid)", data.gclid, { small: true }]);
 
-  const whatsappNumber = data.whatsapp.replace(/\D/g, "");
-  const waLink = `https://wa.me/55${whatsappNumber}?text=${encodeURIComponent(`Olá, ${data.fullName.split(" ")[0]}! Recebi sua solicitação pelo site e gostaria de confirmar seu agendamento.`)}`;
+  // Registro do consentimento (Política de Privacidade, seções 2 e 10).
+  pares.push([
+    "Consentimento (LGPD)",
+    `sim, em ${dataHoraBrasilia(data.consentAt)}; Política de Privacidade versão ${data.privacyPolicyVersion}`,
+  ]);
+  pares.push(["Consentimento para dado de saúde", SAUDE[data.healthConsent]]);
+
+  const primeiroNome = data.fullName.trim().split(/\s+/)[0] ?? "";
+  const waLink = `https://wa.me/55${whatsappNumber}?text=${encodeURIComponent(
+    `Olá, ${primeiroNome}! Recebi sua solicitação pelo site e gostaria de confirmar seu agendamento.`,
+  )}`;
 
   const html = `
     <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:560px;margin:0 auto;color:#333">
@@ -75,25 +129,34 @@ export async function sendLeadNotification(data: LeadEmailData) {
       </div>
       <div style="background:#fff;padding:20px;border:1px solid #eee;border-top:none">
         <table style="width:100%;border-collapse:collapse;font-size:14px">
-          ${rows.join("\n")}
+          ${pares.map(([l, v, o]) => row(l, v, o)).join("\n")}
         </table>
         <div style="margin-top:20px;text-align:center">
-          <a href="${waLink}" style="display:inline-block;background:#25D366;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px">
+          <a href="${escapeHtml(waLink)}" style="display:inline-block;background:#25D366;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px">
             Responder no WhatsApp
           </a>
         </div>
       </div>
       <div style="padding:16px 20px;text-align:center;font-size:12px;color:#999;border-radius:0 0 12px 12px;background:#f9f9f9;border:1px solid #eee;border-top:none">
-        Enviado automaticamente pelo site draanabeatrizodonto.com.br
+        Enviado automaticamente pelo site draanabeatrizodonto.com.br. Guarde este e-mail: ele é o registro do consentimento do paciente.
       </div>
     </div>
   `;
 
+  return {
+    subject: `Novo lead: ${oneLine(data.fullName)} — ${oneLine(data.treatmentInterest)}`,
+    html,
+  };
+}
+
+export async function sendLeadNotification(data: LeadEmailData) {
+  if (!resend) return { ok: false, reason: "not_configured" };
+  const { subject, html } = buildLeadEmail(data);
   try {
     const { error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: NOTIFY_EMAIL,
-      subject: `Novo lead: ${oneLine(data.fullName)} — ${oneLine(data.treatmentInterest)}`,
+      subject,
       html,
     });
     if (error) {

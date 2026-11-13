@@ -25,7 +25,11 @@ export function firstNameOf(fullName: string): string {
 /** Grava os dados do lead recém-enviado. Devolve false se o storage não está disponível. */
 export function saveLeadHandoff(data: { firstName: string; treatment: string }): boolean {
   try {
-    const value: LeadHandoff = { firstName: data.firstName, treatment: data.treatment, fired: false };
+    const value: LeadHandoff = {
+      firstName: data.firstName,
+      treatment: data.treatment,
+      fired: false,
+    };
     window.sessionStorage.setItem(KEY, JSON.stringify(value));
     return true;
   } catch {

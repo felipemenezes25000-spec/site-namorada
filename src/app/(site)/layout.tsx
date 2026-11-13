@@ -7,9 +7,7 @@ import { JsonLd } from "@/components/seo/json-ld";
  * O painel /admin fica FORA deste grupo e não herda header/rodapé/WhatsApp.
  * A moldura (cabeçalho, rodapé, barra do celular...) está em SiteShell.
  */
-export default function SiteLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function SiteLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
       <JsonLd data={[dentistSchema(), websiteSchema()]} />

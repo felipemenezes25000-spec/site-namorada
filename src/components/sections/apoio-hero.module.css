@@ -3,11 +3,11 @@
   padding-block: var(--s-6) var(--s-6);
 }
 .crumb {
-  margin-bottom: 8px;
+  margin-bottom: var(--s-2);
 }
 .grid {
-  margin-top: 32px;
-  row-gap: 48px;
+  margin-top: var(--s-6);
+  row-gap: var(--s-7);
   align-items: end;
 }
 .text,
@@ -16,7 +16,7 @@
   min-width: 0;
 }
 .kicker {
-  margin: 0 0 12px;
+  margin: 0 0 var(--s-3);
 }
 .title {
   margin: 0;
@@ -26,14 +26,11 @@
   max-width: 34rem;
   margin: 20px 0 0;
 }
+/* a quebra dos itens e do "·" vem da própria linha de identidade (globals.css, .idt) */
 .identidade {
   max-width: 34rem;
   margin: var(--s-3) 0 0;
   color: var(--fg);
-}
-/* O registro não quebra ao meio ("CRO-SP / 177801"). */
-.identidade > span:nth-child(2) {
-  white-space: nowrap;
 }
 .aviso {
   max-width: 34rem;
@@ -48,7 +45,7 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 12px;
+  gap: var(--s-3);
   margin-top: 28px;
 }
 .actions > * {
@@ -56,13 +53,18 @@
 }
 .note {
   max-width: 30rem;
-  margin: 16px 0 0;
+  margin: var(--s-4) 0 0;
 }
 .aside {
   display: none;
 }
+@media (min-width: 760px) {
+  .identidadeSoCelular {
+    display: none;
+  }
+}
 .mark {
-  margin: 0 0 4px;
+  margin: 0 0 var(--s-1);
 }
 .lede {
   text-wrap: pretty;
@@ -71,12 +73,13 @@
   font-size: 0.9375rem;
   color: var(--fg);
 }
+/* exceção ao 760/1100: celular estreito (sem trilha e fio duplo no topo) */
 @media (max-width: 480px) {
   .topo {
     display: none;
   }
   .hero {
-    padding-top: 24px;
+    padding-top: var(--s-5);
   }
   .grid {
     margin-top: 0;
@@ -127,7 +130,7 @@
   }
   .lede {
     max-width: 40rem;
-    margin-top: 24px;
+    margin-top: var(--s-5);
   }
   .actions {
     flex-direction: row;
@@ -141,7 +144,7 @@
 }
 @media (min-width: 1100px) {
   .hero {
-    padding-bottom: 96px;
+    padding-bottom: var(--s-9);
   }
 }
 
@@ -149,7 +152,7 @@
    ficarem à vista acima do aviso e da barra. */
 @media (max-width: 759px) and (max-height: 780px) {
   .hero {
-    padding-top: 12px;
+    padding-top: var(--s-3);
   }
   .crumb {
     margin-bottom: 2px;

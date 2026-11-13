@@ -10,7 +10,12 @@ import styles from "./apoio-autoria.module.css";
  */
 export function ApoioAutoria({ tone }: { tone: SectionTone }) {
   return (
-    <Section tone={tone} spacing="none" className={styles.faixa} aria-label="Autoria e data de atualização">
+    <Section
+      tone={tone}
+      spacing="none"
+      className={styles.faixa}
+      aria-label="Autoria e data de atualização"
+    >
       <Container>
         <AuthorshipLine />
       </Container>

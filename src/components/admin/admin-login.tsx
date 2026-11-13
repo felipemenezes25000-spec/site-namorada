@@ -29,13 +29,13 @@ export function AdminLogin({ status, detail = false }: { status: AdminStatus; de
   const [state, formAction, pending] = useActionState<LoginState, FormData>(login, {});
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gradient-to-b from-brand-beige/40 to-brand-bone px-5 py-24">
+    <main className="flex min-h-screen items-center justify-center bg-gradient-to-b from-painel-areia/40 to-osso px-5 py-24">
       <div className="w-full max-w-sm">
         <div className="surface p-8">
           <div className="flex flex-col items-center text-center">
             <BrandSymbol size={56} badge />
-            <h1 className="mt-5 font-display text-2xl text-brand-green">Painel de leads</h1>
-            <p className="mt-1 text-sm text-brand-ink/75">
+            <h1 className="mt-5 font-display text-2xl text-verde">Painel de leads</h1>
+            <p className="mt-1 text-sm text-painel-tinta/75">
               Acesso restrito à equipe da Dra. Ana.
             </p>
           </div>
@@ -59,7 +59,8 @@ export function AdminLogin({ status, detail = false }: { status: AdminStatus; de
                   </>
                 ) : (
                   <>
-                    <strong className="font-semibold">Painel indisponível.</strong> Tente novamente mais tarde.
+                    <strong className="font-semibold">Painel indisponível.</strong> Tente novamente
+                    mais tarde.
                   </>
                 )}
               </span>
@@ -69,7 +70,7 @@ export function AdminLogin({ status, detail = false }: { status: AdminStatus; de
               <div>
                 <Label htmlFor="password">Senha de acesso</Label>
                 <div className="relative">
-                  <Lock className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-brand-green/70" />
+                  <Lock className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-painel-verde/70" />
                   <Input
                     id="password"
                     name="password"
@@ -86,14 +87,20 @@ export function AdminLogin({ status, detail = false }: { status: AdminStatus; de
                   <AlertCircle className="size-4" /> {state.error}
                 </p>
               )}
-              <Button type="submit" variant="primary" size="lg" className="w-full" disabled={pending}>
+              <Button
+                type="submit"
+                variant="primary"
+                size="lg"
+                className="w-full"
+                disabled={pending}
+              >
                 {pending ? <Loader2 className="size-5 animate-spin" /> : "Entrar"}
               </Button>
             </form>
           )}
         </div>
         {detail && (
-          <p className="mt-6 text-center text-xs text-brand-ink/75">
+          <p className="mt-6 text-center text-xs text-painel-tinta/75">
             Trocar <code>ADMIN_PASSWORD</code> no ambiente encerra as sessões abertas.
           </p>
         )}

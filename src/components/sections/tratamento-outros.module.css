@@ -79,12 +79,3 @@
     transition: none;
   }
 }
-
-main section[data-tone].sec.sec {
-  contain-intrinsic-size: auto 600px;
-}
-@media (min-width: 1100px) {
-  main section[data-tone].sec.sec {
-    contain-intrinsic-size: auto 460px;
-  }
-}

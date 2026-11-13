@@ -56,7 +56,8 @@ export const siteConfig = {
   },
 
   /** URL pública canônica (também em NEXT_PUBLIC_SITE_URL). */
-  url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
     "https://www.draanabeatrizodonto.com.br",
 } as const;
 
@@ -127,12 +128,15 @@ export const mainNav: readonly {
   { label: "Valores", href: "/valores", caption: "Como funcionam" },
   { label: "Sobre", href: "/sobre", caption: "A doutora" },
   { label: "Contato", href: "/contato", caption: "Endereço" },
-  { label: "Urgência", href: "/urgencia-odontologica", caption: "Dor ou imprevisto", destaque: true },
+  {
+    label: "Urgência",
+    href: "/urgencia-odontologica",
+    caption: "Dor ou imprevisto",
+    destaque: true,
+  },
 ];
 
 /** Atalhos fora do menu principal (folha do celular e rodapé). */
-export const supportNav = [
-  { label: "Medo de dentista", href: "/medo-de-dentista" },
-] as const;
+export const supportNav = [{ label: "Medo de dentista", href: "/medo-de-dentista" }] as const;
 
 export type SiteConfig = typeof siteConfig;

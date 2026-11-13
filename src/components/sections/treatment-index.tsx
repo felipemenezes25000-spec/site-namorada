@@ -190,9 +190,7 @@ export function TreatmentIndex({
                 <span className="it-sm idx-n" aria-hidden="true">
                   {String(n).padStart(2, "0")}
                 </span>
-                <span className="idx-t t-row min-w-0">
-                  {nameWithHyphens(t.name)}
-                </span>
+                <span className="idx-t t-row min-w-0">{nameWithHyphens(t.name)}</span>
                 <span className={cn("idx-dots", styles.dots)} aria-hidden="true" />
                 <ArrowIcon className={styles.arrow} size={22} />
                 {isIndicated && (
@@ -224,6 +222,7 @@ export function TreatmentIndex({
               <p className={cn("t-body", styles.panelText)}>{t.excerpt}</p>
             </div>
           ))}
+          {/* eslint-disable-next-line @next/next/no-img-element -- SVG estático da marca: next/image não otimiza SVG */}
           <img
             src="/brand/monograma-claro.svg"
             alt=""

@@ -1,4 +1,4 @@
-import { siteConfig, locale } from "@/lib/site-config";
+import { siteConfig, locale, localeTexto } from "@/lib/site-config";
 import { Section, type SectionTone } from "@/components/ui/section";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/eyebrow";
@@ -14,7 +14,13 @@ import styles from "./tratamento-regiao.module.css";
 export function TratamentoRegiao({ tone = "papel", texto }: { tone?: SectionTone; texto: string }) {
   const a = siteConfig.address;
   return (
-    <Section tone={tone} id="onde" spacing="none" className={styles.sec} aria-labelledby="onde-titulo">
+    <Section
+      tone={tone}
+      id="onde"
+      spacing="none"
+      className={styles.sec}
+      aria-labelledby="onde-titulo"
+    >
       <Container>
         <div className="grid12">
           <div className={styles.text}>
@@ -22,7 +28,9 @@ export function TratamentoRegiao({ tone = "papel", texto }: { tone?: SectionTone
             <h2 id="onde-titulo" className="t-d3 display">
               Atendimento na {locale.bairro}
             </h2>
-            <p className={`t-body ${styles.p}`}>{texto}</p>
+            <p className={`t-body ${styles.p}`}>
+              {texto} O consultório fica na {localeTexto("regiaoZona")}.
+            </p>
           </div>
 
           <div className={styles.card}>

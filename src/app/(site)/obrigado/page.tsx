@@ -66,7 +66,9 @@ export default function ObrigadoPage() {
               </p>
               <p className={`t-body ${styles.urgente}`}>
                 Se for urgente, ligue agora:{" "}
-                <PhoneCTA as="texto" location="thank_you" label={siteConfig.phoneDisplay} />
+                <PhoneCTA as="texto" location="thank_you" label={siteConfig.phoneDisplay} />. Em
+                emergência (falta de ar, inchaço no rosto ou no pescoço), ligue 192 ou vá a um
+                pronto-socorro.
               </p>
               <div className={styles.actions}>
                 <ThankYouActions />

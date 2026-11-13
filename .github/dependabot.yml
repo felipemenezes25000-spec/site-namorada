@@ -1,0 +1,16 @@
+# Atualizações de dependências: uma vez por semana, com as versões menores e de correção agrupadas
+# num só pedido (menos ruído). Versões maiores chegam separadas, para revisão com calma.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      menores:
+        update-types: [minor, patch]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

@@ -95,13 +95,3 @@
     transition: none;
   }
 }
-
-/* altura provisória (content-visibility: auto do globals.css, que tem especificidade maior): perto da real */
-main section[data-tone].sec.sec {
-  contain-intrinsic-size: auto 375px;
-}
-@media (min-width: 1100px) {
-  main section[data-tone].sec.sec {
-    contain-intrinsic-size: auto 200px;
-  }
-}

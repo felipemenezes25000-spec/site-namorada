@@ -31,9 +31,7 @@ export function SectionHeading({
   const Title = level === 3 ? "h3" : "h2";
   return (
     <div className={cn("max-w-3xl", className)}>
-      {eyebrow && (
-        <Eyebrow className="mb-3">{eyebrow}</Eyebrow>
-      )}
+      {eyebrow && <Eyebrow className="mb-3">{eyebrow}</Eyebrow>}
       <div className="flex flex-col gap-3 tab:flex-row tab:items-baseline tab:justify-between tab:gap-8">
         <Title id={id} className={size === "d3" ? "t-d3" : "t-d2"}>
           {title}

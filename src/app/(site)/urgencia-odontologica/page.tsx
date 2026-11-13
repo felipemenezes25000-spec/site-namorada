@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
-import { breadcrumbSchema, buildMetadata, faqSchema, medicalWebPageSchema } from "@/lib/seo";
+import {
+  breadcrumbSchema,
+  buildMetadata,
+  exclusiveFaqs,
+  faqSchema,
+  medicalWebPageSchema,
+} from "@/lib/seo";
 import { locale, localeTexto } from "@/lib/site-config";
 import { respostas } from "@/lib/content";
 import { waMessages } from "@/lib/whatsapp";
@@ -12,7 +18,7 @@ import { PhoneCTA, WhatsAppCTA } from "@/components/ui/cta";
 import { FAQSection } from "@/components/sections/faq-section";
 import { ApoioAutoria } from "@/components/sections/apoio-autoria";
 import { ApoioCabeca } from "@/components/sections/apoio-cabeca";
-import { ApoioDeclaracao } from "@/components/sections/apoio-declaracao";
+import { CTASection } from "@/components/sections/cta-section";
 import { ApoioDuas } from "@/components/sections/apoio-duas";
 import { ApoioHero } from "@/components/sections/apoio-hero";
 import { ApoioPassos } from "@/components/sections/apoio-passos";
@@ -20,7 +26,7 @@ import colunas from "@/components/sections/apoio-colunas.module.css";
 
 const PATH = "/urgencia-odontologica";
 const TITLE = `Urgência odontológica na ${locale.regiao} | Dra. Ana Beatriz`;
-const DESCRIPTION = `Dor de dente, dente quebrado, gengiva inchada ou siso inflamado? Fale com a Dra. Ana pelo WhatsApp. ${localeTexto("bairroRegiao")}.`;
+const DESCRIPTION = `Dor de dente, gengiva inchada ou siso inflamado? Fale com a Dra. Ana pelo WhatsApp. ${locale.bairro}, ${localeTexto("regiaoZona")}.`;
 
 export const metadata: Metadata = buildMetadata({
   absoluteTitle: TITLE,
@@ -67,15 +73,16 @@ const steps = [
   },
   {
     title: "Receba orientação",
-    description: "A Dra. Ana orienta os primeiros cuidados para aliviar o desconforto até o atendimento.",
+    description:
+      "A Dra. Ana orienta os primeiros cuidados para aliviar o desconforto até o atendimento.",
   },
   {
     title: "Horário combinado",
-    description: "A Dra. Ana define um horário de atendimento, com prioridade para urgências.",
+    description: `A Dra. Ana define um horário de atendimento no consultório da ${locale.bairro}, ${locale.zona}, com prioridade para urgências.`,
   },
   {
     title: "O atendimento",
-    description: "Com foco em alívio e no cuidado com o conforto durante o atendimento, num ambiente acolhedor.",
+    description: "No atendimento, o foco é aliviar a dor, com cuidado com o seu conforto.",
   },
 ];
 
@@ -119,7 +126,7 @@ export default function UrgenciaOdontologicaPage() {
             name: TITLE,
             description: `Orientação e atendimento de urgência odontológica com a Dra. Ana Beatriz, na ${localeTexto("bairroRegiaoCidade")}.`,
           }),
-          faqSchema(faqs),
+          faqSchema(exclusiveFaqs(faqs)),
           breadcrumbSchema([
             { name: "Início", path: "/" },
             { name: "Urgência odontológica", path: PATH },
@@ -137,8 +144,8 @@ export default function UrgenciaOdontologicaPage() {
         aviso={
           <p className="m-0">
             <strong>Emergência:</strong> dificuldade para respirar ou engolir, inchaço que cresce
-            rápido no rosto ou no pescoço, febre alta com inchaço, desmaio ou trauma na cabeça. Nesses
-            casos, ligue{" "}
+            rápido no rosto ou no pescoço, febre alta com inchaço, desmaio ou trauma na cabeça.
+            Nesses casos, ligue{" "}
             <a href="tel:192" className="link">
               192 (SAMU)
             </a>{" "}
@@ -153,6 +160,7 @@ export default function UrgenciaOdontologicaPage() {
         }
         note={respostas.orientacaoWhatsapp}
         aside={<TrustBlock variant="bloco" />}
+        asideIdentifica
       />
 
       <Section tone="papel" id="quando-procurar" aria-labelledby="quando-procurar-titulo">
@@ -194,7 +202,8 @@ export default function UrgenciaOdontologicaPage() {
             kicker="Primeiros cuidados"
             title="O que fazer enquanto você espera a resposta"
           >
-            Estas orientações simples ajudam a reduzir o desconforto até o atendimento. Vá com calma.
+            Estas orientações simples ajudam a reduzir o desconforto até o atendimento. Vá com
+            calma.
           </ApoioCabeca>
           <div className="mt-12">
             <ApoioPassos modo="orientacoes" items={whatToDo.map((t) => ({ title: t }))} />
@@ -215,23 +224,17 @@ export default function UrgenciaOdontologicaPage() {
         </Container>
       </Section>
 
-      <ApoioDeclaracao
+      {/* fecho no mesmo componente das outras páginas (título display em itálico), com o telefone no lugar do formulário */}
+      <CTASection
         id="agora"
         tone="noite"
-        hideFloating
-        title="Está com dor agora? Não espere."
-        actions={
-          <>
-            <WhatsAppCTA location="urgency_midpage" message={waMessages.urgency} variant="ouro" />
-            <PhoneCTA location="urgency_midpage" variant="contorno-claro" />
-          </>
-        }
-      >
-        <p>
-          Fale com a Dra. Ana pelo WhatsApp e receba orientação para aliviar o desconforto até o
-          atendimento.
-        </p>
-      </ApoioDeclaracao>
+        eyebrow="Não espere"
+        title="Está com dor agora?"
+        description="Fale com a Dra. Ana pelo WhatsApp e receba orientação para aliviar o desconforto até o atendimento. Se preferir, ligue."
+        message={waMessages.urgency}
+        location="urgency_midpage"
+        secondary={<PhoneCTA location="urgency_midpage" variant="contorno-claro" />}
+      />
 
       <FAQSection
         items={faqs}

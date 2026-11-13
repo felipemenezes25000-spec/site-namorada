@@ -46,13 +46,20 @@ export default function TratamentosPage() {
             { name: "Início", path: "/" },
             { name: "Tratamentos", path: "/tratamentos" },
           ]),
-          servicesSchema(treatments.map((t) => ({ name: t.name, slug: t.slug, excerpt: t.excerpt }))),
+          servicesSchema(
+            treatments.map((t) => ({ name: t.name, slug: t.slug, excerpt: t.excerpt })),
+          ),
         ]}
       />
 
       <TratamentoCapa total={treatments.length} />
 
-      <Section tone="papel" id="sumario" aria-labelledby="sumario-titulo" className={styles.sumario}>
+      <Section
+        tone="papel"
+        id="sumario"
+        aria-labelledby="sumario-titulo"
+        className={styles.sumario}
+      >
         <Container>
           <div className={styles.situacaoHead}>
             <Eyebrow>Escolha pelo nome</Eyebrow>

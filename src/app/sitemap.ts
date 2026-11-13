@@ -6,31 +6,40 @@ import { CONTENT_UPDATED, PRIVACY_POLICY_VERSION, TERMS_VERSION } from "@/lib/co
 /**
  * Sem `changeFrequency` e `priority`: o Google os ignora. O <loc> de cada página sai de
  * `absoluteUrl` (a mesma função do canonical em `buildMetadata`), então os dois são idênticos
- * (a home, sem barra final). `lastmod` = data de atualização editorial (content.ts) ou a versão
- * do documento legal. Datas fixas: o build é determinístico. Só mude a constante quando o texto
- * mudar de verdade.
+ * (a home, sem barra final).
+ *
+ * `lastmod` só onde a página mostra a data: conteúdo informativo (tratamentos e páginas de apoio,
+ * "Atualizado em", `CONTENT_UPDATED`) e documentos legais (versão do texto). Páginas sem data
+ * visível (home, sobre, índice de tratamentos, agendamento, contato) vão sem `lastmod`: o Google só
+ * confia no campo quando ele bate com a página. Datas fixas: o build é determinístico.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date(CONTENT_UPDATED);
+  const conteudo = new Date(CONTENT_UPDATED);
 
-  const staticRoutes: MetadataRoute.Sitemap = [
-    { url: absoluteUrl("/"), lastModified },
-    { url: absoluteUrl("/sobre"), lastModified },
-    { url: absoluteUrl("/tratamentos"), lastModified },
-    { url: absoluteUrl("/urgencia-odontologica"), lastModified },
-    { url: absoluteUrl("/primeira-consulta"), lastModified },
-    { url: absoluteUrl("/medo-de-dentista"), lastModified },
-    { url: absoluteUrl("/agendamento"), lastModified },
-    { url: absoluteUrl("/valores"), lastModified },
-    { url: absoluteUrl("/contato"), lastModified },
-    { url: absoluteUrl("/politica-de-privacidade"), lastModified: new Date(PRIVACY_POLICY_VERSION) },
+  const semData: MetadataRoute.Sitemap = [
+    "/",
+    "/sobre",
+    "/tratamentos",
+    "/agendamento",
+    "/contato",
+  ].map((path) => ({ url: absoluteUrl(path) }));
+
+  const comData: MetadataRoute.Sitemap = [
+    { url: absoluteUrl("/urgencia-odontologica"), lastModified: conteudo },
+    { url: absoluteUrl("/primeira-consulta"), lastModified: conteudo },
+    { url: absoluteUrl("/medo-de-dentista"), lastModified: conteudo },
+    { url: absoluteUrl("/valores"), lastModified: conteudo },
+    {
+      url: absoluteUrl("/politica-de-privacidade"),
+      lastModified: new Date(PRIVACY_POLICY_VERSION),
+    },
     { url: absoluteUrl("/termos-de-uso"), lastModified: new Date(TERMS_VERSION) },
   ];
 
   const treatmentRoutes: MetadataRoute.Sitemap = treatmentSlugs.map((slug) => ({
     url: absoluteUrl(`/tratamentos/${slug}`),
-    lastModified,
+    lastModified: conteudo,
   }));
 
-  return [...staticRoutes, ...treatmentRoutes];
+  return [...semData, ...comData, ...treatmentRoutes];
 }

@@ -25,6 +25,7 @@
   display: block;
   margin-top: var(--s-2);
 }
+/* exceção ao 760/1100: celular largo e paisagem */
 @media (min-width: 640px) {
   .leadMore {
     display: inline;
@@ -257,6 +258,7 @@
     width: 100%;
   }
 }
+/* exceção ao 760/1100: tela larga (o retrato ganha a coluna inteira) */
 @media (min-width: 1280px) {
   .fig {
     grid-column: 7 / 13;
