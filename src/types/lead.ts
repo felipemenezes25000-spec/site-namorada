@@ -40,6 +40,8 @@ export interface AppointmentLead {
   lgpd_consent: boolean;
   lgpd_consent_at: string | null;
   privacy_policy_version: string | null;
+  /** Consentimento próprio para dado de saúde (queixa e radiografia); null em leads antigos. */
+  health_consent: boolean | null;
   /** Atribuição de campanha (Google Ads / UTM) — preenchida quando o lead veio de anúncio. */
   gclid: string | null;
   utm_source: string | null;
@@ -58,3 +60,18 @@ export type NewAppointmentLead = Omit<
   AppointmentLead,
   "id" | "status" | "notes" | "created_at" | "updated_at"
 > & { status?: LeadStatus };
+
+/**
+ * Contrato de resposta de POST /api/leads (JSON, sempre com Cache-Control: no-store).
+ * Compartilhado entre a rota e o formulário. A 429 traz também o cabeçalho Retry-After.
+ */
+export type LeadsResponse =
+  | { ok: true; persisted: boolean; emailed: boolean; trap?: true }
+  | { ok: false; error: "invalid_json" | "forbidden" | "payload_too_large" | "delivery_failed" }
+  | {
+      ok: false;
+      error: "validation";
+      fieldErrors: Record<string, string[] | undefined>;
+      formErrors: string[];
+    }
+  | { ok: false; error: "rate_limited"; retryAfter: number };

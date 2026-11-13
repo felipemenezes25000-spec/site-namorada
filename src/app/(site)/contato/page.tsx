@@ -1,20 +1,37 @@
 import type { Metadata } from "next";
-import { siteConfig } from "@/lib/site-config";
+import { locale, localeTexto } from "@/lib/site-config";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/json-ld";
-import { PageHero } from "@/components/sections/page-hero";
+import { ContatoHero } from "@/components/sections/contato-hero";
+import { Section } from "@/components/ui/section";
+import { Container } from "@/components/ui/container";
 import { ContactMethods } from "@/components/sections/contact-methods";
-import { LocationSection } from "@/components/sections/location-section";
-import { CTASection } from "@/components/sections/cta-section";
+import { ContatoMapa } from "@/components/sections/contato-mapa";
+import { ContatoFecho } from "@/components/sections/contato-fecho";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Contato",
-  description:
-    `Fale com a ${siteConfig.doctorName} por WhatsApp, telefone, e-mail ou Instagram. Endereço e localização do consultório em ${siteConfig.city}.`,
+const TITLE = "Contato da Dra. Ana Beatriz | Dentista na Vila Bruna, SP";
+
+// O título fixado segue o DESIGN.md 6.4 (56 caracteres, com o nome da doutora). title, og:title e
+// twitter:title são o mesmo texto: `buildMetadata` ainda não aceita `absoluteTitle`, então os três
+// são fixados aqui.
+const base = buildMetadata({
+  title: TITLE,
+  description: `Fale com a Dra. Ana Beatriz por WhatsApp, telefone, e-mail ou Instagram. Consultório na ${localeTexto("bairroRegiao")}, ${locale.zona}.`,
   path: "/contato",
-  keywords: [`contato dentista ${siteConfig.city}`, `dentista ${siteConfig.neighborhood}`],
 });
 
+export const metadata: Metadata = {
+  ...base,
+  title: { absolute: TITLE },
+  openGraph: { ...base.openGraph, title: TITLE },
+  twitter: { ...base.twitter, title: TITLE },
+};
+
+/**
+ * /contato (DESIGN.md 5.6). Ritmo osso (abertura) / papel (canais) / noite (como chegar) /
+ * osso (fecho curto, só o formulário). Sem FAQ: não há fato confirmado sobre estacionamento ou
+ * acessibilidade (pendência do dono).
+ */
 export default function ContatoPage() {
   return (
     <>
@@ -24,22 +41,20 @@ export default function ContatoPage() {
           { name: "Contato", path: "/contato" },
         ])}
       />
-      <PageHero
-        eyebrow="Contato"
-        title="Fale com a Dra. Ana pelo canal que for mais fácil para você"
-        description="Escolha o canal mais confortável para você. O atendimento é acolhedor desde a primeira mensagem."
-        breadcrumbs={[{ name: "Início", href: "/" }, { name: "Contato" }]}
-      />
+      <ContatoHero />
 
-      <section className="pt-14 pb-4 bg-brand-bone sm:pt-16">
-        <div className="container">
+      <Section tone="papel" id="canais" hideFloating aria-labelledby="canais-titulo" spacing="compact">
+        <Container>
+          <h2 id="canais-titulo" className="sr-only">
+            Formas de contato
+          </h2>
           <ContactMethods />
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      <LocationSection />
+      <ContatoMapa />
 
-      <CTASection />
+      <ContatoFecho />
     </>
   );
 }

@@ -1,174 +1,179 @@
 import Link from "next/link";
-import { MapPin, MessageCircle, Instagram, Mail, Phone } from "lucide-react";
-import { siteConfig, mainNav } from "@/lib/site-config";
-import { whatsappLink, waMessages } from "@/lib/whatsapp";
+import { siteConfig, mainNav, supportNav, localeTexto } from "@/lib/site-config";
 import { treatments } from "@/lib/treatments";
-import { BrandSymbol } from "@/components/ui/logo";
+import { Monogram } from "@/components/brand/logo";
 import { ManageCookiesButton } from "@/components/seo/manage-cookies-button";
+import { AgendarCTA, PhoneCTA } from "@/components/ui/cta";
+import { PlusIcon } from "@/components/ui/icons";
+import { RouteWhatsAppCTA } from "./route-ctas";
+import { TrackedLink } from "@/components/ui/tracked-link";
 
 const legal = [
   { label: "Política de Privacidade", href: "/politica-de-privacidade" },
   { label: "Termos de Uso", href: "/termos-de-uso" },
 ];
 
-/** Páginas de apoio ao paciente (atalhos no rodapé). */
-const supportNav = [
-  { label: "Urgência odontológica", href: "/urgencia-odontologica" },
-  { label: "Primeira consulta", href: "/primeira-consulta" },
-  { label: "Medo de dentista", href: "/medo-de-dentista" },
-  { label: "Como funcionam os valores", href: "/valores" },
-];
+/** Título de coluna: texto, não cabeçalho (o rodapé não tem h2 e as colunas não são seções); a lista se liga a ele. */
+function ColTitle({ id, children }: { id: string; children: React.ReactNode }) {
+  return (
+    <p id={id} className="t-kicker m-0">
+      {children}
+    </p>
+  );
+}
 
+/**
+ * Rodapé (DESIGN.md 5.0): seção noite com o símbolo em marca d'água. Servidor.
+ * Marca, endereço e contato à esquerda (5 colunas); Navegação, Para você e Tratamentos
+ * à direita (7). Cada link tem 44px de altura. O horário só aparece se siteConfig.hours existir.
+ * O trilho do Fio some quando o rodapé entra na tela (FioRail).
+ * Sem h2 "Rodapé" nem aria-label: o <footer> já é o landmark de informações do site.
+ * A estrutura (.ft-*) vive em globals.css: a 404 e as páginas de erro montam o rodapé fora do
+ * layout das rotas e um CSS Module não era carregado lá.
+ */
 export function Footer() {
   const year = 2026; // fixo para build determinístico; edite se necessário.
   return (
-    <footer className="texture-grain relative overflow-hidden bg-brand-green-deep text-brand-bone">
-      {/* brilho dourado sutil */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-24 top-0 h-72 w-72 rounded-full bg-brand-gold/10 blur-3xl"
-      />
-      <div className="container relative py-16 lg:py-20">
-        <div className="grid gap-12 lg:grid-cols-12">
-          {/* Marca */}
-          <div className="lg:col-span-4">
-            <Link href="/" aria-label="Início" className="inline-flex">
-              <BrandSymbol size={56} badge />
-            </Link>
-            <p className="mt-5 font-display text-2xl text-brand-bone">
-              {siteConfig.doctorName}
+    <footer data-tone="noite" data-hide-floating="" className="ft-root">
+      <div className="ft-mark" aria-hidden="true">
+        <Monogram tone="claro" size={300} lazy />
+      </div>
+
+      <div className="wrap relative ft-pad">
+        <div className="ft-grid">
+          <div className="ft-brand">
+            <p className="t-d3 display ft-nome">{siteConfig.doctorName}</p>
+            <p className="t-body mt-3">Cirurgiã-dentista · {siteConfig.cro}</p>
+            <p className="t-body mt-3 hidden max-w-leitura tab:block">
+              Cuidado odontológico com planejamento individual. Atendimento na região da{" "}
+              {siteConfig.neighborhood}, em {siteConfig.city}.
             </p>
-            <p className="mt-1 text-sm uppercase tracking-eyebrow text-brand-gold-soft">
-              {siteConfig.title} · Responsável Técnica: {siteConfig.cro}
-            </p>
-            <p className="mt-5 max-w-xs text-sm leading-relaxed text-brand-bone/70">
-              Cuidado odontológico humanizado, com planejamento individual e foco
-              em naturalidade. Atendimento em {siteConfig.region}.
-            </p>
-          </div>
 
-          {/* Navegação */}
-          <div className="lg:col-span-2">
-            <h3 className="text-xs font-semibold uppercase tracking-eyebrow text-brand-gold-soft">
-              Navegação
-            </h3>
-            <ul className="mt-5 space-y-3 text-sm">
-              {mainNav.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="text-brand-bone/75 transition-colors hover:text-brand-bone"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-
-            <h3 className="mt-8 text-xs font-semibold uppercase tracking-eyebrow text-brand-gold-soft">
-              Para você
-            </h3>
-            <ul className="mt-5 space-y-3 text-sm">
-              {supportNav.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="text-brand-bone/75 transition-colors hover:text-brand-bone"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Tratamentos */}
-          <div className="lg:col-span-3">
-            <h3 className="text-xs font-semibold uppercase tracking-eyebrow text-brand-gold-soft">
-              Tratamentos
-            </h3>
-            <ul className="mt-5 space-y-3 text-sm">
-              {treatments.map((t) => (
-                <li key={t.slug}>
-                  <Link
-                    href={`/tratamentos/${t.slug}`}
-                    className="text-brand-bone/75 transition-colors hover:text-brand-bone"
-                  >
-                    {t.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contato */}
-          <div className="lg:col-span-3">
-            <h3 className="text-xs font-semibold uppercase tracking-eyebrow text-brand-gold-soft">
-              Contato
-            </h3>
-            <ul className="mt-5 space-y-4 text-sm text-brand-bone/80">
-              <li className="flex gap-3">
-                <MapPin className="mt-0.5 size-4 shrink-0 text-brand-gold-soft" strokeWidth={1.6} />
-                <span>{siteConfig.address.full}</span>
+            <address className="t-sm mt-6 min-w-0 max-w-leitura not-italic text-fg-2">
+              {localeTexto("endereco")}
+            </address>
+            {siteConfig.hours && <p className="t-sm mt-2 text-fg-2">{siteConfig.hours}</p>}
+            <ul className="ft-contacts">
+              <li>
+                <RouteWhatsAppCTA
+                  location="footer"
+                  variant="texto"
+                  className="t-sm"
+                />
               </li>
-              <li className="flex gap-3">
-                <MessageCircle className="mt-0.5 size-4 shrink-0 text-brand-gold-soft" strokeWidth={1.6} />
-                <span>Agende pelo WhatsApp</span>
+              <li>
+                <PhoneCTA location="footer" as="texto" className="t-sm" />
               </li>
-              <li className="flex gap-3">
-                <Phone className="mt-0.5 size-4 shrink-0 text-brand-gold-soft" strokeWidth={1.6} />
-                <a href={`tel:+${siteConfig.phone}`} className="hover:text-brand-bone">
-                  {siteConfig.phoneDisplay}
-                </a>
-              </li>
-              <li className="flex gap-3">
-                <Mail className="mt-0.5 size-4 shrink-0 text-brand-gold-soft" strokeWidth={1.6} />
-                <a href={`mailto:${siteConfig.email}`} className="hover:text-brand-bone">
+              <li>
+                <TrackedLink
+                  href={`mailto:${siteConfig.email}`}
+                  event="email_click"
+                  eventParams={{ location: "footer" }}
+                  className="foot-link t-sm"
+                >
                   {siteConfig.email}
-                </a>
+                </TrackedLink>
+              </li>
+              <li>
+                <TrackedLink
+                  href={siteConfig.instagramUrl}
+                  event="instagram_click"
+                  eventParams={{ location: "footer" }}
+                  external
+                  className="foot-link t-sm"
+                >
+                  Instagram {siteConfig.instagram}
+                </TrackedLink>
               </li>
             </ul>
-            <div className="mt-6 flex gap-3">
-              <a
-                href={whatsappLink(waMessages.default)}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="WhatsApp"
-                className="inline-flex size-11 items-center justify-center rounded-full bg-brand-bone/10 text-brand-bone ring-1 ring-inset ring-brand-bone/15 transition hover:bg-brand-gold hover:text-brand-green-deep"
-              >
-                <MessageCircle className="size-5" strokeWidth={1.7} />
-              </a>
-              <a
-                href={siteConfig.instagramUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                className="inline-flex size-11 items-center justify-center rounded-full bg-brand-bone/10 text-brand-bone ring-1 ring-inset ring-brand-bone/15 transition hover:bg-brand-gold hover:text-brand-green-deep"
-              >
-                <Instagram className="size-5" strokeWidth={1.7} />
-              </a>
+          </div>
+
+          <div className="ft-lists">
+            <div>
+              <ColTitle id="ft-nav">Navegação</ColTitle>
+              <ul aria-labelledby="ft-nav" className="m-0 mt-2 list-none p-0">
+                {mainNav.map((item) => (
+                  <li key={item.href}>
+                    <Link href={item.href} prefetch={false} className="foot-link t-sm">
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
+
+            <div>
+              <ColTitle id="ft-apoio">Para você</ColTitle>
+              <ul aria-labelledby="ft-apoio" className="m-0 mt-2 list-none p-0">
+                {supportNav.map((item) => (
+                  <li key={item.href}>
+                    <Link href={item.href} prefetch={false} className="foot-link t-sm">
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+                <li>
+                  <AgendarCTA location="footer" variant="texto" className="t-sm" />
+                </li>
+              </ul>
+            </div>
+
+            <div className="ft-wide ft-wide-desktop">
+              <ColTitle id="ft-trat">Tratamentos</ColTitle>
+              <ul aria-labelledby="ft-trat" className="m-0 mt-2 list-none p-0">
+                {treatments.map((t) => (
+                  <li key={t.slug}>
+                    <Link href={`/tratamentos/${t.slug}`} prefetch={false} className="foot-link t-sm">
+                      {t.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <details className="ft-wide ft-wide-mobile">
+              <summary>
+                <span className="t-kicker">Tratamentos</span>
+                <span aria-hidden="true" className="ft-ind">
+                  <PlusIcon size={20} />
+                </span>
+              </summary>
+              <ul className="m-0 list-none p-0">
+                {treatments.map((t) => (
+                  <li key={t.slug}>
+                    <Link href={`/tratamentos/${t.slug}`} prefetch={false} className="foot-link t-sm">
+                      {t.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </details>
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-4 border-t border-brand-bone/10 pt-8 text-xs text-brand-bone/55 sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {year} {siteConfig.doctorName}. Todos os direitos reservados.
-          </p>
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            {legal.map((l) => (
-              <Link key={l.href} href={l.href} className="hover:text-brand-bone">
-                {l.label}
-              </Link>
-            ))}
-            <ManageCookiesButton className="hover:text-brand-bone" />
+        <div className="ft-legal-row">
+          <span className="fio-h" aria-hidden="true" />
+          <div className={`ft-legal flex flex-col gap-x-8 pt-4 tab:flex-row tab:flex-wrap tab:items-center tab:justify-between`}>
+            <p className="m-0 text-nevoa">
+              © {year} {siteConfig.doctorName}. Todos os direitos reservados.
+            </p>
+            <ul className="m-0 flex list-none flex-col p-0 tab:flex-row tab:flex-wrap tab:items-center tab:gap-x-6">
+              {legal.map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} prefetch={false} className="foot-link">
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <ManageCookiesButton className="foot-link cursor-pointer border-0 bg-transparent p-0 text-left" />
+              </li>
+            </ul>
           </div>
+          <p className="ft-legal-note">
+            Conteúdo de caráter informativo, sem promessa de resultados. Cada caso é avaliado
+            individualmente.
+          </p>
         </div>
-        <p className="mt-6 max-w-3xl text-[0.7rem] leading-relaxed text-brand-bone/65">
-          Conteúdo de caráter informativo, sem promessa de resultados. Cada caso é
-          avaliado individualmente. As imagens e depoimentos seguem as normas de
-          publicidade odontológica.
-        </p>
       </div>
     </footer>
   );

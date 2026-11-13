@@ -1,0 +1,31 @@
+.root {
+  row-gap: 40px;
+}
+.esq,
+.dir {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+@media (min-width: 760px) {
+  .esq {
+    grid-column: 1 / 6;
+  }
+  .dir {
+    grid-column: 7 / 13;
+  }
+}
+@media (min-width: 760px) {
+  .larga .esq {
+    grid-column: 1 / 7;
+  }
+  .larga .dir {
+    grid-column: 7 / 13;
+  }
+}
+@media (min-width: 1100px) {
+  .esq {
+    position: sticky;
+    top: calc(var(--h-header) + 36px);
+    align-self: start;
+  }
+}

@@ -1,34 +1,48 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import { Award, GraduationCap, HeartHandshake, Stethoscope, Smile, ArrowRight } from "lucide-react";
-import { siteConfig } from "@/lib/site-config";
+import { siteConfig, locale, localeTexto } from "@/lib/site-config";
 import { buildMetadata, breadcrumbSchema, personSchema } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/json-ld";
-import { PageHero } from "@/components/sections/page-hero";
-import { CTASection } from "@/components/sections/cta-section";
+import { FioRail } from "@/components/brand/fio-rail";
+import { SobreHero } from "@/components/sections/sobre-hero";
+import { SobreEnsaio } from "@/components/sections/sobre-ensaio";
+import { SobreFormacao } from "@/components/sections/sobre-formacao";
 import { AreasSection } from "@/components/sections/areas-section";
-import { Reveal } from "@/components/ui/reveal";
-import { ButtonLink } from "@/components/ui/button";
+import { SobreConsultorio } from "@/components/sections/sobre-consultorio";
+import { CTASection } from "@/components/sections/cta-section";
 
-export const metadata: Metadata = buildMetadata({
-  title: `Sobre a ${siteConfig.doctorName}`,
-  description: `Conheça a ${siteConfig.doctorName}, ${siteConfig.title.toLowerCase()} (${siteConfig.cro}). Atendimento humanizado, planejamento individual e foco em naturalidade em ${siteConfig.region}.`,
+const TITLE = "Sobre a Dra. Ana Beatriz | Dentista na Vila Bruna, SP";
+
+// `buildMetadata` acrescenta o sufixo da marca quando o nome completo não está no título;
+// aqui o título já é o padrão do DESIGN.md 6.4 (53 caracteres), então ele é fixado por cima.
+const base = buildMetadata({
+  title: TITLE,
+  description: `Conheça a ${siteConfig.doctorName}, cirurgiã-dentista (${siteConfig.cro}). Atendimento na ${localeTexto("bairroRegiao")}, ${locale.zona}.`,
   path: "/sobre",
-  keywords: [`dentista em ${siteConfig.city}`, `cirurgiã-dentista ${siteConfig.neighborhood}`],
 });
 
-/** Credenciais reais da Dra. Ana Beatriz. */
-const credentials = [
-  { icon: GraduationCap, label: "Graduação em Odontologia — Centro Universitário Estácio de Brasília" },
-  { icon: Award, label: "Aperfeiçoamento em Cirurgia Oral Menor — São Leopoldo Mandic" },
-  { icon: Stethoscope, label: "Curso “Rumo à Residência” em CTBMF (Cirurgia e Traumatologia Buco-Maxilo-Facial)" },
-  { icon: Smile, label: "Formação em Implantodontia — ABO Central e APCD Central" },
-  { icon: Award, label: "Formação em Cirurgia Buco-Maxilo-Facial — ABO Central e IOA" },
-  { icon: HeartHandshake, label: `Registro profissional ativo — ${siteConfig.cro}` },
-];
+export const metadata: Metadata = {
+  ...base,
+  title: { absolute: TITLE },
+  openGraph: { ...base.openGraph, title: TITLE },
+  twitter: { ...base.twitter, title: TITLE },
+};
 
 const lattesUrl = "https://lattes.cnpq.br/3767606004982701";
 
+/** Pontos do trilho (>= 1100px): um por seção da página, na ordem do documento. */
+const RAIL = [
+  { id: "abertura", label: "Abertura" },
+  { id: "trajetoria", label: "Trajetória" },
+  { id: "formacao", label: "Formação" },
+  { id: "consultorio", label: "Consultório" },
+  { id: "agendar", label: "Agendar" },
+];
+
+/**
+ * /sobre (DESIGN.md 5.2): a página que convence pela pessoa. Ritmo de tons
+ * osso (abertura) / papel (ensaio) / osso (formação, com um fecho curto) / papel (áreas, em linha) /
+ * noite (consultório, endereço e mapa) / osso (fecho). O trilho vem DEPOIS do conteúdo no DOM.
+ */
 export default function SobrePage() {
   return (
     <>
@@ -40,208 +54,19 @@ export default function SobrePage() {
           ]),
           personSchema({
             sameAs: [lattesUrl],
-            alumniOf: [
-              "Centro Universitário Estácio de Brasília",
-              "São Leopoldo Mandic",
-            ],
+            alumniOf: ["Centro Universitário Estácio de Brasília", "São Leopoldo Mandic"],
           }),
         ]}
       />
-      <PageHero
-        eyebrow="Sobre a Dra. Ana"
-        title={
-          <>
-            Uma odontologia construída com{" "}
-            <span className="italic text-brand-gold-ink">cuidado</span> e confiança
-          </>
-        }
-        description="Por trás de cada sorriso existe uma pessoa, uma história e um tempo próprio. É a partir disso que a Dra. Ana conduz o seu trabalho."
-        breadcrumbs={[{ name: "Início", href: "/" }, { name: "Sobre" }]}
-      />
-
-      {/* História */}
-      <section className="section-y bg-brand-bone">
-        <div className="container grid items-start gap-14 lg:grid-cols-12 lg:gap-16">
-          <Reveal className="lg:col-span-5" y={28}>
-            <div className="relative mx-auto max-w-sm lg:sticky lg:top-28 lg:max-w-none">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-brand-green/5 shadow-lift">
-                <Image
-                  src="/dra-ana-trajetoria.jpg"
-                  alt={`${siteConfig.doctorName} durante sua jornada na Odontologia`}
-                  fill
-                  sizes="(min-width: 1024px) 28rem, (min-width: 640px) 22rem, 90vw"
-                  className="object-cover object-center"
-                />
-              </div>
-              <div className="surface mt-4 flex items-center gap-4 rounded-2xl p-5">
-                <span className="flex size-12 items-center justify-center rounded-full bg-brand-green/10 text-brand-green">
-                  <Stethoscope className="size-6" strokeWidth={1.5} />
-                </span>
-                <div>
-                  <p className="font-display text-lg text-brand-green">{siteConfig.doctorName}</p>
-                  <p className="text-sm text-brand-ink/60">{siteConfig.title} · {siteConfig.cro}</p>
-                </div>
-              </div>
-            </div>
-          </Reveal>
-
-          <div className="lg:col-span-7">
-            <Reveal>
-              <p className="eyebrow flex items-center gap-3">
-                <span className="inline-block h-px w-7 bg-brand-gold/70" /> Trajetória
-              </p>
-            </Reveal>
-            <Reveal delay={0.05}>
-              <h2 className="mt-5 text-display-md text-balance">
-                Conheça a {siteConfig.doctorName}
-              </h2>
-            </Reveal>
-            <div className="mt-6 space-y-5 text-pretty leading-relaxed text-brand-ink/75">
-              <Reveal delay={0.1}>
-                <p>
-                  A vocação da {siteConfig.doctorName} para a área da saúde nunca
-                  foi uma escolha ao acaso; foi um destino traçado pelo seu
-                  propósito genuíno de cuidar do próximo. Sempre atenta ao
-                  bem-estar coletivo, ela encontrou na Odontologia a junção
-                  perfeita entre o rigor da prática clínica e a profundidade do
-                  cuidado humano.
-                </p>
-              </Reveal>
-              <Reveal delay={0.15}>
-                <p>
-                  Para a Dra. Ana Beatriz, a Odontologia vai muito além do dente:
-                  ela trata a identidade, restabelece a função e devolve a
-                  confiança, reconectando a pessoa consigo mesma. Querendo ou
-                  não, o nosso sorriso está presente em todas as esferas da
-                  vida — desde o ato vital de se alimentar e falar com clareza,
-                  até o resgate da autoestima e da estética. Cuidar do sorriso
-                  é, essencialmente, cuidar da engrenagem que move o seu
-                  bem-estar todos os dias.
-                </p>
-              </Reveal>
-              <Reveal delay={0.2}>
-                <p className="rounded-2xl border-l-2 border-brand-gold/60 bg-brand-beige/30 p-5 font-display text-xl leading-snug text-brand-green">
-                  O grande objetivo da doutora é fazer com que seus pacientes
-                  alcancem uma longevidade de vida próspera, saudável e feliz.
-                </p>
-              </Reveal>
-            </div>
-
-            {/* Credenciais */}
-            <Reveal delay={0.1}>
-              <div className="mt-10">
-                <h3 className="font-display text-2xl text-brand-green">Formação e credenciais</h3>
-                <ul className="mt-5 grid gap-3 sm:grid-cols-2">
-                  {credentials.map(({ icon: Icon, label }) => (
-                    <li key={label} className="flex items-start gap-3 rounded-2xl border border-brand-ink/[0.07] bg-white p-4 shadow-sm">
-                      <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-green/[0.07] text-brand-green">
-                        <Icon className="size-5" strokeWidth={1.6} />
-                      </span>
-                      <span className="text-sm leading-relaxed text-brand-ink/75">{label}</span>
-                    </li>
-                  ))}
-                </ul>
-                <a
-                  href={lattesUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-brand-green underline decoration-brand-gold/50 underline-offset-4 transition hover:decoration-brand-gold"
-                >
-                  Conheça o currículo completo da Dra. no Lattes
-                  <ArrowRight className="size-4" strokeWidth={1.7} aria-hidden />
-                </a>
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      <AreasSection />
-
-      {/* Consultório */}
-      <section className="section-y bg-gradient-to-b from-brand-beige/40 to-brand-bone">
-        <div className="container">
-          <div className="max-w-2xl">
-            <Reveal>
-              <p className="eyebrow flex items-center gap-3">
-                <span className="inline-block h-px w-7 bg-brand-gold/70" /> O consultório
-              </p>
-              <h2 className="mt-4 text-display-sm">
-                Um espaço pensado para o seu conforto
-              </h2>
-              <p className="mt-5 text-pretty text-lg leading-relaxed text-brand-ink/75">
-                Ambiente moderno, com luz natural e vista panorâmica, na região
-                da Freguesia do Ó em São Paulo. Aqui, cada detalhe foi planejado para
-                que você se sinta acolhido(a) desde o primeiro momento.
-              </p>
-            </Reveal>
-          </div>
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              {
-                src: "/consultorio-1.png",
-                alt: "Consultório da Dra. Ana Beatriz — mesa de atendimento com cadeira odontológica e vista para a cidade de São Paulo",
-              },
-              {
-                src: "/consultorio-2.png",
-                alt: "Vista ampla do consultório — equipamento odontológico moderno, marcenaria em madeira e janelas com luz natural",
-              },
-              {
-                src: "/consultorio-3.png",
-                alt: "Ambiente do consultório da Dra. Ana Beatriz na Freguesia do Ó, São Paulo — espaço moderno e acolhedor",
-              },
-              {
-                src: "/consultorio-4.jpg",
-                alt: "Dra. Ana Beatriz realizando procedimento cirúrgico com paramentação completa — dedicação e precisão clínica",
-              },
-            ].map((img, i) => (
-              <Reveal key={img.src} delay={i * 0.08}>
-                <div className="relative aspect-[3/4] overflow-hidden rounded-3xl bg-brand-green/5 shadow-card">
-                  <Image
-                    src={img.src}
-                    alt={img.alt}
-                    fill
-                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                    className="object-cover"
-                    loading="lazy"
-                  />
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Compromisso */}
-      <section className="bg-brand-bone pb-4">
-        <div className="container">
-          <div className="texture-grain relative overflow-hidden rounded-[2rem] bg-brand-green px-6 py-14 text-brand-bone sm:px-12 lg:px-16">
-            <div aria-hidden className="pointer-events-none absolute -right-10 -top-10 size-56 rounded-full bg-brand-gold/10 blur-3xl" />
-            <div className="relative grid items-center gap-8 lg:grid-cols-12">
-              <div className="lg:col-span-8">
-                <p className="eyebrow text-brand-gold-bright">Compromisso com você</p>
-                <h2 className="mt-4 text-display-sm text-brand-bone">
-                  Um cuidado ético, transparente e sem promessas que a odontologia
-                  séria não pode fazer
-                </h2>
-                <p className="mt-4 max-w-xl leading-relaxed text-brand-bone/75">
-                  Aqui, você recebe informação clara, estimativas transparentes e
-                  respeito em cada decisão. Sem pressão, sem exageros — apenas o
-                  cuidado que o seu sorriso merece.
-                </p>
-              </div>
-              <div className="lg:col-span-4 lg:justify-self-end">
-                <ButtonLink href="/agendamento" variant="gold" size="lg">
-                  Quero agendar minha consulta
-                  <ArrowRight className="size-4" strokeWidth={1.7} />
-                </ButtonLink>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <CTASection />
+      <div className="has-rail">
+        <SobreHero />
+        <SobreEnsaio />
+        <SobreFormacao />
+        <AreasSection variant="line" tone="papel" id="areas" />
+        <SobreConsultorio />
+        <CTASection />
+      </div>
+      <FioRail stops={RAIL} />
     </>
   );
 }

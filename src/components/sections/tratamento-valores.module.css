@@ -1,0 +1,107 @@
+/* Faixa compacta: legenda à esquerda, texto e dois links em linha à direita. */
+.sec {
+  padding-block: var(--s-5);
+}
+.head {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.head h2 {
+  margin: var(--s-2) 0 0;
+}
+.body {
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin-top: var(--s-4);
+}
+.lead {
+  max-width: 36rem;
+  margin: 0;
+}
+.links {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--s-6);
+  margin: var(--s-2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+@media (max-width: 759px) {
+  /* no celular fica só o primeiro link de apoio */
+  .links li:nth-child(n + 2) {
+    display: none;
+  }
+}
+.link {
+  max-width: 100%;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: 44px;
+  color: var(--head);
+  text-decoration: none;
+}
+.link span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.link svg {
+  flex: none;
+  color: var(--accent);
+  transition: transform var(--d-toque) var(--ease-toque);
+}
+@media (hover: hover) and (pointer: fine) {
+  .link:hover svg,
+  .link:focus-visible svg {
+    transform: translateX(5px);
+  }
+  .link:hover span {
+    text-decoration: underline;
+    text-decoration-color: var(--ouro);
+    text-underline-offset: 0.2em;
+  }
+}
+@media (min-width: 760px) {
+  .head {
+    grid-column: 1 / 5;
+  }
+  .body {
+    grid-column: 5 / 13;
+    margin-top: 0;
+  }
+  .links {
+    grid-column: 5 / 13;
+  }
+}
+@media (min-width: 1100px) {
+  .sec {
+    padding-block: var(--s-5);
+  }
+  .head {
+    grid-column: 1 / 7;
+    grid-row: 1 / span 2;
+  }
+  .body {
+    grid-column: 7 / 13;
+  }
+  .links {
+    grid-column: 7 / 13;
+    margin-top: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .link svg {
+    transition: none;
+  }
+}
+
+/* altura provisória (content-visibility: auto do globals.css, que tem especificidade maior): perto da real */
+main section[data-tone].sec.sec {
+  contain-intrinsic-size: auto 375px;
+}
+@media (min-width: 1100px) {
+  main section[data-tone].sec.sec {
+    contain-intrinsic-size: auto 200px;
+  }
+}

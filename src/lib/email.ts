@@ -32,6 +32,9 @@ interface LeadEmailData {
   landingPage?: string | null;
 }
 
+/** Uma linha só: quebra de linha no assunto abriria cabeçalho novo no e-mail. */
+const oneLine = (v: string) => v.replace(/[\p{Cc}\p{Zl}\p{Zp}]+/gu, " ").trim();
+
 export async function sendLeadNotification(data: LeadEmailData) {
   if (!resend) return { ok: false, reason: "not_configured" };
 
@@ -90,16 +93,17 @@ export async function sendLeadNotification(data: LeadEmailData) {
     const { error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: NOTIFY_EMAIL,
-      subject: `Novo lead: ${data.fullName} — ${data.treatmentInterest}`,
+      subject: `Novo lead: ${oneLine(data.fullName)} — ${oneLine(data.treatmentInterest)}`,
       html,
     });
     if (error) {
-      console.error("[email] resend error:", error);
-      return { ok: false, reason: error.message };
+      // Sem a mensagem completa: pode repetir dados do destinatário/conteúdo.
+      console.error("[email] resend error:", error.name);
+      return { ok: false, reason: error.name };
     }
     return { ok: true };
   } catch (err) {
-    console.error("[email] unexpected error:", err);
+    console.error("[email] unexpected error:", err instanceof Error ? err.name : "unknown");
     return { ok: false, reason: "send_failed" };
   }
 }

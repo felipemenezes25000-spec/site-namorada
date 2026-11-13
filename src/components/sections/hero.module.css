@@ -1,0 +1,271 @@
+/* Capa da home (Hero). Mobile primeiro (390px); tablet e desktop remontam a grade.
+   Nada aqui esconde conteúdo: o HTML do servidor já traz tudo visível.
+   Espaços em var(--s-*) (globals.css) quando o valor cai na escala; os demais são ajustes de composição. */
+.hero {
+  padding-top: var(--s-4);
+  padding-bottom: var(--s-5);
+}
+@media (min-width: 760px) {
+  .hero {
+    padding-bottom: var(--sec-y);
+  }
+}
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: var(--gap);
+}
+
+/* ---- masthead: cirurgiã-dentista · CRO, bairro, fio duplo (no celular só a linha da CRO) ---- */
+.mast {
+  margin-bottom: var(--s-3);
+}
+/* a lista do que se atende: no celular em linha própria (1rem), a partir de 640px segue o parágrafo */
+.leadMore {
+  display: block;
+  margin-top: var(--s-2);
+}
+@media (min-width: 640px) {
+  .leadMore {
+    display: inline;
+    margin-top: 0;
+  }
+}
+.deskOnly {
+  display: none;
+}
+.more {
+  margin-top: var(--s-2);
+}
+.mastRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px var(--s-4);
+  margin-bottom: 9px;
+  font-size: 0.875rem;
+  line-height: 1.35;
+}
+.mastRow p {
+  margin: 0;
+}
+.mastLeft {
+  color: var(--head);
+  font-weight: 500;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.mastRight {
+  display: none;
+  color: var(--fg-2);
+}
+.mastLong {
+  display: none;
+}
+
+/* ---- título ---- */
+.title {
+  margin: 0;
+  /* a linha-chamada e o título são um heading só; a luz não toca o kicker (globals.css) */
+}
+/* a linha-chamada (kicker) é filha do .t-kicker do DisplayHeading: o ajuste fino fica aqui, sem :global */
+.kicker {
+  display: block;
+}
+
+/* celulares baixos (<= 780px de altura, ex.: 360x740): o rosto inteiro precisa caber acima da barra fixa,
+   mesmo com o aviso de cookies aberto. Título, texto e botão ficam mais compactos. */
+@media (max-width: 639px) and (max-height: 780px) {
+  .hero {
+    padding-top: var(--s-2);
+  }
+  .mast {
+    margin-bottom: 10px;
+  }
+  .title {
+    font-size: clamp(2.375rem, 10.4vw, 2.75rem);
+    line-height: 0.98;
+  }
+  .kicker {
+    margin-bottom: -4px;
+    font-size: 1rem;
+  }
+  .text {
+    margin-top: var(--s-3);
+  }
+  .lead {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  .actions {
+    margin-top: 14px;
+  }
+  .wa {
+    min-height: 52px;
+  }
+  .fig {
+    margin-top: 0;
+  }
+}
+
+/* celulares estreitos (360 a 389px): o título ainda cabe em 3 linhas e a linha-chamada em 2 */
+@media (max-width: 389px) {
+  .title {
+    font-size: clamp(2.5rem, 11.6vw, 2.875rem);
+  }
+  .kicker {
+    font-size: 1rem;
+  }
+}
+
+/* 320 a 340px: "acolhedor, claro" cabe inteiro na linha (sem "claro" sozinho) */
+@media (max-width: 340px) {
+  .title {
+    font-size: 2.25rem;
+  }
+}
+
+/* ---- retrato ---- */
+.fig {
+  margin-top: var(--s-4);
+  /* o recorte passa na frente do arco: a cabeça sobe acima do fio */
+  width: 100%;
+  max-width: 560px;
+}
+
+/* ---- texto de apoio e ações ---- */
+.text {
+  margin-top: var(--s-4);
+}
+.lead {
+  max-width: 34rem;
+  margin: 0;
+  color: var(--fg);
+}
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  margin-top: 18px;
+}
+.wa,
+.ver {
+  width: 100%;
+}
+/* celular: "Ver tratamentos" em texto, alvo de 44px, centrado sob o botão */
+.verMobile {
+  align-self: center;
+  min-height: 44px;
+}
+.phone {
+  margin: var(--s-2) 0 0;
+}
+
+/* ---- tablet: H1 em largura total; texto e retrato lado a lado ---- */
+@media (min-width: 760px) {
+  .mastRight {
+    display: block;
+  }
+  .more,
+  .verMobile {
+    display: none;
+  }
+  .ver.deskOnly {
+    display: inline-flex;
+  }
+  p.deskOnly {
+    display: block;
+  }
+  .hero {
+    padding-top: var(--s-6);
+  }
+  .grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  .mast {
+    grid-column: 1 / -1;
+    margin-bottom: 36px;
+  }
+  .mastRow {
+    margin-bottom: 11px;
+  }
+  .mastShort {
+    display: none;
+  }
+  .mastLong {
+    display: inline;
+  }
+  .title {
+    grid-column: 1 / -1;
+  }
+  .text {
+    grid-column: 1 / 8;
+    grid-row: 3;
+    align-self: start;
+    margin-top: 40px;
+  }
+  .fig {
+    grid-column: 8 / 13;
+    grid-row: 3;
+    align-self: start;
+    margin-top: -8px;
+    justify-self: end;
+  }
+  .actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    margin-top: var(--s-6);
+  }
+  .wa,
+  .ver {
+    width: auto;
+  }
+  .wa {
+    min-height: 60px;
+    padding-inline: 34px;
+    font-size: 1.0625rem;
+  }
+  .ver {
+    min-height: 60px;
+  }
+}
+
+/* ---- a partir de 960px: H1 e texto à esquerda, retrato à direita nas duas linhas ---- */
+@media (min-width: 960px) {
+  .hero {
+    padding-top: 28px;
+  }
+  .title {
+    grid-column: 1 / 8;
+    grid-row: 2;
+    font-size: clamp(3.5rem, 6.3vw, 6.25rem);
+  }
+  .text {
+    grid-column: 1 / 8;
+    grid-row: 3;
+    margin-top: 40px;
+  }
+  /* retrato maior (~540px a 1440) e subindo para encostar no fio duplo (+28px) */
+  .fig {
+    grid-column: 8 / 13;
+    grid-row: 2 / 4;
+    margin-top: -4px;
+    max-width: 540px;
+    justify-self: end;
+    width: 100%;
+  }
+}
+@media (min-width: 1280px) {
+  .fig {
+    grid-column: 7 / 13;
+  }
+}
+/* o retrato inteiro cabe na primeira tela de 768px de altura */
+@media (min-width: 960px) and (max-height: 820px) {
+  .fig {
+    max-width: min(100%, 62svh);
+    justify-self: end;
+  }
+}

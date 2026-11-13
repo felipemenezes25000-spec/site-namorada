@@ -1,78 +1,46 @@
+import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { Reveal } from "./reveal";
+import { Eyebrow } from "./eyebrow";
 
+/**
+ * Cabeçalho de seção (DESIGN.md 4.1): eyebrow em itálico, título de display,
+ * folio à direita (desktop) ou abaixo (celular) e abertura `.t-lead`. Sempre à esquerda.
+ * */
 interface SectionHeadingProps {
   eyebrow?: string;
-  title: React.ReactNode;
-  description?: React.ReactNode;
-  align?: "left" | "center";
+  title: ReactNode;
+  /** Itálico à direita do título: "Sumário", "A doutora". */
+  folio?: string;
+  lede?: ReactNode;
+  level?: 2 | 3;
+  size?: "d2" | "d3";
   className?: string;
-  /** Tag do título para hierarquia semântica correta. */
-  as?: "h2" | "h3";
-  light?: boolean;
+  id?: string;
 }
 
 export function SectionHeading({
   eyebrow,
   title,
-  description,
-  align = "center",
+  folio,
+  lede,
+  level,
+  size = "d2",
   className,
-  as = "h2",
-  light = false,
+  id,
 }: SectionHeadingProps) {
-  const Title = as;
+  const Title = level === 3 ? "h3" : "h2";
   return (
-    <div
-      className={cn(
-        "max-w-2xl",
-        align === "center" ? "mx-auto text-center" : "text-left",
-        className,
-      )}
-    >
+    <div className={cn("max-w-3xl", className)}>
       {eyebrow && (
-        <Reveal>
-          <p
-            className={cn(
-              "eyebrow mb-4 flex items-center gap-3",
-              light && "text-brand-gold-bright",
-              align === "center" ? "justify-center" : "justify-start",
-            )}
-          >
-            <span
-              className={cn(
-                "inline-block h-px w-7",
-                light ? "bg-brand-gold-soft" : "bg-brand-gold/70",
-                align === "center" && "hidden",
-              )}
-            />
-            {eyebrow}
-          </p>
-        </Reveal>
+        <Eyebrow className="mb-3">{eyebrow}</Eyebrow>
       )}
-      <Reveal delay={0.05}>
-        <Title
-          className={cn(
-            "text-display-md text-balance",
-            light && "text-brand-bone",
-          )}
-        >
+      <div className="flex flex-col gap-3 tab:flex-row tab:items-baseline tab:justify-between tab:gap-8">
+        <Title id={id} className={size === "d3" ? "t-d3" : "t-d2"}>
           {title}
         </Title>
-      </Reveal>
-      {description && (
-        <Reveal delay={0.1}>
-          <p
-            className={cn(
-              "mt-5 text-pretty text-base leading-relaxed sm:text-lg",
-              light ? "text-brand-bone/75" : "text-brand-ink/70",
-              align === "center" && "mx-auto",
-            )}
-          >
-            {description}
-          </p>
-        </Reveal>
-      )}
+        {folio && <span className="t-folio hidden shrink-0 tab:block">{folio}</span>}
+      </div>
+      {lede && <p className="t-lead mt-6 max-w-leitura">{lede}</p>}
     </div>
   );
 }

@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Cookie } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 const CONSENT_KEY = "abl_cookie_consent";
 const CONSENT_EVENT = "abl-consent-changed";
@@ -10,12 +10,22 @@ const OPEN_EVENT = "abl-open-consent";
 
 export type ConsentState = "accepted" | "declined" | "pending";
 
-/** Lê a decisão atual do usuário. SSR-safe (retorna "pending" no servidor). */
+/**
+ * Decisão desta visita guardada em memória: vale quando o armazenamento do navegador está
+ * bloqueado (modo restrito, navegadores embutidos), onde ler ou gravar lança SecurityError.
+ */
+let memoryConsent: ConsentState = "pending";
+
+/** Lê a decisão atual do usuário. SSR-safe (retorna "pending" no servidor) e tolerante a armazenamento bloqueado. */
 export function getConsent(): ConsentState {
   if (typeof window === "undefined") return "pending";
-  const v = window.localStorage.getItem(CONSENT_KEY);
-  if (v === "accepted" || v === "declined") return v;
-  return "pending";
+  try {
+    const v = window.localStorage.getItem(CONSENT_KEY);
+    if (v === "accepted" || v === "declined") return v;
+  } catch {
+    /* armazenamento bloqueado: vale a decisão em memória */
+  }
+  return memoryConsent;
 }
 
 /** Reabre o banner para o usuário rever/revogar a decisão (direito LGPD). */
@@ -25,7 +35,12 @@ export function openCookieSettings() {
 }
 
 function setConsent(state: "accepted" | "declined") {
-  window.localStorage.setItem(CONSENT_KEY, state);
+  memoryConsent = state;
+  try {
+    window.localStorage.setItem(CONSENT_KEY, state);
+  } catch {
+    /* armazenamento bloqueado: a decisão segue só em memória e o evento abaixo avisa quem depende dela */
+  }
   window.dispatchEvent(new CustomEvent<ConsentState>(CONSENT_EVENT, { detail: state }));
 }
 
@@ -40,6 +55,9 @@ export function subscribeConsent(cb: (state: ConsentState) => void): () => void 
 
 export function CookieConsent() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const noAdmin = !(pathname === "/admin" || pathname?.startsWith("/admin/"));
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setOpen(getConsent() === "pending");
@@ -48,55 +66,59 @@ export function CookieConsent() {
     return () => window.removeEventListener(OPEN_EVENT, reopen);
   }, []);
 
-  if (!open) return null;
+  // Grava a altura real do aviso em --h-cookie enquanto aberto (o botão flutuante
+  // e o scroll-padding-bottom se ajustam) e zera ao fechar.
+  useEffect(() => {
+    const root = document.documentElement;
+    const el = ref.current;
+    if (!open || !el || !noAdmin) {
+      root.style.setProperty("--h-cookie", "0px");
+      return;
+    }
+    // A medida (offsetHeight) fica para o próximo quadro: lê-la dentro do efeito força um reflow
+    // síncrono durante a hidratação.
+    let raf = 0;
+    const paint = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => root.style.setProperty("--h-cookie", `${el.offsetHeight}px`));
+    };
+    paint();
+    const ro = typeof ResizeObserver === "undefined" ? undefined : new ResizeObserver(paint);
+    ro?.observe(el);
+    return () => {
+      cancelAnimationFrame(raf);
+      ro?.disconnect();
+      root.style.setProperty("--h-cookie", "0px");
+    };
+  }, [open, noAdmin]);
+
+  if (!open || !noAdmin) return null;
 
   function decide(v: "accepted" | "declined") {
     setConsent(v);
     setOpen(false);
   }
 
+  /*
+   * Apresentação (DESIGN.md 4.3): faixa compacta, NÃO modal (sem role="dialog",
+   * sem focus trap), primeiro elemento do <body>. No celular fica ACIMA da barra de
+   * ações. "Recusar" e "Aceitar" são idênticos em tamanho, fonte e peso visual.
+   */
   return (
-    <div
-      role="dialog"
-      aria-label="Consentimento de cookies"
-      className="fixed inset-x-0 bottom-0 z-[60] px-4 pb-4 sm:bottom-4 sm:px-6"
-    >
-      <div className="surface mx-auto flex max-w-5xl flex-col gap-4 p-5 shadow-lift sm:flex-row sm:items-center sm:gap-6 sm:p-6">
-        <div className="flex flex-1 items-start gap-3">
-          <span className="hidden size-10 shrink-0 items-center justify-center rounded-full bg-brand-gold/15 text-brand-gold-ink sm:flex">
-            <Cookie className="size-5" strokeWidth={1.6} aria-hidden />
-          </span>
-          <p className="text-sm leading-relaxed text-brand-ink/75">
-            Usamos cookies para entender como o site é utilizado e melhorar a sua
-            experiência. Cookies essenciais são sempre ativos; cookies de medição
-            (analytics) só com a sua autorização. Você pode rever ou alterar essa
-            escolha quando quiser em <strong>Gerenciar cookies</strong>, no rodapé.
-            Saiba mais na{" "}
-            <Link
-              href="/politica-de-privacidade"
-              className="font-semibold text-brand-green underline decoration-brand-gold/50 underline-offset-2 hover:decoration-brand-gold"
-            >
-              Política de Privacidade
-            </Link>
-            .
-          </p>
-        </div>
-        <div className="flex flex-col gap-2 sm:flex-row sm:shrink-0 sm:gap-3">
-          <button
-            type="button"
-            onClick={() => decide("declined")}
-            className="rounded-full px-5 py-2.5 text-sm font-medium text-brand-ink/75 ring-1 ring-inset ring-brand-ink/15 transition hover:bg-brand-green/[0.05] hover:text-brand-green"
-          >
-            Recusar
-          </button>
-          <button
-            type="button"
-            onClick={() => decide("accepted")}
-            className="rounded-full bg-brand-green px-5 py-2.5 text-sm font-semibold text-brand-bone transition hover:bg-brand-green-dark"
-          >
-            Aceitar
-          </button>
-        </div>
+    <div ref={ref} role="region" aria-label="Consentimento de cookies" className="ck">
+      <p className="ck-txt m-0">
+        Cookies essenciais sempre ativos; os de medição só com a sua autorização. Veja a{" "}
+        <Link href="/politica-de-privacidade" prefetch={false}>
+          Política de Privacidade
+        </Link>.
+      </p>
+      <div className="ck-acoes">
+        <button type="button" className="ck-btn" onClick={() => decide("declined")}>
+          Recusar
+        </button>
+        <button type="button" className="ck-btn" onClick={() => decide("accepted")}>
+          Aceitar
+        </button>
       </div>
     </div>
   );

@@ -1,0 +1,264 @@
+/* Formulário de agendamento: sem caixa. Um fio vertical de 1px liga os três blocos (o essencial, o
+   opcional, o envio), cada um marcado por um losango, como o trilho da home em miniatura. Só tokens
+   (escala --s-*); sobram apenas os hairlines de 1px e a geometria do losango (8px + hairline). */
+
+.form {
+  --fio-pad: var(--s-5);
+  position: relative;
+  display: grid;
+  gap: var(--s-7);
+  min-width: 0;
+  padding-left: var(--fio-pad);
+  border-left: 1px solid var(--rule);
+}
+
+.etapa {
+  position: relative;
+  min-width: 0;
+}
+/* losango do bloco, centrado no fio */
+.etapa::before {
+  content: "";
+  position: absolute;
+  left: calc(-1 * var(--fio-pad) - var(--s-1) - 1px);
+  top: var(--s-2);
+  width: calc(var(--s-2) + 1px);
+  height: calc(var(--s-2) + 1px);
+  border: 1px solid var(--accent);
+  background: var(--bg);
+  transform: rotate(45deg);
+}
+.etapaFim::before {
+  background: var(--accent);
+}
+
+.fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.legend {
+  display: block;
+  width: 100%;
+  margin: 0 0 var(--s-5);
+  padding: 0;
+}
+.legendTitle {
+  display: block;
+}
+.req {
+  display: block;
+  margin-top: var(--s-1);
+  color: var(--fg-2);
+}
+
+.campos {
+  display: grid;
+  gap: var(--s-5);
+  min-width: 0;
+}
+.campo {
+  min-width: 0;
+}
+.par {
+  display: grid;
+  gap: var(--s-5);
+  min-width: 0;
+}
+
+/* texto "(opcional)" dentro do rótulo */
+.opc {
+  font-style: normal;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 1rem;
+  color: var(--fg-2);
+}
+
+/* grupos de opção em pílula */
+.grupo {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-top: var(--s-2);
+}
+
+/* ---------------------------- Opcional: <details> ---------------------------- */
+.mais {
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.sum {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  min-height: var(--s-8);
+  padding-block: var(--s-3);
+  list-style: none;
+  cursor: pointer;
+  color: var(--head);
+}
+.sum::-webkit-details-marker {
+  display: none;
+}
+.sumTexto {
+  display: block;
+  flex: 1;
+  min-width: 0;
+}
+.sumTitulo {
+  display: block;
+}
+.sumAjuda {
+  display: block;
+  margin-top: var(--s-1);
+  color: var(--fg);
+}
+.plus {
+  flex: none;
+  width: var(--s-5);
+  height: var(--s-5);
+  transition: transform var(--d-base) var(--ease-toque);
+}
+.mais[open] .plus {
+  transform: rotate(45deg);
+}
+.maisCorpo {
+  display: grid;
+  gap: var(--s-5);
+  padding-block: var(--s-2) var(--s-6);
+  min-width: 0;
+}
+
+/* ------------------------------ Envio ------------------------------ */
+.envio {
+  display: grid;
+  gap: var(--s-5);
+  min-width: 0;
+}
+.status {
+  min-width: 0;
+}
+.enviando {
+  margin: 0;
+}
+/* Região viva sempre montada (leitores de tela anunciam o que entra nela); sem nada para mostrar,
+   sai do fluxo e não deixa vão na grade. */
+.status:not(:has(.aviso)):has(.enviando:empty) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.aviso {
+  display: grid;
+  gap: var(--s-2);
+  justify-items: start;
+}
+.aviso p {
+  margin: 0;
+}
+.submit {
+  width: 100%;
+}
+/* o botão trava com aria-disabled (o foco fica nele); o cursor mostra que está enviando */
+.submit[aria-disabled="true"] {
+  cursor: progress;
+}
+.garantia {
+  margin: 0;
+  color: var(--fg);
+}
+
+/* consentimento: a autorização primeiro; a revogação abaixo, em peso menor */
+.consTexto {
+  display: block;
+  color: var(--fg);
+}
+.consRevoga {
+  display: block;
+  margin-top: var(--s-1);
+  color: var(--fg-2);
+}
+/* caixa de marcar com borda firme (contraste de componente >= 3:1) */
+.form :global(.chk-box) {
+  border: 1.5px solid var(--verde);
+}
+
+/* sem JavaScript: o formulário some (regra no <noscript>) e entram o WhatsApp e o telefone */
+.semJs {
+  display: grid;
+  gap: var(--s-4);
+  justify-items: start;
+  padding-block: var(--s-4);
+}
+.semJs p {
+  margin: 0;
+}
+.semJsAcoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+}
+
+/* honeypot: fora da tela, invisível para pessoas e leitores de tela */
+.honey {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.alt {
+  display: none;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--s-3);
+  margin: 0;
+}
+
+@media (min-width: 760px) {
+  .form {
+    --fio-pad: var(--s-6);
+  }
+  .par {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--gap);
+  }
+  /* sem a barra fixa do celular, o atalho de WhatsApp volta para baixo do botão */
+  .alt {
+    display: flex;
+  }
+  .submit {
+    width: auto;
+    min-width: 21rem;
+  }
+}
+
+@media (min-width: 1100px) {
+  /* O fio mora na calha de 56px do gutter: rótulos e campos ficam no mesmo eixo do título. */
+  .form {
+    --fio-pad: 0px;
+    padding-left: 0;
+    border-left: 0;
+  }
+  .form::after {
+    content: "";
+    position: absolute;
+    left: calc(-1 * (var(--s-5) + var(--s-1)));
+    top: calc(-1 * (var(--s-5) + var(--s-6)));
+    bottom: 0;
+    width: 1px;
+    background: var(--rule);
+  }
+  .etapa::before {
+    left: calc(-1 * var(--s-6) - 0.5px);
+  }
+}

@@ -1,0 +1,86 @@
+.root {
+  margin-top: var(--s-4);
+}
+@media (min-width: 760px) {
+  .root {
+    margin-top: clamp(72px, 9vw, 136px);
+  }
+}
+.statement {
+  grid-column: 1 / -1;
+}
+@media (min-width: 760px) {
+  .statement {
+    grid-column: 1 / 11;
+  }
+}
+.line {
+  max-width: 26ch;
+  margin: 0;
+}
+.cap {
+  margin: 0 0 var(--s-4);
+}
+
+.cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  margin: var(--s-4) 0 0;
+}
+.col {
+  position: relative;
+  min-width: 0;
+  padding: var(--s-3) 0;
+}
+.col::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  background: var(--rule);
+  transform-origin: 0 50%;
+  transition: transform var(--d-fio) var(--ease-fio) calc(var(--i, 0) * 120ms);
+}
+/* estado-base visível; recolhido só com JS e antes de entrar na tela (como os demais fios) */
+:global(html.js:not(.reveal-off)) .cols:not(:global(.in)) .col::before {
+  transform: scaleX(0);
+}
+.dt {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.25;
+  font-weight: 500;
+  color: var(--head);
+  text-wrap: balance;
+}
+.dd {
+  max-width: 28rem;
+  margin: var(--s-2) 0 0;
+}
+/* celular: a duração já está no texto da capa e o WhatsApp no botão logo acima; fica só a coluna do orçamento (as outras seguem no HTML) */
+@media (max-width: 759px) {
+  .col:nth-child(odd) {
+    display: none;
+  }
+}
+@media (min-width: 760px) {
+  /* três colunas iguais, mesmo fio superior (100% da coluna) e corpos na mesma linha (subgrade) */
+  .cols {
+    margin-top: clamp(40px, 5vw, 72px);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: auto auto;
+    column-gap: clamp(32px, 4.4vw, 64px);
+  }
+  .col {
+    display: grid;
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+    padding: var(--s-6) 0 var(--s-2);
+  }
+  .dt {
+    min-height: 2.5em;
+  }
+}

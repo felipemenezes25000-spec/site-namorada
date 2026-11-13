@@ -1,0 +1,192 @@
+/* /tratamentos: capa (numeral no topo), sumário em coluna única e seletor de situação. */
+.sumario {
+  padding-top: clamp(4rem, 2.5rem + 5vw, 6.5rem);
+}
+.situacaoHead h2 {
+  margin: var(--s-3) 0 0;
+  max-width: 14ch;
+}
+.selector {
+  margin-top: var(--s-3);
+}
+
+/* ---- capa ---- */
+.sec {
+  padding-top: var(--s-6);
+  padding-bottom: clamp(3.5rem, 2rem + 6vw, 6.5rem);
+}
+.crumb {
+  margin-bottom: var(--s-2);
+}
+.grid {
+  margin-top: clamp(20px, 4vw, 56px);
+  align-items: start;
+}
+.text {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.kicker {
+  margin: 0 0 var(--s-2);
+}
+.title {
+  margin: 0;
+  max-width: 21ch;
+  font-size: clamp(2.5rem, 1.2rem + 4vw, 4.25rem);
+  text-wrap: balance;
+}
+.lede {
+  max-width: 36rem;
+  margin: var(--s-4) 0 0;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  margin-top: var(--s-5);
+}
+/* o rótulo do botão nunca quebra: se não couber, o segundo botão desce */
+.actions > .btn {
+  white-space: nowrap;
+}
+@media (max-width: 479px) {
+  .actions > .btn {
+    width: 100%;
+  }
+}
+.lado {
+  display: none;
+}
+.ficha {
+  margin: var(--s-6) 0 0;
+  border-bottom: 1px solid var(--ouro);
+}
+.row {
+  display: grid;
+  grid-template-columns: minmax(6.5rem, 2fr) minmax(0, 5fr);
+  column-gap: var(--gap);
+  align-items: baseline;
+  padding-block: var(--s-3);
+  border-top: 1px solid var(--ouro);
+}
+.row dt {
+  color: var(--accent);
+}
+.row dd {
+  margin: 0;
+  color: var(--fg);
+}
+@media (min-width: 760px) {
+  .text {
+    grid-column: 1 / 8;
+  }
+  .lado {
+    display: block;
+    grid-column: 8 / 13;
+  }
+  .lado .numeral {
+    line-height: 0.82;
+  }
+}
+@media (min-width: 1100px) {
+  .text {
+    grid-column: 1 / 7;
+  }
+  .lado {
+    grid-column: 7 / 13;
+  }
+}
+
+/* ---- sumário: uma coluna; o link é o NOME do tratamento e a linha inteira clica (::after) ---- */
+.lista {
+  margin-top: clamp(var(--s-5), 3vw, var(--s-7));
+}
+.item {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr) auto;
+  align-items: baseline;
+  column-gap: var(--s-3);
+  row-gap: var(--s-2);
+  min-height: 64px;
+  padding-block: var(--s-4) var(--s-4);
+}
+.n {
+  grid-row: 1;
+  font-size: 1.125rem;
+  color: var(--accent);
+}
+.nome {
+  grid-row: 1;
+  min-width: 0;
+}
+.link {
+  color: var(--head);
+  text-decoration: none;
+}
+/* a linha toda é o alvo do toque: o link se estende por cima dela */
+.link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.arrow {
+  grid-row: 1;
+  grid-column: 3;
+  align-self: center;
+  color: var(--accent);
+  transition: transform var(--d-toque) var(--ease-toque);
+  pointer-events: none;
+}
+.txt {
+  grid-row: 2;
+  grid-column: 2 / -1;
+  min-width: 0;
+  max-width: 34rem;
+  margin: 0;
+  color: var(--fg-2);
+}
+.meta {
+  display: block;
+  margin-top: var(--s-2);
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--fg);
+}
+.link:focus-visible {
+  outline-offset: 4px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .item:hover .link {
+    color: var(--accent);
+  }
+  .item:hover .arrow {
+    transform: translateX(5px);
+  }
+}
+@media (min-width: 1100px) {
+  .item {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gap);
+    padding-block: var(--s-5);
+  }
+  .n {
+    grid-column: 1 / 2;
+  }
+  .nome {
+    grid-column: 2 / 7;
+  }
+  .txt {
+    grid-row: 1;
+    grid-column: 7 / 12;
+    max-width: none;
+  }
+  .arrow {
+    grid-column: 12 / 13;
+    justify-self: end;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .arrow {
+    transition: none;
+  }
+}

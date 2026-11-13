@@ -1,60 +1,83 @@
 import Link from "next/link";
-import { forwardRef } from "react";
+import { forwardRef, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-type Variant = "primary" | "secondary" | "gold" | "whatsapp" | "ghost" | "light";
-type Size = "sm" | "md" | "lg";
+/**
+ * Botões (DESIGN.md 4.2). Variante pelo tom da seção:
+ *  - fundo claro: primario (WhatsApp, ação principal), contorno, texto;
+ *  - dentro de noite/verde: ouro e contorno-claro.
+ */
+export type ButtonVariant =
+  | "primario"
+  | "contorno"
+  | "ouro"
+  | "contorno-claro"
+  | "texto";
+export type ButtonSize = "md" | "sm";
 
-const base =
-  "group relative inline-flex items-center justify-center gap-2 font-sans font-semibold tracking-wide rounded-full transition-all duration-300 ease-out-expo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/80 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bone disabled:opacity-60 disabled:pointer-events-none select-none";
-
-const variants: Record<Variant, string> = {
-  primary:
-    "bg-brand-green text-brand-bone shadow-soft hover:bg-brand-green-dark hover:shadow-lift hover:-translate-y-0.5 active:translate-y-0",
-  secondary:
-    "bg-transparent text-brand-green ring-1 ring-inset ring-brand-green/25 hover:ring-brand-green/60 hover:bg-brand-green/[0.04]",
-  gold:
-    "bg-brand-gold text-white shadow-gold hover:brightness-[1.04] hover:-translate-y-0.5 active:translate-y-0",
-  whatsapp:
-    "bg-[#1F8C4D] text-white shadow-soft hover:bg-[#19743f] hover:shadow-lift hover:-translate-y-0.5 active:translate-y-0",
-  ghost: "bg-transparent text-brand-green hover:bg-brand-green/[0.06]",
-  light:
-    "bg-brand-bone text-brand-green shadow-soft hover:bg-white hover:-translate-y-0.5",
-};
-
-const sizes: Record<Size, string> = {
-  sm: "h-10 px-5 text-[0.82rem]",
-  md: "h-12 px-7 text-sm",
-  lg: "h-[3.45rem] px-9 text-[0.95rem]",
-};
+const variantClass = {
+  primario: "btn-primario",
+  contorno: "btn-contorno",
+  ouro: "btn-ouro",
+  "contorno-claro": "btn-contorno-claro",
+  texto: "btn-texto",
+} as const;
 
 export function buttonClasses(
-  variant: Variant = "primary",
-  size: Size = "md",
+  variant: ButtonVariant = "primario",
+  size: ButtonSize = "md",
   className?: string,
 ) {
-  return cn(base, variants[variant], sizes[size], className);
+  return cn("btn", variantClass[variant], size === "sm" && "btn-sm", className);
 }
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: Variant;
-  size?: Size;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  iconLeft?: ReactNode;
+  iconRight?: ReactNode;
 }
 
+/**
+ * Use `disabled` quando o botão some do fluxo de vez. Use `aria-disabled="true"` (ou `aria-disabled`)
+ * quando ele precisa MANTER O FOCO e continuar anunciado, como o "Enviar" durante o envio: o visual
+ * é o mesmo do `disabled` (.btn[aria-disabled]), mas o clique e o Enter são ignorados aqui, sem tirar
+ * o botão da ordem de Tab.
+ */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ variant, size, className, ...props }, ref) => (
-    <button ref={ref} className={buttonClasses(variant, size, className)} {...props} />
-  ),
+  ({ variant, size, className, iconLeft, iconRight, children, onClick, ...props }, ref) => {
+    const soft = props["aria-disabled"] === true || props["aria-disabled"] === "true";
+    return (
+      <button
+        ref={ref}
+        className={buttonClasses(variant, size, className)}
+        onClick={
+          soft
+            ? (e) => {
+                e.preventDefault();
+              }
+            : onClick
+        }
+        {...props}
+      >
+        {iconLeft}
+        {children}
+        {iconRight}
+      </button>
+    );
+  },
 );
 Button.displayName = "Button";
 
 interface ButtonLinkProps {
   href: string;
-  variant?: Variant;
-  size?: Size;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
   external?: boolean;
   className?: string;
-  children: React.ReactNode;
+  children: ReactNode;
+  iconLeft?: ReactNode;
+  iconRight?: ReactNode;
   "aria-label"?: string;
   onClick?: () => void;
   prefetch?: boolean;
@@ -67,28 +90,36 @@ export function ButtonLink({
   external,
   className,
   children,
+  iconLeft,
+  iconRight,
   onClick,
   prefetch,
   ...rest
 }: ButtonLinkProps) {
   const classes = buttonClasses(variant, size, className);
-  if (external || href.startsWith("http") || href.startsWith("tel:")) {
+  const isHttp = href.startsWith("http");
+  if (external || isHttp || href.startsWith("tel:") || href.startsWith("mailto:")) {
     return (
       <a
         href={href}
-        target={href.startsWith("http") ? "_blank" : undefined}
-        rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+        target={isHttp ? "_blank" : undefined}
+        rel={isHttp ? "noopener noreferrer" : undefined}
         className={classes}
         onClick={onClick}
         {...rest}
       >
+        {iconLeft}
         {children}
+        {iconRight}
+        {isHttp && <span className="sr-only"> (abre em nova aba)</span>}
       </a>
     );
   }
   return (
     <Link href={href} className={classes} onClick={onClick} prefetch={prefetch} {...rest}>
+      {iconLeft}
       {children}
+      {iconRight}
     </Link>
   );
 }

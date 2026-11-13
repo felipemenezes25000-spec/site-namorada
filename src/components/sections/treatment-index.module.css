@@ -1,0 +1,209 @@
+/* Sumário de tratamentos (TreatmentIndex). Estrutura base: classes .idx-* de globals.css. */
+.root {
+  display: block;
+}
+.list {
+  position: relative;
+}
+.link {
+  /* alvo confortável para o dedo: linha de >= 64px */
+  min-height: 64px;
+  align-items: baseline;
+}
+/* o pontilhado só existe a partir de 640px (no celular ele fica solto e curto) */
+@media (max-width: 639px) {
+  .dots {
+    visibility: hidden;
+  }
+}
+.arrow {
+  align-self: center;
+  color: var(--accent);
+  transition: transform var(--d-toque) var(--ease-toque);
+}
+@media (hover: hover) and (pointer: fine) {
+  .link:hover .arrow,
+  .link:focus-visible .arrow {
+    transform: translateX(5px);
+  }
+}
+/* o ponto de leitura "Indicado para você" */
+.indicado {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--accent);
+}
+.indicado i {
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--ouro);
+  background: var(--ouro);
+  transform: rotate(45deg);
+  flex: none;
+}
+/* fio de ouro à esquerda da linha indicada: cresce de cima para baixo */
+.item::after {
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: 14px;
+  bottom: 14px;
+  width: 1px;
+  background: var(--ouro);
+  transform: scaleY(0);
+  transform-origin: 50% 0;
+  transition: transform 500ms var(--ease-fio);
+}
+.item[data-indicated]::after {
+  transform: scaleY(1);
+}
+@media (min-width: 760px) {
+  .item::after {
+    left: -22px;
+  }
+}
+
+.excerpt {
+  max-width: 34rem;
+  color: var(--fg-2);
+}
+
+@media (max-width: 759px) {
+  .excerpt {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+}
+
+/* ---- página /tratamentos: duas colunas com a frase visível ---- */
+@media (min-width: 1100px) {
+  .completo {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: calc(var(--gap) * 2);
+  }
+  .completo > li:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---- cartão noite fixo (desktop) ---- */
+.card {
+  display: none;
+}
+@media (min-width: 1100px) {
+  .withCard {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    column-gap: calc(var(--gap) * 2);
+    align-items: start;
+  }
+  .card {
+    position: sticky;
+    top: calc(var(--h-header) + 36px);
+    display: block;
+    height: min(640px, calc(100vh - 200px));
+    min-height: 440px;
+    overflow: hidden;
+  }
+  /* filete interno de 12px em ouro-claro a 55% */
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: var(--s-3);
+    border: 1px solid var(--ouro-claro);
+    opacity: 0.55;
+    pointer-events: none;
+  }
+  .marca {
+    position: absolute;
+    right: 24px;
+    bottom: var(--s-5);
+    width: 40%;
+    height: auto;
+    opacity: 0.1;
+    pointer-events: none;
+  }
+  .panel {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: clamp(36px, 3.4vw, 52px);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--d-painel) var(--ease-toque),
+      visibility 0s linear var(--d-painel);
+  }
+  .panel[data-on] {
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity var(--d-painel) var(--ease-toque),
+      visibility 0s;
+  }
+  .panel > :first-child {
+    margin-bottom: auto;
+    font-size: clamp(6rem, 9vw, 8.5rem);
+    line-height: 0.8;
+  }
+  .panelTitle {
+    margin: var(--s-5) 0 0;
+    max-width: 14ch;
+  }
+  .panelText {
+    margin: 18px 0 0;
+    max-width: 30ch;
+  }
+}
+
+/* ---- celular: a lista inteira recolhida num <details> (o conteúdo segue no HTML) ---- */
+.resumo {
+  display: none;
+}
+@media (max-width: 759px) {
+  .resumo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-4);
+    min-height: 56px;
+    padding-block: var(--s-2);
+    border-block: 1px solid var(--rule);
+    cursor: pointer;
+    list-style: none;
+  }
+  .resumo::-webkit-details-marker {
+    display: none;
+  }
+  .resumoTxt {
+    font-size: 1.25rem;
+  }
+  .chevron {
+    flex: none;
+    width: 10px;
+    height: 10px;
+    margin-right: 6px;
+    border-right: 1.5px solid var(--accent);
+    border-bottom: 1.5px solid var(--accent);
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform var(--d-toque) var(--ease-toque);
+  }
+  .recolher[open] > .resumo .chevron {
+    transform: translateY(2px) rotate(-135deg);
+  }
+  .recolher[open] > .resumo {
+    border-bottom-color: transparent;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chevron {
+    transition: none;
+  }
+}

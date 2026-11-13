@@ -1,0 +1,63 @@
+.list {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 36px;
+}
+.item {
+  position: relative;
+  padding-block: 0 40px;
+}
+.item:last-child {
+  padding-bottom: 0;
+}
+/* o fio: por etapa, só entre um losango e o seguinte (a última não tem) */
+.item::before {
+  content: "";
+  position: absolute;
+  left: -31px;
+  top: calc(0.45em + 14px);
+  bottom: calc(2px - 0.45em);
+  width: 1px;
+  background: var(--ouro);
+}
+.item:last-child::before {
+  display: none;
+}
+.dot {
+  position: absolute;
+  left: -36px;
+  top: 0.45em;
+  width: 11px;
+  height: 11px;
+  border: 1px solid var(--ouro-tinta);
+  background: var(--bg);
+  transform: rotate(45deg);
+}
+.title {
+  margin: 0;
+  font-size: 1.75rem;
+  line-height: 1.14;
+  letter-spacing: -0.012em;
+  font-weight: var(--d-wght);
+  color: var(--head);
+}
+.text {
+  max-width: 34rem;
+  margin: 8px 0 0;
+  color: var(--fg-2);
+}
+@media (min-width: 760px) {
+  .list {
+    padding-left: 56px;
+  }
+  .dot {
+    left: -56px;
+  }
+  .item::before {
+    left: -51px;
+  }
+  .item {
+    padding-bottom: 52px;
+  }
+}

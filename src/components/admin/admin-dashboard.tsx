@@ -1,9 +1,12 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Search, Copy, Check, MessageCircle, LogOut, Inbox, RefreshCw, ChevronDown, AlertTriangle,
-} from "lucide-react";
+  ChevronLeft, ChevronRight,
+} from "./admin-icons";
 import type { AppointmentLead, LeadStatus } from "@/types/lead";
 import { leadStatuses, leadStatusLabels } from "@/types/lead";
 import { updateLeadStatus, logout } from "@/app/admin/actions";
@@ -25,58 +28,99 @@ function fmtDate(iso: string): string {
   }
 }
 
+function listHref(page: number, status: LeadStatus | null, q: string): string {
+  const qs = new URLSearchParams();
+  if (status) qs.set("status", status);
+  if (q) qs.set("q", q);
+  if (page > 1) qs.set("p", String(page));
+  const s = qs.toString();
+  return s ? `/admin?${s}` : "/admin";
+}
+
 export function AdminDashboard({
   leads,
   dbConfigured,
+  page,
+  pageSize,
+  total,
+  statusFilter,
+  query = "",
 }: {
   leads: AppointmentLead[];
   dbConfigured: boolean;
+  page: number;
+  pageSize: number;
+  total: number;
+  statusFilter: LeadStatus | null;
+  /** Termo da busca no servidor (nome ou telefone), já limpo. */
+  query?: string;
 }) {
-  const [filter, setFilter] = useState<LeadStatus | "all">("all");
-  const [query, setQuery] = useState("");
+  const router = useRouter();
+  const pageCount = Math.max(1, Math.ceil(total / pageSize));
   const [copied, setCopied] = useState<string | null>(null);
+  /** Status escolhido e ainda não confirmado pelo servidor; some quando o servidor responde. */
+  const [chosen, setChosen] = useState<Record<string, LeadStatus>>({});
+  /** Aviso de erro (copiar, trocar status). Vai para um role="alert". */
+  const [notice, setNotice] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
-  const counts = useMemo(() => {
-    const c: Record<string, number> = { all: leads.length };
-    for (const s of leadStatuses) c[s] = 0;
-    for (const l of leads) c[l.status] = (c[l.status] || 0) + 1;
-    return c;
-  }, [leads]);
-
-  const filtered = useMemo(() => {
-    return leads.filter((l) => {
-      const okStatus = filter === "all" || l.status === filter;
-      const q = query.trim().toLowerCase();
-      const okQuery = !q || l.full_name.toLowerCase().includes(q) || l.whatsapp.includes(q);
-      return okStatus && okQuery;
-    });
-  }, [leads, filter, query]);
-
-  function copy(value: string, id: string) {
-    navigator.clipboard?.writeText(value).then(() => {
+  async function copy(value: string, id: string) {
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error("clipboard indisponível");
+      await navigator.clipboard.writeText(value);
+      setNotice(null);
       setCopied(id);
       setTimeout(() => setCopied((c) => (c === id ? null : c)), 1600);
+    } catch {
+      // Sem permissão (ou sem HTTPS): mostra o número para copiar à mão.
+      setNotice(`Não foi possível copiar automaticamente. O número é ${value}.`);
+    }
+  }
+
+  function forget(id: string) {
+    setChosen((c) => {
+      const next = { ...c };
+      delete next[id];
+      return next;
     });
   }
 
-  function changeStatus(id: string, status: string) {
+  function changeStatus(lead: AppointmentLead, status: string) {
+    setNotice(null);
+    setChosen((c) => ({ ...c, [lead.id]: status as LeadStatus }));
     startTransition(async () => {
-      await updateLeadStatus(id, status);
+      try {
+        const res = await updateLeadStatus(lead.id, status);
+        forget(lead.id);
+        if (res.ok) return;
+        if (res.error === "unauthorized") {
+          setNotice("Sua sessão expirou. Entre de novo para continuar.");
+          router.refresh(); // sem sessão, a página volta para o login
+          return;
+        }
+        setNotice(`Não foi possível salvar o status de ${lead.full_name}. Nada foi alterado; tente de novo.`);
+      } catch {
+        forget(lead.id);
+        setNotice(`Sem conexão com o servidor: o status de ${lead.full_name} não foi alterado.`);
+      }
     });
   }
 
   return (
-    <div className="min-h-screen bg-brand-bone">
+    <main className="min-h-screen bg-brand-bone">
       {/* Topo */}
       <header className="sticky top-0 z-10 border-b border-brand-ink/[0.07] bg-brand-bone/85 backdrop-blur-md">
         <div className="container flex h-16 items-center justify-between">
           <div>
             <h1 className="font-display text-xl text-brand-green">Painel de leads</h1>
-            <p className="text-xs text-brand-ink/50">{leads.length} solicitações no total</p>
+            <p className="text-xs text-brand-ink/70">
+              {total} {total === 1 ? "solicitação" : "solicitações"}
+              {statusFilter ? ` com status “${leadStatusLabels[statusFilter]}”` : " no total"}
+              {query ? ` para “${query}”` : ""}
+            </p>
           </div>
           <form action={logout}>
-            <button className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-brand-ink/70 ring-1 ring-inset ring-brand-ink/10 transition hover:bg-brand-green/[0.05] hover:text-brand-green">
+            <button className="inline-flex min-h-11 items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-brand-ink/70 ring-1 ring-inset ring-brand-ink/10 transition hover:bg-brand-green/[0.05] hover:text-brand-green">
               <LogOut className="size-4" /> Sair
             </button>
           </form>
@@ -98,94 +142,134 @@ export function AdminDashboard({
         {/* Filtros */}
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="no-scrollbar flex gap-2 overflow-x-auto pb-1">
-            {(["all", ...leadStatuses] as const).map((s) => (
-              <button
-                key={s}
-                onClick={() => setFilter(s)}
-                className={cn(
-                  "whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm font-medium transition",
-                  filter === s
-                    ? "bg-brand-green text-brand-bone"
-                    : "bg-white text-brand-ink/65 ring-1 ring-inset ring-brand-ink/10 hover:text-brand-green",
-                )}
-              >
-                {s === "all" ? "Todos" : leadStatusLabels[s]}
-                <span className="ml-1.5 opacity-60">{counts[s] ?? 0}</span>
-              </button>
-            ))}
+            {(["all", ...leadStatuses] as const).map((s) => {
+              const active = (s === "all" ? null : s) === statusFilter;
+              return (
+                <Link
+                  key={s}
+                  href={listHref(1, s === "all" ? null : s, query)}
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "inline-flex min-h-11 items-center whitespace-nowrap rounded-full px-4 text-sm font-medium transition",
+                    active
+                      ? "bg-brand-green text-brand-bone"
+                      : "bg-white text-brand-ink/75 ring-1 ring-inset ring-brand-ink/10 hover:text-brand-green",
+                  )}
+                >
+                  {s === "all" ? "Todos" : leadStatusLabels[s]}
+                </Link>
+              );
+            })}
           </div>
-          <div className="relative w-full lg:w-72">
-            <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-brand-ink/40" />
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Buscar por nome ou telefone"
-              className="h-11 w-full rounded-xl border border-brand-ink/10 bg-white pl-10 pr-4 text-sm focus:border-brand-gold/60 focus:outline-none focus:ring-2 focus:ring-brand-gold/40"
-            />
-          </div>
+          {/* Busca no servidor (todas as páginas); funciona também sem JavaScript. */}
+          <form method="get" action="/admin" role="search" className="flex w-full gap-2 lg:w-96">
+            {statusFilter && <input type="hidden" name="status" value={statusFilter} />}
+            <div className="relative min-w-0 flex-1">
+              <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-brand-ink/60" />
+              <input
+                type="search"
+                name="q"
+                defaultValue={query}
+                maxLength={60}
+                placeholder="Buscar por nome ou telefone"
+                aria-label="Buscar por nome ou telefone, em todas as páginas"
+                className="h-11 w-full rounded-xl border border-brand-ink/10 bg-white pl-10 pr-4 text-sm focus:border-brand-gold/60 focus:outline-none focus:ring-2 focus:ring-brand-gold/40"
+              />
+            </div>
+            <button
+              type="submit"
+              className="inline-flex min-h-11 items-center rounded-full bg-brand-green px-5 text-sm font-semibold text-brand-bone transition hover:bg-brand-green-dark"
+            >
+              Buscar
+            </button>
+          </form>
         </div>
 
-        {pending && (
-          <p className="mt-4 flex items-center gap-2 text-sm text-brand-ink/50">
-            <RefreshCw className="size-3.5 animate-spin" /> Atualizando…
+        {query && (
+          <p className="mt-3 text-sm text-brand-ink/70">
+            Resultado da busca em todos os leads.{" "}
+            <Link href={listHref(1, statusFilter, "")} className="font-medium text-brand-green underline underline-offset-2">
+              Limpar busca
+            </Link>
           </p>
         )}
 
+        {/* Avisos: role="alert" anuncia o erro a quem usa leitor de tela */}
+        <div role="alert" aria-atomic="true" className={notice ? "mt-4" : undefined}>
+          {notice && (
+            <p className="flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-800">
+              <AlertTriangle className="mt-0.5 size-4 shrink-0" />
+              <span>{notice}</span>
+            </p>
+          )}
+        </div>
+
+        <div role="status" aria-live="polite">
+          {pending && (
+            <p className="mt-4 flex items-center gap-2 text-sm text-brand-ink/70">
+              <RefreshCw className="size-3.5 animate-spin" /> Atualizando…
+            </p>
+          )}
+        </div>
+
         {/* Lista */}
-        {filtered.length === 0 ? (
+        {leads.length === 0 ? (
           <div className="mt-10 flex flex-col items-center justify-center rounded-3xl border border-dashed border-brand-ink/15 bg-white/60 p-16 text-center">
-            <Inbox className="size-10 text-brand-ink/30" strokeWidth={1.4} />
-            <p className="mt-4 font-display text-xl text-brand-green">Nenhum lead por aqui</p>
-            <p className="mt-1 max-w-sm text-sm text-brand-ink/55">
-              Os agendamentos enviados pelo site aparecem nesta lista assim que o
-              Supabase estiver configurado.
+            <Inbox className="size-10 text-brand-ink/50" strokeWidth={1.4} />
+            <p className="mt-4 font-display text-xl text-brand-green">
+              {query ? "Nenhum lead encontrado" : "Nenhum lead por aqui"}
+            </p>
+            <p className="mt-1 max-w-sm text-sm text-brand-ink/70">
+              {query
+                ? "Nenhum nome ou telefone corresponde a essa busca. Confira a grafia ou limpe a busca."
+                : "Os agendamentos enviados pelo site aparecem nesta lista assim que o Supabase estiver configurado."}
             </p>
           </div>
         ) : (
           <div className="mt-6 space-y-4">
-            {filtered.map((lead) => (
+            {leads.map((lead) => (
               <article key={lead.id} className="surface overflow-hidden">
                 <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-start sm:justify-between sm:p-6">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-3">
                       <h2 className="font-display text-xl text-brand-green">{lead.full_name}</h2>
-                      <LeadStatusBadge status={lead.status} />
+                      <LeadStatusBadge status={chosen[lead.id] ?? lead.status} />
                     </div>
-                    <p className="mt-1 text-xs text-brand-ink/45">Recebido em {fmtDate(lead.created_at)}</p>
+                    <p className="mt-1 text-xs text-brand-ink/70">Recebido em {fmtDate(lead.created_at)}</p>
 
                     <dl className="mt-4 grid gap-x-8 gap-y-2 text-sm sm:grid-cols-2">
                       <div className="flex items-center gap-2">
-                        <dt className="text-brand-ink/45">WhatsApp:</dt>
-                        <dd className="font-medium text-brand-ink/80">{formatPhone(lead.whatsapp)}</dd>
+                        <dt className="text-brand-ink/70">WhatsApp:</dt>
+                        <dd className="font-medium text-brand-ink/90">{formatPhone(lead.whatsapp)}</dd>
                       </div>
                       {lead.email && (
                         <div className="flex items-center gap-2">
-                          <dt className="text-brand-ink/45">E-mail:</dt>
-                          <dd className="truncate text-brand-ink/80">{lead.email}</dd>
+                          <dt className="text-brand-ink/70">E-mail:</dt>
+                          <dd className="truncate text-brand-ink/90">{lead.email}</dd>
                         </div>
                       )}
                       {lead.treatment_interest && (
                         <div className="flex items-center gap-2">
-                          <dt className="text-brand-ink/45">Interesse:</dt>
-                          <dd className="text-brand-ink/80">{lead.treatment_interest}</dd>
+                          <dt className="text-brand-ink/70">Interesse:</dt>
+                          <dd className="text-brand-ink/90">{lead.treatment_interest}</dd>
                         </div>
                       )}
                       <div className="flex items-center gap-2">
-                        <dt className="text-brand-ink/45">Preferência:</dt>
-                        <dd className="text-brand-ink/80">
+                        <dt className="text-brand-ink/70">Preferência:</dt>
+                        <dd className="text-brand-ink/90">
                           {[lead.preferred_date, lead.preferred_period].filter(Boolean).join(" · ") || "—"}
                         </dd>
                       </div>
                       {lead.source && (
                         <div className="flex items-center gap-2">
-                          <dt className="text-brand-ink/45">Origem:</dt>
-                          <dd className="text-brand-ink/80">{lead.source}</dd>
+                          <dt className="text-brand-ink/70">Origem:</dt>
+                          <dd className="text-brand-ink/90">{lead.source}</dd>
                         </div>
                       )}
                     </dl>
 
                     {lead.main_complaint && (
-                      <p className="mt-3 rounded-xl bg-brand-beige/40 p-3 text-sm text-brand-ink/70">
+                      <p className="mt-3 rounded-xl bg-brand-beige/40 p-3 text-sm text-brand-ink/80">
                         “{lead.main_complaint}”
                       </p>
                     )}
@@ -197,30 +281,31 @@ export function AdminDashboard({
                       href={leadWa(lead.whatsapp)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2 rounded-full bg-[#1F8C4D] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#19743f]"
+                      className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-brand-green px-4 py-2.5 text-sm font-semibold text-brand-bone transition hover:bg-brand-green-dark"
                     >
                       <MessageCircle className="size-4" /> Abrir WhatsApp
+                      <span className="sr-only"> (abre em nova aba)</span>
                     </a>
                     <button
                       onClick={() => copy(formatPhone(lead.whatsapp), lead.id)}
-                      className="inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium text-brand-green ring-1 ring-inset ring-brand-green/20 transition hover:bg-brand-green/[0.05]"
+                      className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium text-brand-green ring-1 ring-inset ring-brand-green/20 transition hover:bg-brand-green/[0.05]"
                     >
                       {copied === lead.id ? <Check className="size-4" /> : <Copy className="size-4" />}
                       {copied === lead.id ? "Copiado!" : "Copiar número"}
                     </button>
                     <div className="relative">
                       <select
-                        value={lead.status}
-                        onChange={(e) => changeStatus(lead.id, e.target.value)}
+                        value={chosen[lead.id] ?? lead.status}
+                        onChange={(e) => changeStatus(lead, e.target.value)}
                         disabled={pending}
                         aria-label={`Alterar status de ${lead.full_name}`}
-                        className="h-10 w-full cursor-pointer appearance-none rounded-full border border-brand-ink/15 bg-white pl-4 pr-9 text-sm font-medium text-brand-ink/80 focus:border-brand-gold/60 focus:outline-none focus:ring-2 focus:ring-brand-gold/40"
+                        className="h-11 w-full cursor-pointer appearance-none rounded-full border border-brand-ink/15 bg-white pl-4 pr-9 text-sm font-medium text-brand-ink/90 focus:border-brand-gold/60 focus:outline-none focus:ring-2 focus:ring-brand-gold/40"
                       >
                         {leadStatuses.map((s) => (
                           <option key={s} value={s}>{leadStatusLabels[s]}</option>
                         ))}
                       </select>
-                      <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 size-4 -translate-y-1/2 text-brand-green/60" />
+                      <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 size-4 -translate-y-1/2 text-brand-green/70" />
                     </div>
                   </div>
                 </div>
@@ -228,7 +313,35 @@ export function AdminDashboard({
             ))}
           </div>
         )}
+
+        {pageCount > 1 && (
+          <nav aria-label="Paginação" className="mt-8 flex items-center justify-between gap-3 text-sm">
+            {page > 1 ? (
+              <Link
+                href={listHref(page - 1, statusFilter, query)}
+                className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-4 py-2 font-medium text-brand-green ring-1 ring-inset ring-brand-green/20 hover:bg-brand-green/[0.05]"
+              >
+                <ChevronLeft className="size-4" /> Anteriores
+              </Link>
+            ) : (
+              <span />
+            )}
+            <span className="text-brand-ink/70">
+              Página {page} de {pageCount}
+            </span>
+            {page < pageCount ? (
+              <Link
+                href={listHref(page + 1, statusFilter, query)}
+                className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-4 py-2 font-medium text-brand-green ring-1 ring-inset ring-brand-green/20 hover:bg-brand-green/[0.05]"
+              >
+                Próximas <ChevronRight className="size-4" />
+              </Link>
+            ) : (
+              <span />
+            )}
+          </nav>
+        )}
       </div>
-    </div>
+    </main>
   );
 }

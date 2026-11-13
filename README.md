@@ -1,134 +1,108 @@
-# Site — Dra. Ana Beatriz Lemos Souza
+# Site da Dra. Ana Beatriz Lemos Souza
 
-Site institucional premium e landing page de alta conversão para a cirurgiã-dentista
-**Dra. Ana Beatriz Lemos Souza**, construído sobre a identidade visual oficial da marca
-(verde `#22513A`, dourado `#B69050`, off-white `#FCFCFC`; tipografia Cormorant Garamond + Montserrat).
+Site institucional da cirurgiã-dentista **Dra. Ana Beatriz Lemos Souza** (CRO-SP 177801), com consultório na R. Rio Verde, 1029, Vila Bruna (região da Freguesia do Ó), em São Paulo. Atendimento particular. O tráfego principal chega pelo celular, vindo do Google Ads; as conversões são o clique no WhatsApp e o formulário de agendamento.
 
-> **Começe por aqui:** [`EDITAR-DEPOIS.md`](./EDITAR-DEPOIS.md) — o que preencher com os dados reais.
+Direção visual, regras de conteúdo e decisões vigentes: [`DESIGN.md`](./DESIGN.md) (comece pela seção 0). O que preencher com dados reais: [`EDITAR-DEPOIS.md`](./EDITAR-DEPOIS.md). Anúncios e medição: [`GOOGLE-ADS-SETUP.md`](./GOOGLE-ADS-SETUP.md).
 
----
-
-## 🚀 Como rodar
+## Como rodar
 
 ```bash
-npm install
-npm run dev      # ambiente de desenvolvimento → http://localhost:3000
-# produção:
-npm run build
-npm run start
+npm ci               # instala exatamente o que está no package-lock.json
+npm run dev          # desenvolvimento em http://localhost:3000
+npm run build        # build de produção
+npm run start        # serve o build
 ```
 
-Requer Node 18+ (testado em Node 24). O site funciona **sem nenhuma variável de ambiente**
-— o formulário de agendamento leva o paciente direto ao WhatsApp.
+Requer Node 20 ou mais novo (a CI usa o 22). O site abre **sem nenhuma variável de ambiente**; sem uma saída de leads configurada, o formulário leva o paciente ao WhatsApp.
 
----
+## Scripts
 
-## 🧱 Stack
+| Script | O que faz |
+|---|---|
+| `npm run lint` | ESLint 9 (`next/core-web-vitals` e `next/typescript`) |
+| `npm run typecheck` | `tsc --noEmit` |
+| `npm run test` | Vitest sobre `src/lib` |
+| `npm run check:site` | verifica o HTML gerado (precisa de `npm run build` antes); ver abaixo |
+| `npm run format` / `format:check` | Prettier (finais de linha LF) |
+| `npm run verify` | lint, typecheck, test, build e check:site, nessa ordem |
+
+`scripts/check-site.mjs` falha quando encontra colchetes em texto publicado, título acima de 60 ou descrição acima de 155 caracteres, mais de um H1, imagem sem `alt`, canonical ausente, pergunta do FAQ que não está no texto visível, termo proibido (nome de especialidade, forma de pagamento, endereço antigo, entre outros), `lang` diferente de `pt-BR`, falta de viewport, link ou imagem interna que não existe, URL do sitemap que não é página gerada, `robots.txt` sem `Sitemap` e JavaScript inicial acima do orçamento (230 kB gzip, mudável com `JS_BUDGET_KB`). Também lê páginas baixadas: `node scripts/check-site.mjs --dir <pasta com .html>`.
+
+A CI do GitHub (`.github/workflows/ci.yml`) roda a mesma sequência a cada push e pull request.
+
+## Stack
 
 | Camada | Tecnologia |
 |---|---|
-| Framework | **Next.js 15** (App Router, RSC) + **TypeScript** |
-| Estilo | **Tailwind CSS** (design system em `tailwind.config.ts`) |
-| Animações | **Framer Motion** (reveals suaves, robustos a scroll rápido) |
-| Formulários | **React Hook Form + Zod** |
-| Ícones | **lucide-react** |
-| Banco de leads | **Supabase** (opcional, com fallback gracioso) |
-| Deploy sugerido | **Vercel** |
+| Framework | Next.js 15 (App Router) e React 19, em TypeScript |
+| Estilo | Tailwind CSS 3 e `src/app/globals.css` (tokens em `:root`, classes `.t-*`, `.btn-*`, `.idx-*` em `@layer components`) |
+| Tipografia | Bodoni Moda (títulos grandes) e Hanken Grotesk (texto), via `next/font` |
+| Formulário | React Hook Form e zod |
+| Leads | Supabase (opcional) e e-mail pelo Resend (opcional) |
+| Movimento | CSS puro, respeitando `prefers-reduced-motion` |
+| Deploy | Vercel |
 
----
+## Rotas
 
-## 🗺️ Páginas
-
-| Rota | Descrição |
+| Rota | Arquivo |
 |---|---|
-| `/` | Home / landing de conversão (12 seções) |
-| `/sobre` | Página institucional da Dra. Ana |
-| `/tratamentos` | Lista de tratamentos (layout editorial alternado) |
-| `/tratamentos/[slug]` | 6 páginas individuais com SEO + schema próprios |
-| `/agendamento` | Formulário premium + WhatsApp |
-| `/contato` | Canais de contato + mapa/localização |
-| `/obrigado` | Pós-envio, com continuidade no WhatsApp |
-| `/politica-de-privacidade` · `/termos-de-uso` | Documentos legais (LGPD) |
-| `/admin` | Painel de leads (protegido por senha) |
-| `not-found` (404) | Página de erro personalizada |
-| `/sitemap.xml` · `/robots.txt` · `/opengraph-image` · `/icon` | SEO e ativos gerados |
+| `/` | `src/app/(site)/page.tsx` |
+| `/sobre` | `src/app/(site)/sobre/page.tsx` |
+| `/tratamentos` | `src/app/(site)/tratamentos/page.tsx` |
+| `/tratamentos/[slug]` (8 páginas) | `src/app/(site)/tratamentos/[slug]/page.tsx` |
+| `/agendamento` | `src/app/(site)/agendamento/page.tsx` |
+| `/contato` | `src/app/(site)/contato/page.tsx` |
+| `/primeira-consulta`, `/valores`, `/urgencia-odontologica`, `/medo-de-dentista` | `src/app/(site)/<rota>/page.tsx` |
+| `/obrigado` (noindex) | `src/app/(site)/obrigado/page.tsx` |
+| `/politica-de-privacidade`, `/termos-de-uso` | `src/app/(site)/<rota>/page.tsx` |
+| `/admin` (painel de leads, com senha) | `src/app/admin/page.tsx` |
+| `POST /api/leads` | `src/app/api/leads/route.ts` |
+| `/sitemap.xml`, `/robots.txt`, `/manifest.webmanifest` | `src/app/sitemap.ts`, `robots.ts`, `manifest.ts` |
 
-Tratamentos: `avaliacao-odontologica`, `limpeza-dental`, `clareamento-dental`,
-`restauracoes`, `prevencao`, `estetica-do-sorriso`.
+Slugs de tratamento: `avaliacao-odontologica`, `limpeza-dental`, `clareamento-dental`, `restauracoes`, `prevencao`, `implante`, `cirurgia-oral` e `cirurgia-buco-maxilo-facial` (o slug não muda; o nome visível é "Remoção de dentes inclusos e cirurgias na boca").
 
----
-
-## ✨ O que foi entregue
-
-**Design & UX**
-- Estética "luxo clínico editorial": muito respiro, hierarquia forte, dourado só como fio de acabamento (regra 70/20/10 da marca).
-- Mobile-first impecável: menu drawer, botões grandes, sem scroll horizontal, WhatsApp flutuante.
-- Microinterações suaves (hover em cards/botões, reveals de seção, accordion), com respeito a `prefers-reduced-motion`.
-- Logos da marca aplicados (símbolo AB no header/rodapé/favicon, OG gerado com a identidade).
-
-**Conversão**
-- WhatsApp em todos os pontos-chave (header, hero, cards, localização, flutuante, pós-formulário), com mensagens pré-preenchidas por contexto.
-- Formulário de agendamento com máscara de WhatsApp, validação amigável, estados de loading/erro e **fallback para WhatsApp** se a rede falhar.
-- CTAs humanos ("Quero agendar minha avaliação", "Falar pelo WhatsApp") em vez de genéricos.
-
-**SEO local**
-- `title`/`description`/canonical únicos por página, Open Graph + Twitter Card.
-- JSON-LD: **Dentist + LocalBusiness**, **MedicalWebPage**, **FAQPage**, **BreadcrumbList**, **WebSite**.
-- `sitemap.xml`, `robots.txt`, H1 único por página, alt text, URLs amigáveis.
-- Palavras-chave locais parametrizáveis por cidade/bairro em `site-config.ts`.
-
-**Backend / automação (estrutura pronta)**
-- Tabela `appointment_leads` (Supabase) com RLS, enum de status e trigger (`supabase/schema.sql`).
-- API `/api/leads` validada com Zod; grava no banco se configurado, sem quebrar se não.
-- Painel `/admin`: lista, filtra por status, busca, altera status, copia/abre WhatsApp — protegido por senha.
-- Camada de rastreamento (GA4 / Meta Pixel / GTM) com eventos: `whatsapp_click`, `appointment_form_submit`, `lead_created`, `treatment_card_click`, `map_click`, `instagram_click`, `phone_click`.
-- Mensagens de automação de WhatsApp (novo lead, confirmação, lembretes, pós-consulta) documentadas para evolução com Cloud API / Z-API / Twilio etc.
-
-**Performance & acessibilidade**
-- First Load JS ~102 kB (compartilhado); imagens otimizadas via `next/image`; favicon gerado (1,7 kB).
-- Fontes auto-hospedadas (`next/font`), sem layout shift.
-- Foco visível, skip-link, `aria-*`, labels em formulários, navegação por teclado, contraste adequado.
-- **Sem erros de console** e **sem scroll horizontal** (validado em desktop e mobile com Playwright).
-
----
-
-## ✅ Validação (Playwright)
-
-Validado em viewport desktop (1440px) e mobile (390px):
-- Home, Sobre, Tratamentos, página de tratamento, Agendamento, Contato, Obrigado, Admin, 404.
-- Fluxo completo do formulário: máscara → validação → envio → redirecionamento → página de obrigado → WhatsApp.
-- 5 tipos de JSON-LD presentes nas páginas de tratamento.
-- 0 erros e 0 avisos de console; 0 overflow horizontal; reveals robustos a rolagem rápida.
-
-Prévias visuais em [`/preview`](./preview) (não versionado).
-
----
-
-## 📁 Estrutura
+## Estrutura
 
 ```
 src/
-  app/
-    (site)/            # páginas públicas (header/rodapé/WhatsApp)
-    admin/             # painel de leads (sem o chrome de marketing)
-    api/leads/         # endpoint de criação de leads
-    icon.tsx · apple-icon.tsx · opengraph-image.tsx · sitemap.ts · robots.ts
+  app/                 rotas (site) e (admin), api/leads, globals.css, layout.tsx
   components/
-    layout/  ui/  sections/  forms/  seo/  admin/
-  lib/        # site-config, treatments, content, seo, whatsapp, analytics, supabase, validations
-  types/      # tipos de lead
-supabase/schema.sql
-EDITAR-DEPOIS.md   # ⬅️ checklist de dados reais a preencher
+    brand/             logo e o Fio (FioRule, FioRail, FioProgress, FioSmile)
+    layout/            Header, Footer, MenuSheet, MobileActionBar, SiteShell, route-ctas
+    motion/            RevealObserver
+    sections/          seções das páginas
+    ui/                cta (WhatsApp, telefone, mapa, agendar), MapFacade, Figure, FAQ, etc.
+    forms/  seo/  admin/
+  lib/                 site-config, content, treatments, seo, whatsapp, analytics, attribution,
+                       validations, supabase, email, rate-limit, admin-auth
+  types/               tipos de lead
+supabase/schema.sql    tabela de leads
+scripts/check-site.mjs verificação do HTML gerado
+public/                imagens servidas (o que sai de uso vai para _arquivo/, fora do Git)
 ```
 
----
+## Dados e textos
 
-## 🌐 Deploy (Vercel — sugerido)
+- Dados do consultório (nome, CRO, contatos, endereço, mapa, URL): `src/lib/site-config.ts`. Bairro, região e endereço em texto vêm de `locale` e `localeTexto(...)`, no mesmo arquivo.
+- Respostas que se repetem (avaliação, pagamento, duração, convênio): `respostas` em `src/lib/content.ts`.
+- Tratamentos: `src/lib/treatments.ts`. Situações do seletor da home: `src/lib/situations.ts`.
+- Rótulos de botão: só o vocabulário de `src/components/ui/cta.tsx` (ver DESIGN.md, 0.2).
 
-1. Suba o projeto para um repositório (GitHub/GitLab).
-2. Importe na [Vercel](https://vercel.com), framework **Next.js** (detectado automaticamente).
-3. Configure as variáveis de ambiente (veja `.env.example`) — todas opcionais.
-4. Aponte o domínio e atualize `NEXT_PUBLIC_SITE_URL`.
+## Variáveis de ambiente
 
-> Conteúdo de caráter informativo, sem promessa de resultados, seguindo as normas de
-> publicidade odontológica. Revise os documentos legais com apoio jurídico antes de publicar.
+Copie `.env.example` para `.env.local`. Para receber leads configure **uma** saída: Supabase (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, com o SQL de `supabase/schema.sql`) ou Resend (`RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `LEAD_NOTIFY_EMAIL`). O painel `/admin` só liga com `ADMIN_PASSWORD` (12 caracteres ou mais) **e** `ADMIN_SESSION_SECRET` (32 ou mais, diferente da senha). Medição: `NEXT_PUBLIC_GTM_ID`, `NEXT_PUBLIC_GA_MEASUREMENT_ID`, `NEXT_PUBLIC_GOOGLE_ADS_ID`, `NEXT_PUBLIC_META_PIXEL_ID` (nada carrega sem o ID; veja `GOOGLE-ADS-SETUP.md`).
+
+## Medição
+
+`src/lib/analytics.ts` envia os eventos `whatsapp_click`, `phone_click`, `email_click`, `instagram_click`, `map_click`, `cta_click`, `scheduling_intent`, `treatment_card_click`, `care_need_click`, `situation_select`, `form_start`, `appointment_form_submit` e `lead_created`. Com GTM, os eventos vão só ao `dataLayer`; sem GTM, só ao `gtag`. **A conversão é `lead_created`**, que dispara uma vez em `/obrigado`; os demais são eventos de interesse. Nenhum evento leva nome, e-mail ou telefone.
+
+## Deploy (Vercel)
+
+1. Projeto na Vercel com o nome `site-namorada` (o redirecionamento dos endereços `*.vercel.app` em `next.config.mjs` casa com esse prefixo; se o projeto for renomeado, ajuste o `has` do redirect).
+2. Variáveis de ambiente do `.env.example` no escopo Production.
+3. Domínio: confira em **Settings, Domains** que `draanabeatrizodonto.com.br` (o apex) redireciona para `www.draanabeatrizodonto.com.br` e que o `www` é o domínio de produção. Em produção, qualquer host diferente do `www` recebe `X-Robots-Tag: noindex`, então um apex servindo conteúdo sem redirecionamento sai do índice do Google.
+4. Depois do primeiro deploy, rode `npm run verify` localmente (ou veja a CI) e envie o sitemap no Search Console.
+
+## Conteúdo e ética
+
+O texto segue as regras de publicidade do Conselho Federal de Odontologia: sem preço, sem forma de pagamento em destaque, sem promessa de resultado, sem superlativo, sem foto de procedimento em andamento e sem o título de especialista. Ao mudar texto, rode `npm run check:site`.

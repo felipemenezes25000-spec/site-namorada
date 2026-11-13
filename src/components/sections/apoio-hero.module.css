@@ -1,0 +1,178 @@
+/* Abertura das páginas de apoio. Mobile primeiro; a grade de 12 colunas entra a partir de 760px. */
+.hero {
+  padding-block: var(--s-6) var(--s-6);
+}
+.crumb {
+  margin-bottom: 8px;
+}
+.grid {
+  margin-top: 32px;
+  row-gap: 48px;
+  align-items: end;
+}
+.text,
+.aside {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.kicker {
+  margin: 0 0 12px;
+}
+.title {
+  margin: 0;
+  max-width: 18ch;
+}
+.lede {
+  max-width: 34rem;
+  margin: 20px 0 0;
+}
+.identidade {
+  max-width: 34rem;
+  margin: var(--s-3) 0 0;
+  color: var(--fg);
+}
+/* O registro não quebra ao meio ("CRO-SP / 177801"). */
+.identidade > span:nth-child(2) {
+  white-space: nowrap;
+}
+.aviso {
+  max-width: 34rem;
+  margin-top: var(--s-5);
+  padding-left: var(--s-4);
+  border-left: 2px solid var(--ouro);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--head);
+}
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  margin-top: 28px;
+}
+.actions > * {
+  width: 100%;
+}
+.note {
+  max-width: 30rem;
+  margin: 16px 0 0;
+}
+.aside {
+  display: none;
+}
+.mark {
+  margin: 0 0 4px;
+}
+.lede {
+  text-wrap: pretty;
+}
+.note {
+  font-size: 0.9375rem;
+  color: var(--fg);
+}
+@media (max-width: 480px) {
+  .topo {
+    display: none;
+  }
+  .hero {
+    padding-top: 24px;
+  }
+  .grid {
+    margin-top: 0;
+  }
+}
+/* Os dois botões lado a lado só onde o rótulo inteiro cabe (de 430 a 480px): o WhatsApp ocupa o
+   que sobra e o "Ligar" fica com a largura do conteúdo. Abaixo disso, coluna única. */
+@media (min-width: 430px) and (max-width: 480px) {
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+  }
+  .row > a {
+    width: auto;
+    padding-inline: var(--s-4);
+  }
+}
+
+@media (min-width: 760px) {
+  .hero {
+    padding-bottom: 80px;
+  }
+  .grid {
+    margin-top: 40px;
+  }
+  .text {
+    grid-column: 1 / 8;
+  }
+  .ampla {
+    grid-column: 1 / 9;
+  }
+  .aside {
+    grid-column: 8 / 13;
+  }
+  .ampla + .aside {
+    grid-column: 9 / 13;
+  }
+  .aside {
+    display: block;
+    align-self: center;
+  }
+  .mark {
+    display: none;
+  }
+  .title {
+    max-width: none;
+  }
+  .lede {
+    max-width: 40rem;
+    margin-top: 24px;
+  }
+  .actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 36px;
+  }
+  .actions > * {
+    width: auto;
+  }
+}
+@media (min-width: 1100px) {
+  .hero {
+    padding-bottom: 96px;
+  }
+}
+
+/* Celular baixo (ex.: 360x740 com o aviso de cookies): abertura mais compacta para os botões
+   ficarem à vista acima do aviso e da barra. */
+@media (max-width: 759px) and (max-height: 780px) {
+  .hero {
+    padding-top: 12px;
+  }
+  .crumb {
+    margin-bottom: 2px;
+  }
+  .grid {
+    margin-top: 20px;
+  }
+  .kicker {
+    margin-bottom: 6px;
+  }
+  .text .lede {
+    margin-top: 10px;
+    font-size: 1rem;
+    line-height: 1.45;
+  }
+  .kicker {
+    display: none;
+  }
+  .mark {
+    margin-bottom: 0;
+  }
+  .actions {
+    gap: 10px;
+    margin-top: 20px;
+  }
+}

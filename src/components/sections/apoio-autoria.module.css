@@ -1,0 +1,4 @@
+/* Faixa de autoria: mais baixa que uma seção compacta, para não alongar a página. */
+.faixa {
+  padding-block: var(--s-5);
+}

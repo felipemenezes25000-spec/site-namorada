@@ -1,0 +1,72 @@
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: var(--gap);
+}
+.item {
+  position: relative;
+  min-width: 0;
+  padding-block: 28px 32px;
+}
+.rule {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  --fio-delay: calc(var(--i, 0) * 80ms);
+}
+.num {
+  display: block;
+  font-size: clamp(3.5rem, 2.4rem + 4vw, 6rem);
+  line-height: 1;
+}
+.title {
+  margin: 18px 0 0;
+  font-size: 1.75rem;
+  line-height: 1.14;
+  letter-spacing: -0.012em;
+  font-weight: var(--d-wght);
+  color: var(--head);
+  text-wrap: balance;
+}
+.text {
+  max-width: 24rem;
+  margin: 12px 0 0;
+  color: var(--fg-2);
+}
+@media (min-width: 760px) {
+  .list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .item {
+    padding-block: 32px 44px;
+  }
+}
+@media (min-width: 1100px) {
+  .list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Modo "orientacoes": frases em lista numerada, duas colunas a partir de 760px (nunca quatro). */
+.orient .num {
+  font-size: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+}
+.frase {
+  margin: 12px 0 0;
+  max-width: 28rem;
+  color: var(--head);
+  text-wrap: pretty;
+}
+@media (min-width: 1100px) {
+  .orient {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--s-8);
+  }
+}
+.orient .item {
+  padding-block: var(--s-5) var(--s-4);
+}

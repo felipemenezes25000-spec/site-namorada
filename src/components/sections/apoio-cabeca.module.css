@@ -1,0 +1,40 @@
+.root {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 20px;
+  column-gap: var(--gap);
+}
+.titulo,
+.texto {
+  min-width: 0;
+}
+.h2 {
+  margin: 12px 0 0;
+  max-width: 20ch;
+  color: var(--head);
+  text-wrap: balance;
+}
+.texto {
+  max-width: 34rem;
+  margin: 0;
+  color: var(--fg-2);
+}
+@media (min-width: 760px) {
+  .root {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: end;
+  }
+  .titulo {
+    grid-column: 1 / 8;
+  }
+  .texto {
+    grid-column: 8 / 13;
+  }
+  .solo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .solo .titulo,
+  .solo .texto {
+    grid-column: 1 / -1;
+  }
+}

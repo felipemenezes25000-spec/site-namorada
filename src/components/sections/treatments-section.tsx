@@ -1,30 +1,89 @@
 import { treatments } from "@/lib/treatments";
+import { situations } from "@/lib/situations";
+import { Section } from "@/components/ui/section";
+import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { RevealGroup } from "@/components/ui/reveal";
-import { TreatmentCard } from "./treatment-card";
+import { WhatsAppCTA, CTA_DUVIDAS_WHATSAPP } from "@/components/ui/cta";
+import { SituationProvider } from "./situation-context";
+import { SituationSelector } from "./situation-selector";
+import { TreatmentIndex, type IndexTreatment } from "./treatment-index";
+import styles from "./treatments-section.module.css";
 
+/** Dados mínimos (primitivos) para as ilhas cliente: nada de `treatments.ts` inteiro no navegador. */
+function indexItems(limit?: number): IndexTreatment[] {
+  return (limit ? treatments.slice(0, limit) : treatments).map((t) => ({
+    slug: t.slug,
+    name: t.name,
+    shortName: t.shortName,
+    excerpt: t.excerpt,
+    duration: t.duration,
+    sessions: t.sessions,
+  }));
+}
+
+/**
+ * Momento 2 da home (DESIGN.md 5.1): "Tratamentos" como sumário de revista.
+ * Acima, o seletor "O que traz você aqui hoje?"; abaixo, o sumário numerado
+ * (cartão noite fixo no desktop). Os dois compartilham a situação escolhida:
+ * os tratamentos indicados sobem ao topo do sumário. Sem escolha, nada muda.
+ *
+ * Sem JavaScript: o seletor vira lista de links e o sumário continua completo.
+ */
 export function TreatmentsSection({
-  limit,
-  eyebrow = "Tratamentos",
+  id = "tratamentos",
+  eyebrow,
+  title = "Tratamentos",
+  folio = "Sumário",
+  className,
 }: {
-  limit?: number;
+  id?: string;
   eyebrow?: string;
+  title?: string;
+  folio?: string;
+  className?: string;
 }) {
-  const list = limit ? treatments.slice(0, limit) : treatments;
+  const items = indexItems();
+  const titleTodos = "Todos os tratamentos";
   return (
-    <section id="tratamentos" className="section-y bg-brand-bone">
-      <div className="container">
+    <Section tone="papel" id={id} aria-labelledby={`${id}-titulo`} className={className}>
+      <Container>
         <SectionHeading
+          id={`${id}-titulo`}
           eyebrow={eyebrow}
-          title="Cuidados pensados para cada etapa do seu sorriso"
-          description="Da primeira avaliação à estética — e o que cada um resolve, explicado sem jargão, para você escolher por onde começar."
+          title={
+            <>
+              {title}
+              {folio && (
+                <span className={`t-folio ${styles.folio}`} aria-hidden="true">
+                  {folio}
+                </span>
+              )}
+            </>
+          }
+          className={`max-w-none ${styles.titulo}`}
         />
-        <RevealGroup className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" stagger={0.08}>
-          {list.map((t) => (
-            <TreatmentCard key={t.slug} treatment={t} />
-          ))}
-        </RevealGroup>
-      </div>
-    </section>
+
+        <SituationProvider>
+          <div className={styles.selector}>
+            <SituationSelector
+              situations={situations}
+              treatments={items.map(({ slug, name, shortName }) => ({ slug, name, shortName }))}
+            />
+          </div>
+
+          <div className={styles.indice}>
+            <span data-reveal="" className={`fio-h ${styles.sep}`} aria-hidden="true" />
+            <h3 className={`t-kicker ${styles.todos}`}>{titleTodos}</h3>
+            <div className={styles.lista}>
+              <TreatmentIndex items={items} collapsibleLabel={`${titleTodos} (${items.length})`} />
+            </div>
+          </div>
+        </SituationProvider>
+
+        <div className={styles.convite}>
+          <WhatsAppCTA location="treatments_section" label={CTA_DUVIDAS_WHATSAPP} variant="contorno" block />
+        </div>
+      </Container>
+    </Section>
   );
 }

@@ -1,48 +1,67 @@
-import Link from "next/link";
-import { Home, Stethoscope, MessageCircle } from "lucide-react";
-import { whatsappLink, waMessages } from "@/lib/whatsapp";
+import type { Metadata } from "next";
+import { SiteShell } from "@/components/layout/site-shell";
+import { Section } from "@/components/ui/section";
+import { Container } from "@/components/ui/container";
+import { Numeral } from "@/components/ui/numeral";
+import { DisplayHeading } from "@/components/ui/display-heading";
 import { ButtonLink } from "@/components/ui/button";
-import { BrandSymbol } from "@/components/ui/logo";
+import { WhatsAppCTA, CTA_DUVIDAS_WHATSAPP } from "@/components/ui/cta";
+import { Symbol } from "@/components/brand/logo";
+import { waMessages } from "@/lib/whatsapp";
 
+/**
+ * O Next já injeta `<meta name="robots" content="noindex">` em toda 404. O layout raiz declara
+ * `index, follow`, que apareceria como segunda meta conflitante: aqui ela é zerada (null) para sobrar
+ * uma só. Descrição e cartões sociais herdados falam da home, então também saem.
+ */
+export const metadata: Metadata = {
+  title: "Página não encontrada",
+  description: null,
+  alternates: { canonical: null },
+  robots: null,
+  openGraph: null,
+  twitter: null,
+};
+
+/** 404 (DESIGN.md 5.13): tom osso, alinhado à esquerda, 7/5. Mesmo molde do error.tsx. */
 export default function NotFound() {
   return (
-    <section className="relative flex min-h-[80vh] items-center overflow-hidden bg-gradient-to-b from-brand-beige/40 to-brand-bone pt-28 pb-20">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(70%_50%_at_50%_0%,#dde8e1_0%,transparent_60%)]"
-      />
-      <div className="container text-center">
-        <div className="mx-auto flex max-w-lg flex-col items-center">
-          <BrandSymbol size={72} badge />
-          <p className="eyebrow mt-8 justify-center">Página não encontrada</p>
-          <h1 className="mt-4 font-display text-[clamp(4rem,16vw,8rem)] leading-none text-brand-green">
-            404
-          </h1>
-          <p className="mt-4 max-w-md text-pretty text-lg leading-relaxed text-brand-ink/75">
-            A página que você procura saiu para uma limpeza. Que tal voltar ao
-            início ou conhecer os tratamentos da Dra. Ana?
-          </p>
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <ButtonLink href="/" variant="primary" size="lg">
-              <Home className="size-4" strokeWidth={1.7} />
-              Voltar ao início
-            </ButtonLink>
-            <ButtonLink href="/tratamentos" variant="secondary" size="lg">
-              <Stethoscope className="size-4" strokeWidth={1.7} />
-              Ver tratamentos
-            </ButtonLink>
+    <SiteShell>
+      <Section tone="osso" className="min-h-[70vh]">
+        <Container>
+          <div className="grid12 items-center">
+            <div className="min-w-0 tab:col-span-7">
+              <Numeral size="xl">404</Numeral>
+              <DisplayHeading level={1} size="d1i" className="mt-2">
+                Página não encontrada
+              </DisplayHeading>
+              <p className="t-lead mt-6 max-w-leitura">
+                A página que você procura saiu para uma limpeza. Que tal voltar ao início ou
+                conhecer os tratamentos da Dra. Ana?
+              </p>
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <ButtonLink href="/" variant="primario">
+                  Voltar ao início
+                </ButtonLink>
+                <ButtonLink href="/tratamentos" variant="contorno">
+                  Ver tratamentos
+                </ButtonLink>
+              </div>
+              <div className="mt-4">
+                <WhatsAppCTA
+                  location="not_found"
+                  variant="texto"
+                  message={waMessages.default}
+                  label={CTA_DUVIDAS_WHATSAPP}
+                />
+              </div>
+            </div>
+            <div className="hidden tab:col-span-5 tab:block">
+              <Symbol size={380} className="ml-auto h-auto w-full max-w-[380px]" />
+            </div>
           </div>
-          <Link
-            href={whatsappLink(waMessages.default)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand-green hover:text-brand-gold"
-          >
-            <MessageCircle className="size-4" strokeWidth={1.7} />
-            Ou fale pelo WhatsApp
-          </Link>
-        </div>
-      </div>
-    </section>
+        </Container>
+      </Section>
+    </SiteShell>
   );
 }

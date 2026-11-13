@@ -1,0 +1,41 @@
+.root {
+  max-width: 440px;
+  margin-left: auto;
+}
+.numeral {
+  display: flex;
+  align-items: baseline;
+  gap: 0.15em;
+  margin: 0;
+  font-size: clamp(4.5rem, 2.4rem + 6.4vw, 8.5rem);
+  line-height: 0.9;
+  font-variation-settings: "opsz" var(--d-opsz);
+  color: var(--accent);
+}
+.n {
+  display: inline-block;
+}
+.a {
+  font-size: 0.4em;
+}
+.fio {
+  margin-top: 24px;
+}
+.legenda {
+  max-width: 30rem;
+  margin: 16px 0 0;
+  color: var(--fg);
+}
+/* celular: numeral e unidade na mesma linha, acima do título */
+.miniRoot {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin: 0 0 14px;
+}
+.mini {
+  font-size: 3.5rem;
+}
+.unidade {
+  margin: 0;
+}

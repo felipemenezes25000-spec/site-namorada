@@ -1,128 +1,61 @@
-"use client";
+import { siteConfig, localeTexto } from "@/lib/site-config";
+import { Section, type SectionTone } from "@/components/ui/section";
+import { Container } from "@/components/ui/container";
+import { Eyebrow } from "@/components/ui/eyebrow";
+import { MapCTA, PhoneCTA } from "@/components/ui/cta";
+import { MapFacade } from "@/components/ui/map-facade";
+import { IndexEnd, IndexRow } from "@/components/ui/index-list";
+import { RouteWhatsAppCTA } from "@/components/layout/route-ctas";
+import styles from "./editorial.module.css";
 
-import { MapPin, Navigation, MessageCircle, Phone } from "lucide-react";
-import { siteConfig } from "@/lib/site-config";
-import { whatsappLink, waMessages } from "@/lib/whatsapp";
-import { track } from "@/lib/analytics";
-import { SectionHeading } from "@/components/ui/section-heading";
-import { ButtonLink } from "@/components/ui/button";
-import { Reveal } from "@/components/ui/reveal";
-
-export function LocationSection() {
-  const hasMap = Boolean(siteConfig.address.mapsEmbedUrl);
+/**
+ * Localização (DESIGN.md 5.1, momento 6): título e abertura, fatos em lista com fios
+ * (endereço, horário só se existir em `siteConfig.hours`, contato), "Como chegar" como botão e
+ * "Agendar pelo WhatsApp" como link (com a mensagem da rota, B-06), e o mapa numa fachada em arco
+ * (MapFacade): o iframe do Google só entra depois do clique em "Ver mapa". Sem cartões, sem
+ * ícones em círculo, sem rótulos em caixa-alta. Usada na home.
+ */
+export function LocationSection({ tone = "osso" }: { tone?: SectionTone }) {
   return (
-    <section id="localizacao" className="section-y bg-brand-bone">
-      <div className="container">
-        <SectionHeading
-          align="left"
-          eyebrow="Localização"
-          title="Um espaço acolhedor, pensado para o seu conforto"
-          description={`Consultório na ${siteConfig.neighborhood}, ${siteConfig.city} — com fácil acesso pela Av. Edgar Facó. Venha conhecer ou fale com a Dra. Ana para combinar o melhor horário.`}
-          className="max-w-3xl"
-        />
+    <Section tone={tone} id="localizacao" aria-labelledby="localizacao-titulo" className={styles.secM}>
+      <Container>
+        <div className="grid12">
+          <div className={styles.locHead}>
+            <Eyebrow>Localização</Eyebrow>
+            <h2 id="localizacao-titulo" className="t-d2 mt-3">
+              Um espaço acolhedor, pensado para&nbsp;o&nbsp;seu conforto
+            </h2>
+            <p className="t-lead">
+              Consultório em uma travessa da Av. Edgar Facó, na {localeTexto("regiaoZona")}.
+              Venha conhecer ou fale com a Dra. Ana para combinar o melhor horário.
+            </p>
+          </div>
 
-        <div className="mt-12 grid gap-8 lg:grid-cols-12">
-          {/* Informações */}
-          <Reveal className="lg:col-span-5" y={24}>
-            <div className="surface flex h-full flex-col gap-7 p-7 sm:p-9">
-              <div className="flex gap-4">
-                <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-brand-green/[0.07] text-brand-green">
-                  <MapPin className="size-5" strokeWidth={1.6} />
-                </span>
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-eyebrow text-brand-gold-ink">Endereço</p>
-                  <p className="mt-1 leading-relaxed text-brand-ink/80">{siteConfig.address.full}</p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-brand-green/[0.07] text-brand-green">
-                  <MessageCircle className="size-5" strokeWidth={1.6} />
-                </span>
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-eyebrow text-brand-gold-ink">Agendamento</p>
-                  <p className="mt-1 leading-relaxed text-brand-ink/80">Fale pelo WhatsApp para combinar o melhor dia e horário.</p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-brand-green/[0.07] text-brand-green">
-                  <Phone className="size-5" strokeWidth={1.6} />
-                </span>
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-eyebrow text-brand-gold-ink">Contato</p>
-                  <a
-                    href={`tel:+${siteConfig.phone}`}
-                    onClick={() => track("phone_click", { location: "location_section" })}
-                    className="mt-1 block text-brand-ink/80 hover:text-brand-green"
-                  >
-                    {siteConfig.phoneDisplay}
-                  </a>
-                </div>
-              </div>
-
-              <div className="mt-auto flex flex-col gap-3 pt-2 sm:flex-row">
-                <ButtonLink
-                  href={siteConfig.address.mapsDirectionsUrl}
-                  external
-                  variant="primary"
-                  size="md"
-                  className="flex-1"
-                  onClick={() => track("map_click", { location: "location_section" })}
-                >
-                  <Navigation className="size-4" strokeWidth={1.7} />
-                  Como chegar
-                </ButtonLink>
-                <ButtonLink
-                  href={whatsappLink(waMessages.default)}
-                  external
-                  variant="whatsapp"
-                  size="md"
-                  className="flex-1"
-                  onClick={() => track("whatsapp_click", { location: "location_section" })}
-                >
-                  <MessageCircle className="size-4" strokeWidth={1.7} />
-                  Agendar
-                </ButtonLink>
-              </div>
+          <div className={styles.locInfo}>
+            <ul data-reveal="" className="idx">
+              {[
+                { label: "Endereço", value: localeTexto("endereco") },
+                ...(siteConfig.hours ? [{ label: "Horário", value: siteConfig.hours }] : []),
+                { label: "Contato", value: <PhoneCTA as="texto" location="location_section" /> },
+              ].map((row, i) => (
+                <IndexRow key={row.label} i={i} className={styles.locRow}>
+                  <p className="t-kicker m-0">{row.label}</p>
+                  <div className={`t-body ${styles.locValue}`}>{row.value}</div>
+                </IndexRow>
+              ))}
+              <IndexEnd i={3} />
+            </ul>
+            <div className={styles.locBtns}>
+              <MapCTA location="location_section" />
+              <RouteWhatsAppCTA location="location_section" variant="texto" />
             </div>
-          </Reveal>
+          </div>
 
-          {/* Mapa */}
-          <Reveal className="lg:col-span-7" y={24} delay={0.08}>
-            <div className="relative h-full min-h-[20rem] overflow-hidden rounded-3xl border border-brand-ink/[0.07] shadow-card">
-              {hasMap ? (
-                <iframe
-                  src={siteConfig.address.mapsEmbedUrl}
-                  title={`Localização — ${siteConfig.doctorName}`}
-                  className="size-full"
-                  style={{ border: 0, minHeight: "20rem" }}
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  allowFullScreen
-                />
-              ) : (
-                <div className="texture-grain flex size-full flex-col items-center justify-center gap-4 bg-gradient-to-br from-brand-mint via-brand-beige to-brand-mint/60 px-6 py-16 text-center">
-                  <span className="flex size-16 items-center justify-center rounded-full bg-white/70 text-brand-green shadow-soft">
-                    <MapPin className="size-7" strokeWidth={1.5} />
-                  </span>
-                  <p className="max-w-xs text-sm text-brand-green/70">
-                    {siteConfig.address.full}
-                  </p>
-                  <ButtonLink
-                    href={siteConfig.address.mapsDirectionsUrl}
-                    external
-                    variant="secondary"
-                    size="sm"
-                    onClick={() => track("map_click", { location: "location_map_placeholder" })}
-                  >
-                    <Navigation className="size-4" strokeWidth={1.7} />
-                    Como chegar
-                  </ButtonLink>
-                </div>
-              )}
-            </div>
-          </Reveal>
+          <div className={styles.map}>
+            <MapFacade location="location_map" showDirections={false} minHeight={240} />
+          </div>
         </div>
-      </div>
-    </section>
+      </Container>
+    </Section>
   );
 }

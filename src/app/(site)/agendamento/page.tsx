@@ -1,21 +1,38 @@
 import type { Metadata } from "next";
-import { MessageCircle, MapPin, ShieldCheck, HeartHandshake, CheckCircle2 } from "lucide-react";
-import { siteConfig } from "@/lib/site-config";
+import { locale, localeTexto } from "@/lib/site-config";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
-import { whatsappLink, waMessages } from "@/lib/whatsapp";
+import { waMessages } from "@/lib/whatsapp";
+import { treatments } from "@/lib/treatments";
+import { treatmentOptions } from "@/lib/lead-treatments";
 import { JsonLd } from "@/components/seo/json-ld";
-import { PageHero } from "@/components/sections/page-hero";
 import { AppointmentForm } from "@/components/forms/appointment-form";
-import { Reveal } from "@/components/ui/reveal";
-import { ButtonLink } from "@/components/ui/button";
+import { Section } from "@/components/ui/section";
+import { Container } from "@/components/ui/container";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
+import { Eyebrow } from "@/components/ui/eyebrow";
+import { DisplayHeading } from "@/components/ui/display-heading";
+import { Numeral } from "@/components/ui/numeral";
+import { IndexRow, IndexEnd } from "@/components/ui/index-list";
+import { TrustBlock } from "@/components/ui/trust-block";
+import { WhatsAppCTA } from "@/components/ui/cta";
+import { Monogram } from "@/components/brand/logo";
+import styles from "./agendamento-page.module.css";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Agendamento de avaliação",
-  description:
-    "Agende sua avaliação odontológica com a Dra. Ana Beatriz Lemos Souza. Preencha o formulário ou fale pelo WhatsApp — atendimento humanizado em [Cidade].",
+  // 44 caracteres, com o local; a marca fica na descrição e no domínio.
+  absoluteTitle: `Agendar avaliação odontológica na ${locale.bairro}`,
+  description: `Agende sua avaliação odontológica com a Dra. Ana Beatriz, na ${localeTexto("bairroRegiao")}. Preencha o formulário ou fale pelo WhatsApp.`,
   path: "/agendamento",
-  keywords: [`agendar dentista em ${siteConfig.city}`, `avaliação odontológica em ${siteConfig.city}`],
 });
+
+/**
+ * slug do tratamento -> opção do select, para `?tratamento=<slug>`. Vai por props ao formulário, que lê a
+ * URL no navegador: a página continua estática (cacheada na borda), sem custo extra para o tráfego de
+ * anúncios. Slug que não existe é ignorado pelo formulário.
+ */
+const treatmentBySlug: Record<string, string> = Object.fromEntries(
+  treatments.filter((t) => treatmentOptions.includes(t.name)).map((t) => [t.slug, t.name]),
+);
 
 const expect = [
   "Uma conversa tranquila para entender o que te trouxe",
@@ -24,6 +41,16 @@ const expect = [
   "Plano de cuidado individual e transparente",
 ];
 
+/**
+ * /agendamento (DESIGN.md 5.5). Uma só cena `osso`, numa grade de 12 colunas a partir de 1024px:
+ * título e formulário à esquerda (7), painel de WhatsApp e "O que esperar" à direita (5, fixos ao
+ * rolar). A ordem do HTML é a ordem de leitura e de Tab: título, formulário, identificação, WhatsApp,
+ * "O que esperar". No celular a ordem visual é a do HTML (título, formulário, WhatsApp, "O que esperar",
+ * identificação): o primeiro campo aparece acima da barra fixa sem rolar. O painel de WhatsApp é uma
+ * <section data-hide-floating>: enquanto ele está na tela, a barra fixa se esconde, sem dois botões
+ * iguais. Sem JavaScript o formulário dá lugar ao WhatsApp e ao telefone (appointment-form.tsx).
+ * Assinatura do desktop: arco com monograma ao lado do título.
+ */
 export default function AgendamentoPage() {
   return (
     <>
@@ -33,87 +60,75 @@ export default function AgendamentoPage() {
           { name: "Agendamento", path: "/agendamento" },
         ])}
       />
-      <PageHero
-        eyebrow="Agendamento"
-        title="Vamos marcar a sua avaliação"
-        description="Preencha o formulário abaixo com tranquilidade. A Dra. Ana confirma com você o melhor dia e horário. Se preferir, fale direto pelo WhatsApp."
-        breadcrumbs={[{ name: "Início", href: "/" }, { name: "Agendamento" }]}
-      />
-
-      <section className="section-y bg-brand-bone">
-        <div className="container grid gap-10 lg:grid-cols-12 lg:gap-12">
-          {/* Formulário */}
-          <div className="lg:col-span-7">
-            <Reveal>
-              <AppointmentForm />
-            </Reveal>
+      <Section tone="osso" id="formulario" spacing="none" className={styles.sec}>
+        <Container>
+          <div className={styles.trilha}>
+            <Breadcrumbs items={[{ name: "Início", href: "/" }, { name: "Agendamento" }]} />
           </div>
 
-          {/* Aside */}
-          <aside className="lg:col-span-5">
-            <div className="lg:sticky lg:top-28 space-y-6">
-              <Reveal delay={0.05}>
-                <div className="rounded-3xl bg-brand-green p-7 text-brand-bone shadow-card">
-                  <p className="eyebrow text-brand-gold-bright">Prefere conversar agora?</p>
-                  <h2 className="mt-3 font-display text-2xl text-brand-bone">
-                    Fale pelo WhatsApp em poucos toques
-                  </h2>
-                  <p className="mt-3 text-sm leading-relaxed text-brand-bone/75">
-                    Tire dúvidas ou agende diretamente com a Dra. Ana. Ela retorna
-                    assim que possível para combinar o melhor horário.
-                  </p>
-                  <ButtonLink
-                    href={whatsappLink(waMessages.default)}
-                    external
-                    variant="gold"
-                    size="md"
-                    className="mt-5 w-full"
-                  >
-                    <MessageCircle className="size-4" strokeWidth={1.7} />
-                    Falar pelo WhatsApp
-                  </ButtonLink>
+          <div className={styles.layout}>
+            <div className={styles.main}>
+              <header className={styles.intro}>
+                <div className={`arch-line ${styles.assinatura}`} aria-hidden="true">
+                  <svg viewBox="0 0 1072 1100" preserveAspectRatio="xMidYMid meet" focusable="false">
+                    <path pathLength={1} d="M1.5 1100V536A534.5 534.5 0 0 1 1070.5 536V1100" />
+                  </svg>
+                  <Monogram size={44} className="arch-mono" lazy />
                 </div>
-              </Reveal>
+                <Eyebrow>Avaliação</Eyebrow>
+                <DisplayHeading level={1} size="d1i" className={styles.titulo}>
+                  Vamos marcar a sua avaliação
+                </DisplayHeading>
+                <p className={`t-lead ${styles.lede}`}>
+                  Preencha com tranquilidade. A&nbsp;Dra.&nbsp;Ana confirma com você o melhor dia e
+                  horário.
+                </p>
+              </header>
 
-              <Reveal delay={0.1}>
-                <div className="surface p-7">
-                  <h2 className="font-display text-2xl text-brand-green">O que esperar</h2>
-                  <ul className="mt-4 space-y-3">
-                    {expect.map((e) => (
-                      <li key={e} className="flex items-start gap-3 text-sm text-brand-ink/75">
-                        <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-brand-green" strokeWidth={1.7} />
-                        {e}
-                      </li>
-                    ))}
-                  </ul>
+              <div className={styles.form}>
+                <h2 className="sr-only">Formulário de agendamento</h2>
+                <AppointmentForm treatmentOptions={treatmentOptions} treatmentBySlug={treatmentBySlug} />
+              </div>
 
-                  <dl className="mt-6 space-y-4 border-t border-brand-ink/[0.07] pt-6 text-sm">
-                    <div className="flex gap-3">
-                      <MapPin className="mt-0.5 size-4 shrink-0 text-brand-gold" strokeWidth={1.7} />
-                      <div>
-                        <dt className="font-semibold text-brand-green">Onde</dt>
-                        <dd className="text-brand-ink/70">{siteConfig.address.full}</dd>
-                      </div>
-                    </div>
-                    <div className="flex gap-3">
-                      <MessageCircle className="mt-0.5 size-4 shrink-0 text-brand-gold" strokeWidth={1.7} />
-                      <div>
-                        <dt className="font-semibold text-brand-green">Agendamento</dt>
-                        <dd className="text-brand-ink/70">Fale pelo WhatsApp para combinar o melhor dia e horário.</dd>
-                      </div>
-                    </div>
-                  </dl>
-
-                  <div className="mt-6 flex items-center gap-4 rounded-2xl bg-brand-beige/40 p-4 text-xs text-brand-ink/60">
-                    <span className="flex items-center gap-1.5"><ShieldCheck className="size-4 text-brand-green" /> Dados sigilosos</span>
-                    <span className="flex items-center gap-1.5"><HeartHandshake className="size-4 text-brand-green" /> Sem compromisso</span>
-                  </div>
-                </div>
-              </Reveal>
+              <TrustBlock variant="linha" className={styles.trust} />
             </div>
-          </aside>
-        </div>
-      </section>
+
+            <div className={styles.lado}>
+              <section className={styles.wa} data-tone="noite" aria-labelledby="ag-whatsapp">
+                <h2 id="ag-whatsapp" className={`t-d3 display ${styles.waTitulo}`}>
+                  Prefere o WhatsApp?
+                </h2>
+                <p className={`t-body ${styles.waTexto}`}>
+                  Tire dúvidas ou agende direto com a Dra.&nbsp;Ana, em poucos toques.
+                </p>
+                <div className={styles.waBotao}>
+                  <WhatsAppCTA
+                    location="appointment_page"
+                    message={waMessages.default}
+                    variant="ouro"
+                    block
+                  />
+                </div>
+              </section>
+
+              <div className={styles.rest}>
+                <h2 className={`t-d3 display ${styles.restTitulo}`}>O que esperar</h2>
+                <ol data-reveal="" className={`idx ${styles.passos}`}>
+                  {expect.map((texto, i) => (
+                    <IndexRow key={texto} i={i} className={styles.passo}>
+                      <Numeral size="md" decorative>
+                        {String(i + 1).padStart(2, "0")}
+                      </Numeral>
+                      <span className="t-body">{texto}</span>
+                    </IndexRow>
+                  ))}
+                  <IndexEnd i={expect.length} />
+                </ol>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </Section>
     </>
   );
 }

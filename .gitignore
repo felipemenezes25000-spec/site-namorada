@@ -28,6 +28,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
+# testes
+/coverage/
+/test-results/
+
 # editor
 .vscode/*
 !.vscode/extensions.json
@@ -36,6 +40,8 @@ yarn-error.log*
 # previews e artefatos de QA (Playwright)
 /preview
 .playwright-mcp/
-*.tsbuildinfo
+
+# arquivos retirados de public/ (guardados, fora do site e do repositório)
+/_arquivo/
 
 .vercel

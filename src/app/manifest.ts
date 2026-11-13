@@ -1,16 +1,16 @@
 import type { MetadataRoute } from "next";
-import { siteConfig } from "@/lib/site-config";
+import { siteConfig, themeColor, localeTexto } from "@/lib/site-config";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: `${siteConfig.doctorName} — ${siteConfig.title}`,
     short_name: "Dra. Ana Beatriz",
-    description:
-      "Odontologia humanizada: avaliação, limpeza, clareamento, prevenção, restaurações e cirurgia oral.",
+    description: `Dentista particular na ${localeTexto("bairroRegiaoCidade")}. Agende pelo WhatsApp.`,
     start_url: "/",
     display: "standalone",
-    background_color: "#FCFCFC",
-    theme_color: "#22513A",
+    // Mesma cor do `viewport.themeColor` (layout raiz): uma constante só, em site-config.ts.
+    background_color: themeColor,
+    theme_color: themeColor,
     lang: "pt-BR",
     icons: [
       { src: "/brand/icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },

@@ -1,70 +1,101 @@
 import type { Metadata } from "next";
-import {
-  MessageCircle,
-  Phone,
-  AlertCircle,
-  Activity,
-  HeartPulse,
-} from "lucide-react";
-import { siteConfig } from "@/lib/site-config";
-import { buildMetadata, breadcrumbSchema, faqSchema, localize } from "@/lib/seo";
-import { whatsappLink, waMessages } from "@/lib/whatsapp";
+import { breadcrumbSchema, buildMetadata, faqSchema, medicalWebPageSchema } from "@/lib/seo";
+import { locale, localeTexto } from "@/lib/site-config";
+import { respostas } from "@/lib/content";
+import { waMessages } from "@/lib/whatsapp";
 import { JsonLd } from "@/components/seo/json-ld";
-import { PageHero } from "@/components/sections/page-hero";
+import { Container } from "@/components/ui/container";
+import { IndexList } from "@/components/ui/index-list";
+import { Section } from "@/components/ui/section";
+import { TrustBlock } from "@/components/ui/trust-block";
+import { PhoneCTA, WhatsAppCTA } from "@/components/ui/cta";
 import { FAQSection } from "@/components/sections/faq-section";
-import { CTASection } from "@/components/sections/cta-section";
-import { TrackedButtonLink } from "@/components/ui/tracked-button-link";
-import { Reveal } from "@/components/ui/reveal";
+import { ApoioAutoria } from "@/components/sections/apoio-autoria";
+import { ApoioCabeca } from "@/components/sections/apoio-cabeca";
+import { ApoioDeclaracao } from "@/components/sections/apoio-declaracao";
+import { ApoioDuas } from "@/components/sections/apoio-duas";
+import { ApoioHero } from "@/components/sections/apoio-hero";
+import { ApoioPassos } from "@/components/sections/apoio-passos";
+import colunas from "@/components/sections/apoio-colunas.module.css";
 
 const PATH = "/urgencia-odontologica";
+const TITLE = `Urgência odontológica na ${locale.regiao} | Dra. Ana Beatriz`;
+const DESCRIPTION = `Dor de dente, dente quebrado, gengiva inchada ou siso inflamado? Fale com a Dra. Ana pelo WhatsApp. ${localeTexto("bairroRegiao")}.`;
 
 export const metadata: Metadata = buildMetadata({
-  title: "Urgência odontológica em [Cidade] — Dra. Ana Beatriz Lemos Souza",
-  description:
-    "Está com dor, dente quebrado, sangramento ou siso inflamado em [Cidade]? Fale pelo WhatsApp e receba orientação e atendimento de urgência com a Dra. Ana Beatriz Lemos Souza.",
+  absoluteTitle: TITLE,
+  description: DESCRIPTION,
   path: PATH,
-  keywords: [
-    "urgência odontológica em [cidade]",
-    "dentista de urgência [bairro]",
-    "dor de dente [cidade]",
-    "dentista agora em [cidade]",
-  ],
 });
 
+/**
+ * Triagem em duas listas que nunca se sobrepõem. Texto a validar pela Dra. Ana antes de ir ao ar
+ * como definitivo. Consultório: o que a Dra. Ana atende. Emergência: o que não espera resposta
+ * de WhatsApp (192 ou pronto-socorro).
+ */
 const whenToSeek = [
   "Dor de dente intensa ou latejante",
-  "Dente quebrado, trincado ou avulsionado (batida ou trauma)",
+  "Dente quebrado, trincado ou que saiu do lugar (batida na boca)",
   "Sangramento na gengiva que não para",
-  "Inchaço ou abscesso (pus) na gengiva ou no rosto",
-  "Siso inflamado, dolorido ou com dificuldade para abrir a boca",
+  "Abscesso (pus) na gengiva, sem dificuldade para respirar ou engolir",
+  "Siso inflamado ou dolorido",
   "Sensibilidade intensa e súbita",
   "Restauração, faceta ou coroa que caiu ou quebrou",
 ];
 
+const emergencySigns = [
+  "Dificuldade para respirar ou engolir",
+  "Inchaço que cresce rápido no rosto ou no pescoço",
+  "Febre alta com inchaço",
+  "Desmaio",
+  "Trauma na cabeça",
+];
+
 const whatToDo = [
-  "Mantenha a calma e evite o pânico — a maioria dos casos tem solução.",
+  "Respire fundo e tente manter a calma.",
   "Para inchaço, use compressa fria por fora do rosto (nunca calor).",
   "Evite alimentos muito quentes, gelados ou duros do lado afetado.",
   "Se um dente inteiro saiu, guarde-o em soro fisiológico ou leite e leve o quanto antes.",
   "Não coloque aspirina ou outros comprimidos diretamente sobre a gengiva.",
-  "Analgésicos só conforme orientação — evite se automedicar.",
+  "Analgésicos só conforme orientação: evite se automedicar.",
 ];
 
 const steps = [
-  { title: "Fale pelo WhatsApp", description: "Descreva o que você está sentindo e o que aconteceu — com calma, no seu tempo." },
-  { title: "Receba orientação", description: "A Dra. Ana orienta os primeiros cuidados para aliviar o desconforto até o atendimento." },
-  { title: "Combinamos o horário", description: "Definimos um horário de atendimento, com prioridade para urgências." },
-  { title: "Você é atendido(a)", description: "Com foco em alívio, conforto e controle da dor, num ambiente acolhedor." },
+  {
+    title: "Fale pelo WhatsApp",
+    description: "Descreva o que você está sentindo e o que aconteceu, com calma, no seu tempo.",
+  },
+  {
+    title: "Receba orientação",
+    description: "A Dra. Ana orienta os primeiros cuidados para aliviar o desconforto até o atendimento.",
+  },
+  {
+    title: "Horário combinado",
+    description: "A Dra. Ana define um horário de atendimento, com prioridade para urgências.",
+  },
+  {
+    title: "O atendimento",
+    description: "Com foco em alívio e no cuidado com o conforto durante o atendimento, num ambiente acolhedor.",
+  },
 ];
 
+/** A mesma lista vai ao <FAQ> (via FAQSection) e ao JSON-LD; nenhuma pergunta repete a da home. */
 const faqs = [
   {
-    q: "Vocês atendem urgência no mesmo dia?",
-    a: "Sempre que possível, sim. Ao falar pelo WhatsApp e descrever o caso, a Dra. Ana avalia a prioridade e combina o horário mais rápido disponível, inclusive em horários especiais para urgências.",
+    q: "A Dra. Ana atende urgência no mesmo dia?",
+    a: "Conforme a agenda. Ao descrever o caso pelo WhatsApp, você recebe a orientação inicial, e a Dra. Ana informa o primeiro horário disponível.",
   },
   {
     q: "Dor de dente é sempre urgência?",
-    a: "Nem sempre, mas dor não deve ser ignorada. Mesmo uma dor leve que vai e volta pode indicar algo que merece avaliação. Fale com a gente para entender o melhor momento de ser atendido(a).",
+    a: "Nem sempre, mas dor não deve ser ignorada. Mesmo uma dor leve que vai e volta pode indicar algo que merece avaliação. Fale com a Dra. Ana para entender o momento certo para o atendimento.",
+  },
+  {
+    q: "O que é caso de consultório e o que é caso de pronto-socorro?",
+    a: "Dor de dente, dente quebrado, sangramento na gengiva, abscesso, siso inflamado ou restauração que caiu podem ser atendidos no consultório. Dificuldade para respirar ou engolir, inchaço que cresce rápido no rosto ou no pescoço, febre alta com inchaço, desmaio ou trauma na cabeça: ligue 192 (SAMU) ou vá a um pronto-socorro agora.",
+  },
+  {
+    q: "O que fazer se um dente saiu inteiro?",
+    a: "Guarde o dente em soro fisiológico ou leite e leve o quanto antes. Fale com a Dra. Ana pelo WhatsApp para receber orientação.",
   },
   {
     q: "Como funciona o valor de um atendimento de urgência?",
@@ -72,23 +103,22 @@ const faqs = [
   },
 ];
 
-const medicalSchema = {
-  "@context": "https://schema.org",
-  "@type": "MedicalWebPage",
-  name: localize("Urgência odontológica em [Cidade] — Dra. Ana Beatriz Lemos Souza"),
-  description: localize(
-    "Está com dor, dente quebrado, sangramento ou siso inflamado em [Cidade]? Fale pelo WhatsApp e receba orientação e atendimento de urgência com a Dra. Ana Beatriz Lemos Souza.",
-  ),
-  url: `${siteConfig.url}${PATH}`,
-  inLanguage: "pt-BR",
-};
-
+/**
+ * /urgencia-odontologica (DESIGN.md 5.9): página de destino de anúncio, sem alarmismo. osso (aviso de
+ * emergência, WhatsApp e telefone na abertura, acima da barra no celular) · papel (quando procurar,
+ * com o pronto-socorro) · osso (o que fazer) · verde (como funciona) · noite (faixa de ação) ·
+ * papel (dúvidas) · osso (autoria).
+ */
 export default function UrgenciaOdontologicaPage() {
   return (
     <>
       <JsonLd
         data={[
-          medicalSchema,
+          medicalWebPageSchema({
+            path: PATH,
+            name: TITLE,
+            description: `Orientação e atendimento de urgência odontológica com a Dra. Ana Beatriz, na ${localeTexto("bairroRegiaoCidade")}.`,
+          }),
           faqSchema(faqs),
           breadcrumbSchema([
             { name: "Início", path: "/" },
@@ -97,172 +127,121 @@ export default function UrgenciaOdontologicaPage() {
         ]}
       />
 
-      <PageHero
-        eyebrow="Urgência odontológica"
+      <ApoioHero
+        ampla
+        actionsRow
+        kicker="Urgência odontológica"
         title="Está com dor ou um problema que não pode esperar?"
-        description="Se você está com dor, um dente quebrou, a gengiva inchou ou um siso inflamou, fale com a Dra. Ana pelo WhatsApp. Você recebe orientação inicial e a gente combina o atendimento o quanto antes."
+        lede="Fale com a Dra. Ana pelo WhatsApp. Você recebe orientação inicial, e ela combina o atendimento o quanto antes."
         breadcrumbs={[{ name: "Início", href: "/" }, { name: "Urgência odontológica" }]}
-      >
-        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-          <TrackedButtonLink
-            href={whatsappLink(waMessages.urgency)}
-            external
-            variant="whatsapp"
-            size="md"
-            event="whatsapp_click"
-            eventParams={{ location: "urgency_hero" }}
-          >
-            <MessageCircle className="size-4" strokeWidth={1.7} />
-            Falar agora pelo WhatsApp
-          </TrackedButtonLink>
-          <TrackedButtonLink
-            href={`tel:+${siteConfig.phone}`}
-            variant="secondary"
-            size="md"
-            event="phone_click"
-            eventParams={{ location: "urgency_hero" }}
-          >
-            <Phone className="size-4" strokeWidth={1.7} />
-            Ligar para o consultório
-          </TrackedButtonLink>
-        </div>
-      </PageHero>
+        aviso={
+          <p className="m-0">
+            <strong>Emergência:</strong> dificuldade para respirar ou engolir, inchaço que cresce
+            rápido no rosto ou no pescoço, febre alta com inchaço, desmaio ou trauma na cabeça. Nesses
+            casos, ligue{" "}
+            <a href="tel:192" className="link">
+              192 (SAMU)
+            </a>{" "}
+            ou vá a um pronto-socorro agora.
+          </p>
+        }
+        actions={
+          <>
+            <WhatsAppCTA location="urgency_hero" message={waMessages.urgency} />
+            <PhoneCTA location="urgency_hero" label="Ligar" />
+          </>
+        }
+        note={respostas.orientacaoWhatsapp}
+        aside={<TrustBlock variant="bloco" />}
+      />
 
-      {/* Quando procurar atendimento de urgência */}
-      <section className="section-y bg-brand-bone">
-        <div className="container">
-          <div className="max-w-2xl">
-            <Reveal>
-              <p className="eyebrow flex items-center gap-3">
-                <span className="inline-block h-px w-7 bg-brand-gold/70" /> Sinais de alerta
-              </p>
-              <h2 className="mt-4 text-display-sm">Quando procurar atendimento de urgência</h2>
-              <p className="mt-5 text-pretty text-lg leading-relaxed text-brand-ink/75">
-                Alguns sinais pedem cuidado o quanto antes. Se você se identificar com qualquer um deles, fale com a gente.
-              </p>
-            </Reveal>
-          </div>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {whenToSeek.map((item, i) => (
-              <Reveal key={item} delay={i * 0.05}>
-                <div className="surface flex h-full items-start gap-4 p-6">
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand-green/[0.07] text-brand-green">
-                    {i % 2 === 0 ? (
-                      <AlertCircle className="size-5" strokeWidth={1.7} />
-                    ) : (
-                      <Activity className="size-5" strokeWidth={1.7} />
-                    )}
-                  </span>
-                  <p className="text-sm leading-relaxed text-brand-ink/75">{item}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* O que fazer enquanto a gente se fala */}
-      <section className="section-y bg-gradient-to-b from-brand-beige/40 to-brand-bone">
-        <div className="container grid items-start gap-12 lg:grid-cols-12 lg:gap-16">
-          <div className="lg:col-span-5">
-            <Reveal>
-              <p className="eyebrow flex items-center gap-3">
-                <span className="inline-block h-px w-7 bg-brand-gold/70" /> Primeiros cuidados
-              </p>
-              <h2 className="mt-4 text-display-sm">O que fazer enquanto a gente se fala</h2>
-              <p className="mt-5 text-pretty text-lg leading-relaxed text-brand-ink/75">
-                Estas orientações simples ajudam a reduzir o desconforto até o atendimento. Vá com calma — estamos com você.
-              </p>
-            </Reveal>
-          </div>
-          <div className="lg:col-span-7">
-            <Reveal delay={0.08}>
-              <ul className="space-y-4">
-                {whatToDo.map((item) => (
-                  <li
-                    key={item}
-                    className="flex items-start gap-4 rounded-2xl border border-brand-ink/[0.07] bg-white p-5 shadow-sm"
-                  >
-                    <span className="mt-2 size-1.5 shrink-0 rounded-full bg-brand-gold" />
-                    <span className="text-sm leading-relaxed text-brand-ink/75">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
-            <Reveal delay={0.16}>
-              <div className="mt-6 flex items-start gap-4 rounded-2xl border border-brand-gold/30 bg-brand-gold/[0.06] p-5">
-                <HeartPulse className="mt-0.5 size-5 shrink-0 text-brand-gold-ink" strokeWidth={1.7} />
-                <p className="text-sm leading-relaxed text-brand-ink/75">
-                  Estas orientações são gerais e não substituem uma avaliação profissional. Em caso de dor intensa,
-                  dificuldade para respirar ou engolir, ou inchaço que cresce rápido, procure um pronto-socorro.
-                </p>
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* Como funciona o atendimento de urgência */}
-      <section className="section-y bg-brand-bone">
-        <div className="container">
-          <div className="max-w-2xl">
-            <p className="eyebrow flex items-center gap-3">
-              <span className="inline-block h-px w-7 bg-brand-gold/70" /> Passo a passo
+      <Section tone="papel" id="quando-procurar" aria-labelledby="quando-procurar-titulo">
+        <Container>
+          <ApoioDuas
+            esquerda={
+              <ApoioCabeca
+                id="quando-procurar-titulo"
+                empilhar
+                kicker="Sinais que pedem atenção"
+                title="Quando procurar atendimento de urgência"
+              >
+                Alguns sinais pedem cuidado o quanto antes. Se você se identificar com qualquer um
+                deles, fale com a Dra. Ana.
+              </ApoioCabeca>
+            }
+            direita={<IndexList variant="fatos" items={whenToSeek.map((t) => ({ title: t }))} />}
+          />
+          <aside className={colunas.socorro} aria-labelledby="pronto-socorro-titulo">
+            <h3 id="pronto-socorro-titulo" className="display">
+              Quando ligar 192 ou ir a um pronto-socorro
+            </h3>
+            <p className="t-body">
+              Estes sinais não esperam resposta de WhatsApp. Ligue{" "}
+              <a href="tel:192" className="link">
+                192 (SAMU)
+              </a>{" "}
+              ou vá a um pronto-socorro agora:
             </p>
-            <h2 className="mt-4 text-display-sm">Como funciona o atendimento de urgência</h2>
-          </div>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {steps.map((step, i) => (
-              <Reveal key={step.title} delay={i * 0.08}>
-                <div className="surface h-full p-6">
-                  <span className="flex size-11 items-center justify-center rounded-full border border-brand-gold/40 font-display text-lg text-brand-gold-ink">
-                    0{i + 1}
-                  </span>
-                  <h3 className="mt-4 font-display text-xl text-brand-green">{step.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-brand-ink/70">{step.description}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
+            <IndexList variant="fatos" items={emergencySigns.map((t) => ({ title: t }))} />
+          </aside>
+        </Container>
+      </Section>
 
-      {/* Reforço de CTA no meio da página longa */}
-      <section className="bg-brand-bone pb-4">
-        <div className="container">
-          <div className="texture-grain relative overflow-hidden rounded-[2rem] bg-brand-green px-6 py-12 text-center text-brand-bone sm:px-12">
-            <div aria-hidden className="pointer-events-none absolute -right-10 -top-10 size-56 rounded-full bg-brand-gold/10 blur-3xl" />
-            <div className="relative">
-              <h2 className="text-display-sm text-brand-bone">Está com dor agora? Não espere.</h2>
-              <p className="mx-auto mt-3 max-w-xl text-brand-bone/75">
-                Fale com a Dra. Ana pelo WhatsApp e receba orientação para aliviar o desconforto até o atendimento.
-              </p>
-              <div className="mt-7 flex justify-center">
-                <TrackedButtonLink
-                  href={whatsappLink(waMessages.urgency)}
-                  external
-                  variant="gold"
-                  size="lg"
-                  event="whatsapp_click"
-                  eventParams={{ location: "urgency_midpage" }}
-                >
-                  <MessageCircle className="size-5" strokeWidth={1.7} />
-                  Falar agora pelo WhatsApp
-                </TrackedButtonLink>
-              </div>
-            </div>
+      <Section tone="osso" id="enquanto-isso" aria-labelledby="enquanto-isso-titulo">
+        <Container>
+          <ApoioCabeca
+            id="enquanto-isso-titulo"
+            kicker="Primeiros cuidados"
+            title="O que fazer enquanto você espera a resposta"
+          >
+            Estas orientações simples ajudam a reduzir o desconforto até o atendimento. Vá com calma.
+          </ApoioCabeca>
+          <div className="mt-12">
+            <ApoioPassos modo="orientacoes" items={whatToDo.map((t) => ({ title: t }))} />
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
+
+      <Section tone="verde" id="como-funciona" aria-labelledby="como-funciona-titulo">
+        <Container>
+          <ApoioCabeca
+            id="como-funciona-titulo"
+            kicker="Passo a passo"
+            title="Como funciona o atendimento de urgência"
+          />
+          <div className="mt-12">
+            <ApoioPassos items={steps} />
+          </div>
+        </Container>
+      </Section>
+
+      <ApoioDeclaracao
+        id="agora"
+        tone="noite"
+        hideFloating
+        title="Está com dor agora? Não espere."
+        actions={
+          <>
+            <WhatsAppCTA location="urgency_midpage" message={waMessages.urgency} variant="ouro" />
+            <PhoneCTA location="urgency_midpage" variant="contorno-claro" />
+          </>
+        }
+      >
+        <p>
+          Fale com a Dra. Ana pelo WhatsApp e receba orientação para aliviar o desconforto até o
+          atendimento.
+        </p>
+      </ApoioDeclaracao>
 
       <FAQSection
         items={faqs}
+        tone="papel"
         eyebrow="Dúvidas sobre urgência"
-        title="Perguntas frequentes — Urgência"
+        title="Perguntas frequentes"
         whatsappMessage={waMessages.urgency}
       />
 
-      <CTASection />
+      <ApoioAutoria tone="osso" />
     </>
   );
 }

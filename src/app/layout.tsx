@@ -1,29 +1,35 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Montserrat } from "next/font/google";
+import { Bodoni_Moda, Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
-import { siteConfig } from "@/lib/site-config";
+import { siteConfig, themeColor } from "@/lib/site-config";
+import { absoluteUrl, ogImage } from "@/lib/seo";
 import { Analytics } from "@/components/seo/analytics";
 import { CookieConsent } from "@/components/seo/cookie-consent";
+import { SkipLink } from "@/components/seo/skip-link";
 
-const cormorant = Cormorant_Garamond({
+// Única família display e única sans do site (DESIGN.md 2.2).
+// Orçamento: <= 150 kB, 3 arquivos (romano + itálico da Bodoni e a Hanken variável).
+const display = Bodoni_Moda({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
   style: ["normal", "italic"],
-  variable: "--font-cormorant",
+  axes: ["opsz"], // eixo óptico 6..96; peso variável (omitimos "weight")
   display: "swap",
+  variable: "--font-display",
+  // Sem "Bodoni 72": o next/font não coloca aspas e o nome com número invalida a declaração inteira.
+  fallback: ["Didot", "Georgia", "serif"],
 });
 
-const montserrat = Montserrat({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-montserrat",
+const sans = Hanken_Grotesk({
+  subsets: ["latin"], // peso variável; usamos 400, 500 e 600
   display: "swap",
+  variable: "--font-sans",
+  fallback: ["system-ui", "-apple-system", "Segoe UI", "sans-serif"],
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.doctorName} — ${siteConfig.title} em ${siteConfig.city}`,
+    default: `${siteConfig.doctorName} — ${siteConfig.title}`,
     template: `%s | ${siteConfig.doctorName}`,
   },
   description:
@@ -37,37 +43,46 @@ export const metadata: Metadata = {
     type: "website",
     locale: "pt_BR",
     siteName: siteConfig.doctorName,
-    images: [
-      {
-        url: `${siteConfig.url}/opengraph-image.png`,
-        width: 1200,
-        height: 630,
-        alt: `${siteConfig.doctorName} — ${siteConfig.title}`,
-      },
-    ],
+    images: [{ url: absoluteUrl(ogImage.path), width: ogImage.width, height: ogImage.height, alt: ogImage.alt }],
   },
   twitter: {
     card: "summary_large_image",
-    images: [`${siteConfig.url}/opengraph-image.png`],
+    images: [absoluteUrl(ogImage.path)],
   },
   robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#22513A",
+  themeColor,
   width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
   colorScheme: "light",
 };
+
+// Marca o <html> como "com JavaScript" antes da pintura: só então os fios
+// começam recolhidos para se desenharem ao entrar na tela (nunca acima da dobra).
+// Trava de segurança: se a hidratação não acontecer em 5s, `reveal-off` mostra os fios inteiros.
+const SCRIPT_JS =
+  "document.documentElement.classList.add('js');window.__rv=setTimeout(function(){document.documentElement.classList.add('reveal-off')},5000)";
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pt-BR" className={`${cormorant.variable} ${montserrat.variable}`}>
-      <body className="min-h-screen bg-brand-bone font-sans text-brand-ink antialiased">
-        {children}
+    <html
+      lang="pt-BR"
+      className={`${display.variable} ${sans.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: SCRIPT_JS }} />
+      </head>
+      <body className="min-h-screen">
+        <SkipLink />
+        {/* Região de cookies: logo depois do link de pular, no DOM (posição visual fixa). */}
         <CookieConsent />
+        {children}
         <Analytics />
       </body>
     </html>

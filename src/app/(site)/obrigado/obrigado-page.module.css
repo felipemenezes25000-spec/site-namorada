@@ -1,0 +1,133 @@
+/* /obrigado: abertura osso com o arco do fio grande à direita (no celular, um arco pequeno ao lado do
+   kicker) e uma faixa verde com o que acontece agora. Sem cartão, sem sombra. */
+
+.abertura {
+  padding-top: var(--s-5);
+  padding-bottom: var(--s-7);
+}
+
+.main {
+  min-width: 0;
+}
+
+.kickLinha {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+}
+.arcoMini {
+  flex: none;
+  width: calc(var(--s-7) + var(--s-1));
+}
+.arcoMini path {
+  stroke-width: 9;
+}
+.arcoGrande {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .arcoMini path,
+  .arcoGrande path {
+    animation: obrDesenha var(--d-arco) var(--ease-fio) 0.25s backwards;
+  }
+}
+@keyframes obrDesenha {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.title {
+  margin: var(--s-4) 0 0;
+  max-width: 14ch;
+}
+.title:focus {
+  outline: none;
+}
+
+.lead {
+  max-width: 34rem;
+  margin: var(--s-4) 0 0;
+}
+.urgente {
+  margin: var(--s-4) 0 0;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--s-1);
+  margin-top: var(--s-5);
+}
+.actions :global(.btn-primario) {
+  width: 100%;
+}
+.back {
+  align-self: flex-start;
+  min-height: calc(var(--s-6) + var(--s-3));
+}
+
+/* faixa verde */
+.passos {
+  min-width: 0;
+}
+.lista {
+  margin-top: var(--s-4);
+}
+.chegar {
+  min-width: 0;
+  margin-top: var(--s-7);
+}
+.chegarTexto {
+  margin: var(--s-3) 0 0;
+}
+.mapa {
+  margin-top: var(--s-5);
+}
+.trust {
+  margin-top: var(--s-7);
+}
+
+@media (min-width: 760px) {
+  .abertura {
+    padding-top: var(--s-7);
+    padding-bottom: var(--s-9);
+  }
+  .arcoMini {
+    display: none;
+  }
+  .arcoGrande {
+    display: block;
+    align-self: start;
+    justify-self: end;
+    width: 100%;
+    max-width: calc(var(--s-10) * 2 + var(--s-8) + var(--s-4) + var(--s-1));
+    margin-top: var(--s-2);
+  }
+  .arcoGrande path {
+    stroke-width: 4;
+  }
+  .actions {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--s-2) var(--s-5);
+  }
+  .actions :global(.btn-primario) {
+    width: auto;
+  }
+  .chegar {
+    margin-top: 0;
+  }
+}
+
+@media (min-width: 760px) {
+  .trust {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

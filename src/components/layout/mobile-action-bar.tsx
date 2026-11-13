@@ -1,55 +1,53 @@
 "use client";
 
-import { MessageCircle, CalendarDays, Navigation } from "lucide-react";
-import { siteConfig } from "@/lib/site-config";
-import { whatsappLink, waMessages } from "@/lib/whatsapp";
-import { track } from "@/lib/analytics";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { CTA_LIGAR, PhoneCTA } from "@/components/ui/cta";
+import { RouteAgendarCTA, RouteWhatsAppCTA, useWaRoute } from "./route-ctas";
 
 /**
- * Barra de ação fixa no rodapé — SOMENTE em telas pequenas (md:hidden).
- * Cobre as 3 intenções de maior conversão num consultório: falar agora
- * (WhatsApp), agendar (formulário) e como chegar (mapa). A maior parte do
- * tráfego de clínica é mobile, então estes atalhos ficam sempre na mão.
- *
- * O botão flutuante de WhatsApp fica restrito ao desktop (max-md:hidden)
- * para não duplicar o WhatsApp aqui.
+ * Barra de ações fixa do celular (< 760px; DESIGN.md 4.3), presente desde o
+ * primeiro pixel. WhatsApp dominante (flex 1) + Agendar + Ligar. Fundo osso
+ * sólido, fio superior. Só a sombra do botão de WhatsApp (--sombra-botao-fixo).
+ * Em /agendamento o botão Agendar é omitido (a pessoa já está no formulário). Em
+ * /urgencia-odontologica a segunda ação é "Ligar" com rótulo visível (no lugar do formulário).
+ * O WhatsApp leva a mensagem da rota e o formulário leva o slug do tratamento (route-ctas.tsx).
+ * Some enquanto o fecho da página (`section[data-hide-floating]`) está na tela: lá já existe o
+ * mesmo botão, grande, e dois botões iguais empilhados só atrapalham.
  */
 export function MobileActionBar() {
+  const pathname = usePathname();
+  const urgencia = useWaRoute().kind === "urgency";
+  const [hidden, setHidden] = useState(false);
+
+  useEffect(() => {
+    const inView = new Set<Element>();
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) inView.add(e.target);
+        else inView.delete(e.target);
+      }
+      setHidden(inView.size > 0);
+    });
+    document.querySelectorAll("section[data-hide-floating]").forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [pathname]);
+
   return (
-    <nav
-      aria-label="Ações rápidas"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-brand-ink/[0.08] bg-brand-bone/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md md:hidden"
-    >
-      <div className="grid grid-cols-3">
-        <a
-          href={whatsappLink(waMessages.default)}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={() => track("whatsapp_click", { location: "mobile_bar" })}
-          className="flex flex-col items-center justify-center gap-1 py-2.5 text-[0.68rem] font-semibold text-[#1F8C4D]"
-        >
-          <MessageCircle className="size-5" strokeWidth={1.8} />
-          WhatsApp
-        </a>
-        <a
-          href="/agendamento"
-          onClick={() => track("scheduling_intent", { location: "mobile_bar" })}
-          className="flex flex-col items-center justify-center gap-1 border-x border-brand-ink/[0.08] py-2.5 text-[0.68rem] font-semibold text-brand-green"
-        >
-          <CalendarDays className="size-5" strokeWidth={1.8} />
-          Agendar
-        </a>
-        <a
-          href={siteConfig.address.mapsDirectionsUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={() => track("map_click", { location: "mobile_bar" })}
-          className="flex flex-col items-center justify-center gap-1 py-2.5 text-[0.68rem] font-semibold text-brand-gold-ink"
-        >
-          <Navigation className="size-5" strokeWidth={1.8} />
-          Como chegar
-        </a>
-      </div>
+    <nav aria-label="Ações rápidas" className="abar" data-hidden={hidden ? "" : undefined}>
+      <RouteWhatsAppCTA
+        location="mobile_bar"
+        compactLabel="WhatsApp"
+        className="btn-fixo"
+      />
+      {urgencia ? (
+        <PhoneCTA location="mobile_bar" label={CTA_LIGAR} className="shrink-0" />
+      ) : (
+        <>
+          {pathname !== "/agendamento" && <RouteAgendarCTA location="mobile_bar" iconOnly />}
+          <PhoneCTA location="mobile_bar" iconOnly />
+        </>
+      )}
     </nav>
   );
 }

@@ -1,0 +1,9 @@
+.next
+node_modules
+_arquivo
+coverage
+test-results
+package-lock.json
+public
+supabase
+DESIGN.md

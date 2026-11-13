@@ -1,0 +1,331 @@
+/* Seções da página /contato: abertura, canais em linhas largas, "Como chegar" com o mapa em
+   janela de arco e fecho curto. Mobile primeiro; sem cartões, sem sombras, sem caixa-alta.
+   Nada estoura a largura: todo item de grade tem min-width: 0 e os valores longos quebram com
+   overflow-wrap. */
+
+/* ------------------------------ Abertura ------------------------------ */
+.hero {
+  padding-block: var(--s-5) var(--s-6);
+}
+.crumbs {
+  margin-bottom: var(--s-2);
+}
+.heroGrid {
+  margin-top: var(--s-5);
+  align-items: end;
+}
+.heroText {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.heroTitle {
+  font-size: clamp(2.1rem, 8.6vw, 2.75rem);
+  max-width: 16ch;
+}
+.heroLede {
+  max-width: 30rem;
+  margin: var(--s-4) 0 0;
+}
+/* no celular a barra fixa e a primeira linha de canais já cumprem o papel */
+.heroActions,
+.heroFig {
+  display: none;
+}
+@media (min-width: 760px) {
+  .hero {
+    padding-block: var(--s-6) var(--s-8);
+  }
+  .heroGrid {
+    margin-top: var(--s-7);
+  }
+  .heroTitle {
+    font-size: clamp(2.75rem, 1.1rem + 5vw, 5.25rem);
+    max-width: none;
+  }
+  .heroLede {
+    margin-top: var(--s-6);
+  }
+  .heroText {
+    grid-column: 1 / 8;
+  }
+  .heroFig {
+    display: block;
+    grid-column: 9 / 13;
+    min-width: 0;
+  }
+  .heroActions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-4) var(--s-6);
+    margin-top: var(--s-6);
+  }
+  .heroActions > a {
+    white-space: nowrap;
+  }
+  .heroPhoneWrap {
+    display: flex;
+    align-items: baseline;
+    gap: var(--s-3);
+    margin: 0;
+    min-width: 0;
+  }
+  .heroPhoneK {
+    font-family: var(--font-display), Didot, "Bodoni 72", Georgia, serif;
+    font-style: italic;
+    font-size: 1.125rem;
+    color: var(--accent);
+  }
+  .heroPhone {
+    font-size: clamp(1.5rem, 1rem + 1.4vw, 2.25rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--head);
+    text-decoration-color: var(--ouro);
+    text-underline-offset: 0.22em;
+  }
+}
+@media (min-width: 1100px) {
+  .hero {
+    padding-block: var(--s-6) var(--s-9);
+  }
+  .heroText {
+    grid-column: 1 / 8;
+  }
+  .heroFig {
+    grid-column: 9 / 13;
+  }
+}
+
+/* ------------------------------ Canais ------------------------------ */
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: var(--s-2);
+  padding-block: var(--s-5) var(--s-5);
+  min-width: 0;
+}
+.label {
+  margin: 0;
+  font-size: 1.1875rem;
+}
+.val {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.valLink {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 44px;
+  color: var(--head);
+  text-decoration: none;
+}
+/* a linha inteira vira alvo de toque: o link estica um ::after sobre o <li> */
+.valLink::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.valText {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-decoration: underline;
+  text-decoration-color: var(--ouro);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: text-decoration-thickness var(--d-toque) var(--ease-toque);
+}
+.stretch::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+@media (hover: hover) {
+  .valLink:hover .valText {
+    text-decoration-thickness: 2px;
+  }
+}
+/* números (telefone) em Hanken tabular, no tamanho de um título d3 */
+.big {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(1.75rem, 1.25rem + 2.2vw, 2.75rem);
+  line-height: 1.14;
+  letter-spacing: -0.012em;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+/* e-mail e Instagram: longos, ficam um pouco menores */
+.mid {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(1.25rem, 0.95rem + 1.6vw, 2rem);
+  line-height: 1.25;
+}
+.addr {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.addrSub {
+  margin: var(--s-3) 0 0;
+  color: var(--fg);
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+.action {
+  min-width: 0;
+  margin-top: var(--s-3);
+}
+@media (min-width: 760px) {
+  .row {
+    grid-template-columns: minmax(8rem, 3fr) minmax(0, 9fr);
+    column-gap: var(--gap);
+    align-items: baseline;
+    padding-block: var(--s-6) var(--s-6);
+  }
+  .action {
+    grid-column: 2;
+    margin-top: var(--s-2);
+  }
+}
+@media (min-width: 1100px) {
+  .row {
+    grid-template-columns: minmax(8rem, 2fr) minmax(0, 7fr) minmax(0, 3fr);
+  }
+  .action {
+    grid-column: auto;
+    margin-top: 0;
+    justify-self: end;
+  }
+}
+
+/* ------------------------------ Como chegar (noite) ------------------------------ */
+.mapGrid {
+  align-items: end;
+}
+.head {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.head :global(.t-d2) {
+  margin: var(--s-3) 0 0;
+  max-width: 12ch;
+}
+.lead {
+  max-width: 34rem;
+  margin: var(--s-5) 0 0;
+}
+.addrBlock {
+  position: relative;
+  max-width: 34rem;
+  margin-top: var(--s-6);
+  padding-top: var(--s-5);
+}
+.addrBlock > :global(.fio-h) {
+  position: absolute;
+  inset: 0 0 auto 0;
+}
+.refs {
+  margin: var(--s-3) 0 0;
+  padding: 0;
+}
+.ref {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-4);
+  padding-block: var(--s-2);
+  min-width: 0;
+  border-top: 1px solid var(--rule);
+}
+.ref:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+.ref dt {
+  flex: none;
+  min-width: 6.5rem;
+}
+.ref dd {
+  margin: 0;
+  min-width: 0;
+  color: var(--fg);
+}
+.note {
+  margin: var(--s-4) 0 0;
+  max-width: 34rem;
+  color: var(--fg);
+}
+.btns {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--s-3);
+  margin-top: var(--s-6);
+}
+.btns > a {
+  white-space: nowrap;
+}
+.mapCol {
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin-top: var(--s-8);
+  --mf-min-desk: 34rem;
+}
+.facade {
+  height: 100%;
+}
+@media (min-width: 560px) {
+  .btns {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+}
+@media (min-width: 1100px) {
+  .head {
+    grid-column: 1 / 6;
+  }
+  .mapCol {
+    grid-column: 7 / 13;
+    margin-top: 0;
+  }
+}
+
+/* ------------------------------ Fecho ------------------------------ */
+.fecho {
+  align-items: end;
+}
+.fechoHead {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.fechoHead :global(.t-d2) {
+  margin: var(--s-3) 0 0;
+  max-width: 14ch;
+}
+.fechoAction {
+  grid-column: 1 / -1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--s-5);
+  margin-top: var(--s-5);
+  max-width: 28rem;
+}
+@media (min-width: 760px) {
+  .fechoHead {
+    grid-column: 1 / 8;
+  }
+  .fechoAction {
+    grid-column: 8 / 13;
+    margin-top: 0;
+    align-items: flex-start;
+  }
+}

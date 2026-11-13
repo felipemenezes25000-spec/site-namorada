@@ -2,146 +2,2481 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
+/* Hífen dos títulos: a serifa de alto contraste (Bodoni Moda) desenha o hífen como um fio de menos de 1px,
+   que some em "buco-maxilo-facial" e "bem-estar" a 1x. Esta face cobre SÓ o hífen (unicode-range) com a
+   sans do sistema (traço de cerca de 2px a 28px), e entra na frente da serifa nas pilhas de título
+   (--font-display-hy). Se nenhuma das fontes locais existir, o navegador usa o hífen da serifa. */
+@font-face {
+  font-family: "Hifen";
+  src:
+    local("Segoe UI"),
+    local("Roboto"),
+    local("Helvetica Neue"),
+    local("Arial"),
+    local("Liberation Sans");
+  unicode-range: U+002D, U+2010, U+2011;
+  font-display: swap;
+}
+
+/* ==========================================================================
+   Sistema de design "Edição de Consultório" — fonte única dos tokens.
+   Especificação: DESIGN.md (raiz do repositório). Tailwind apenas espelha
+   estas variáveis (tailwind.config.ts).
+   ========================================================================== */
+
+:root {
+  /* ----- cores (2.1) ----- */
+  --osso: #fbf8f1;
+  --papel: #f3ede0;
+  --areia: #efe5d0;
+  --verde: #22513a;
+  --verde-escuro: #1a4230;
+  --noite: #0f2a1e;
+  --noite-fundo: #08170f;
+  --tinta: #16251d;
+  --tinta-2: #44564b;
+  --ouro: #b69050; /* só fios e ornamentos: nunca texto */
+  --ouro-tinta: #76591e; /* texto dourado sobre claro */
+  --ouro-claro: #dcc285; /* texto e fios sobre escuro */
+  --ouro-hover: #e6cf9b;
+  /* numerais grandes (.num-lg, .num-xl) sobre tons claros: >= 3:1 sobre osso (4,74), papel (4,31) e areia (4,02).
+     Sobre noite e verde vira --ouro-claro (ver [data-tone] abaixo). Não vale para fios e ornamentos: esses seguem --ouro. */
+  --ouro-numeral: #8a6a28;
+  --nevoa: #c3cec6;
+  /* tratamento de cor comum a todas as fotos (retrato em arco e figuras): mesmo grading sobre fundo papel */
+  --foto-grade: saturate(0.94) contrast(1.02);
+  --linha: #6f7f74; /* contorno que carrega informação (>= 3:1) */
+  --erro: #9e2a2b;
+  --luz: #9a7a35; /* só o brilho do título */
+  --fio: rgba(182, 144, 80, 0.55);
+  --fio-claro: rgba(220, 194, 133, 0.45);
+
+  /* tom padrão = osso (Section troca via data-tone) */
+  --bg: var(--osso);
+  --head: var(--verde);
+  --fg: var(--tinta);
+  --fg-2: var(--tinta-2);
+  --accent: var(--ouro-tinta);
+  --rule: var(--fio);
+  --focus: var(--verde);
+
+  /* ----- grade e ritmo (2.3) ----- */
+  /* margem lateral; nunca menor que a área segura do aparelho (entalhe em paisagem) */
+  --pad: max(clamp(20px, 5.2vw, 72px), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+  --rail: 0px; /* trilho do Fio: >= 1100px reserva 56px à esquerda em TODAS as páginas (um único gutter) */
+  --wrap-max: 1480px; /* >= 1700px: 1640px */
+  --gap: clamp(16px, 2.4vw, 32px);
+  /* escala de espaço (contrato do base): use var(--s-n) em padding, margin e gap dos módulos novos.
+       --s-1 4px   --s-2 8px   --s-3 12px  --s-4 16px  --s-5 24px
+       --s-6 32px  --s-7 48px  --s-8 64px  --s-9 96px  --s-10 128px */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: 4rem;
+  --s-9: 6rem;
+  --s-10: 8rem;
+  --sec-y: clamp(4rem, 1.6rem + 7vw, 8.75rem); /* 64px no celular, 88px a 760px, ~126px a 1440px */
+
+  /* ----- eixos ópticos da serifa (2.2) -----
+     Abaixo de ~64px a serifa de alto contraste perde os fios finos (hífen, serifas) a 1x:
+     peso 500 e opsz 28 valem para tudo; só os títulos GRANDES (>= 64px: .t-d1, .t-d1i, .t-d4,
+     numerais) voltam a 450 e opsz 48, a partir de 1200px (ver a regra no fim das tipografias). */
+  --d-wght: 500;
+  --d-opsz: 28;
+  --font-display-hy: "Hifen", var(--font-display);
+  --d-opsz-grande: 48;
+
+  /* ----- sombra única (2.4) ----- */
+  --sombra-botao-fixo: 0 10px 28px -12px rgba(15, 42, 30, 0.55);
+
+  /* ----- camadas fixas (2.5) ----- */
+  /* alturas em rem: acompanham o tamanho do texto (200%) em vez de cortar o cabeçalho e a barra */
+  --h-header: 3.5rem;
+  --h-bar: calc(4.5rem + env(safe-area-inset-bottom));
+  --h-cookie: 0px; /* CookieConsent grava a altura real enquanto aberto */
+  --z-rail: 30;
+  --z-bar: 40;
+  --z-cookie: 42;
+  --z-header: 50;
+  --z-skip: 100;
+
+  /* ----- movimento (2.6) ----- */
+  --ease-fio: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-toque: cubic-bezier(0.16, 1, 0.3, 1);
+  --d-toque: 180ms;
+  --d-base: 400ms;
+  --d-painel: 600ms;
+  --d-fio: 1400ms;
+  --d-luz: 1800ms;
+  --d-arco: 2400ms;
+  --d-retrato: 1200ms;
+}
+@media (min-width: 760px) {
   :root {
-    --font-cormorant: "Cormorant Garamond", Georgia, serif;
-    --font-montserrat: "Montserrat", system-ui, sans-serif;
-    --brand-green: #22513a;
-    --brand-gold: #b69050;
-    --brand-bone: #fbf8f1;
+    --h-header: 4.5rem;
+    --h-bar: 0px;
+  }
+}
+@media (min-width: 1100px) {
+  :root {
+    --h-header: 4.75rem;
+    --rail: 56px;
+  }
+}
+@media (min-width: 1700px) {
+  :root {
+    --wrap-max: 1640px;
+  }
+}
+/* Paisagem de celular (altura <= 480px): a barra fixa encolhe para uma linha de 56px; em alturas
+   ainda menores (zoom de 400%, 320x256) ela deixa de ser fixa e não reserva espaço. O cabeçalho
+   deixa de acompanhar a rolagem (ver .hdr). */
+@media (max-height: 480px) and (max-width: 759px) {
+  :root {
+    --h-bar: calc(56px + env(safe-area-inset-bottom));
+  }
+}
+@media (max-height: 300px) and (max-width: 759px) {
+  :root {
+    --h-bar: 0px;
+  }
+}
+
+/* Tons de seção: Section grava data-tone; todos os componentes leem as variáveis. */
+[data-tone] {
+  background-color: var(--bg);
+  color: var(--fg);
+}
+[data-tone="papel"] {
+  --bg: var(--papel);
+}
+[data-tone="noite"],
+[data-tone="verde"] {
+  --ouro-numeral: var(--ouro-claro);
+  --head: var(--osso);
+  --fg: var(--osso);
+  --fg-2: var(--nevoa);
+  --accent: var(--ouro-claro);
+  --rule: var(--fio-claro);
+  --focus: var(--ouro-claro);
+}
+[data-tone="verde"] {
+  --fg-2: #dce8df; /* texto de apoio sobre o verde: >= 7:1 (sem opacidade) */
+}
+[data-tone="noite"] {
+  --bg: var(--noite);
+}
+[data-tone="verde"] {
+  --bg: var(--verde);
+}
+[data-tone="noite-fundo"] {
+  --ouro-numeral: var(--ouro-claro);
+  --bg: var(--noite-fundo);
+  --head: var(--osso);
+  --fg: var(--osso);
+  --fg-2: var(--nevoa);
+  --accent: var(--ouro-claro);
+  --rule: var(--fio-claro);
+  --focus: var(--ouro-claro);
+}
+
+/* ==========================================================================
+   BASE
+   ========================================================================== */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    /* foco e âncoras nunca ficam sob o cabeçalho, a barra ou o aviso de cookies */
+    scroll-padding-top: calc(var(--h-header) + 16px);
+    scroll-padding-bottom: calc(var(--h-bar) + var(--h-cookie) + 16px);
+  }
+  /* cabeçalho que não acompanha a rolagem (paisagem baixa): nada fica sob ele */
+  @media (max-height: 480px) {
+    html {
+      scroll-padding-top: 16px;
+    }
+  }
+  /* o alvo do "Ir para o conteúdo" recebe o foco, mas não precisa de anel */
+  main:focus {
+    outline: none;
   }
 
+  body {
+    background: var(--osso);
+    color: var(--tinta);
+    font-family: var(--font-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: clip;
+  }
+
+  /* LEGADO: borda padrão do /admin. */
   * {
     border-color: rgba(35, 48, 42, 0.1);
   }
 
-  html {
-    -webkit-text-size-adjust: 100%;
-    scroll-behavior: smooth;
-    scroll-padding-top: 6rem;
+  h1,
+  h2 {
+    font-family: var(--font-display-hy), Didot, "Bodoni 72", Georgia, serif;
+    font-weight: var(--d-wght);
+    color: var(--head);
+    text-wrap: balance;
   }
-
-  body {
-    @apply bg-brand-bone text-brand-ink font-sans antialiased;
-    font-feature-settings: "kern", "liga", "calt";
-    text-rendering: optimizeLegibility;
-  }
-
-  h1, h2, h3, h4 {
-    @apply font-display text-brand-green;
+  h3,
+  h4 {
     font-weight: 500;
+    color: var(--head);
+    text-wrap: balance;
+  }
+  p,
+  li {
+    text-wrap: pretty;
   }
 
   ::selection {
-    background: rgba(34, 81, 58, 0.92);
-    color: #fcfcfc;
+    background: var(--verde);
+    color: var(--osso);
   }
 
-  /* Visible, on-brand focus ring for keyboard users only */
+  /* Foco: anel duplo (contorno + halo da cor do fundo da seção). Só teclado. */
   :focus-visible {
-    outline: 2px solid var(--brand-gold);
-    outline-offset: 3px;
-    border-radius: 4px;
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--bg);
+  }
+  :focus:not(:focus-visible) {
+    outline: none;
   }
 
-  /* Custom scrollbar (desktop) */
+  img,
+  svg {
+    max-width: 100%;
+  }
+
+  /* Barra de rolagem discreta (desktop) */
   @media (pointer: fine) {
     ::-webkit-scrollbar {
       width: 11px;
       height: 11px;
     }
     ::-webkit-scrollbar-track {
-      background: #f1efe9;
+      background: var(--papel);
     }
     ::-webkit-scrollbar-thumb {
       background: #c9cdbf;
       border-radius: 999px;
-      border: 3px solid #f1efe9;
+      border: 3px solid var(--papel);
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: #b69050;
+      background: var(--ouro);
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.001ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.001ms !important;
-      scroll-behavior: auto !important;
+  @media (forced-colors: active) {
+    :focus-visible {
+      outline-color: Highlight;
     }
   }
 }
 
+/* ==========================================================================
+   COMPONENTES
+   ========================================================================== */
 @layer components {
-  /* Eyebrow / kicker label — small tracked uppercase Montserrat.
-     Cor padrão = dourado escurecido (AA sobre fundo claro). Em fundos
-     escuros, sobrescreva com `text-brand-gold-bright`. */
-  .eyebrow {
-    @apply font-sans text-[0.72rem] font-semibold uppercase tracking-eyebrow text-brand-gold-ink;
+  /* ------------------------------ Grade (2.3) ------------------------------ */
+  .wrap {
+    width: 100%;
+    max-width: var(--wrap-max);
+    margin-inline: auto;
+    padding-inline: var(--pad);
+    /* gutter único: logo, capa, miolo e rodapé começam no mesmo x (pad + trilho) */
+    padding-left: calc(var(--pad) + var(--rail));
+  }
+  .grid12 {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: var(--gap);
+  }
+  @media (min-width: 760px) {
+    .grid12 {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 760px) {
+    .grid12--7-5 > :first-child { grid-column: 1 / 8; }
+    .grid12--7-5 > :last-child { grid-column: 8 / 13; }
+    .grid12--5-7 > :first-child { grid-column: 1 / 6; }
+    .grid12--5-7 > :last-child { grid-column: 6 / 13; }
+    .grid12--8-4 > :first-child { grid-column: 1 / 9; }
+    .grid12--8-4 > :last-child { grid-column: 9 / 13; }
+    .grid12--3-9 > :first-child { grid-column: 1 / 4; }
+    .grid12--3-9 > :last-child { grid-column: 4 / 13; }
+  }
+  /* Hero das páginas internas: colunas próprias (não dependem de utilitários responsivos) */
+  .pg-text,
+  .pg-fig {
+    grid-column: 1 / -1;
+    min-width: 0;
+  }
+  @media (min-width: 760px) {
+    .pg-text {
+      grid-column: span 7;
+    }
+    .pg-text--wide {
+      grid-column: span 9;
+    }
+    .pg-fig {
+      grid-column: span 5;
+    }
+  }
+  .sec {
+    padding-block: var(--sec-y);
+  }
+  /* Seções abaixo da primeira não são desenhadas até chegarem perto da tela (content-visibility).
+     contain-intrinsic-size "auto" lembra a altura real depois de desenhada. Âncoras (#hash), o trilho do Fio
+     e a busca do navegador continuam funcionando: a seção é revelada ao ser alvo. */
+  main section[data-tone]:not(:first-of-type) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 720px;
+  }
+  .sec-compact {
+    padding-block: calc(var(--sec-y) / 2);
+  }
+  .bleed-right {
+    margin-right: calc(-1 * var(--pad));
+  }
+  .clip-x {
+    overflow-x: clip;
   }
 
-  /* Editorial body copy */
-  .lede {
-    @apply font-sans text-lg leading-relaxed text-brand-ink/80;
+  /* Estrutura do site (só páginas públicas). O cabeçalho é sticky e ocupa o seu lugar no fluxo
+     (cresce sozinho com o texto a 200%); a barra do celular e o aviso de cookies são fixos e
+     reservam o espaço no fim, para o último pixel do rodapé nunca ficar sob eles. */
+  .site-shell {
+    padding-bottom: calc(var(--h-bar) + var(--h-cookie));
   }
 
-  /* Thin gold rule used as a refined divider */
-  .gold-rule {
-    @apply h-px w-12 bg-brand-gold/70;
+  /* --------------------------- Tipografia (2.2) --------------------------- */
+  .display,
+  .t-d1,
+  .t-d1i,
+  .t-d2,
+  .t-d3,
+  .t-d4,
+  .t-row {
+    font-family: var(--font-display-hy), Didot, "Bodoni 72", Georgia, serif;
+    font-weight: var(--d-wght);
+    font-optical-sizing: none;
+    font-variation-settings: "opsz" var(--d-opsz);
+    color: var(--head);
+    text-wrap: balance;
+    hyphens: manual;
+    /* a palavra longa quebra em vez de vazar (texto a 200%, 320px) */
+    overflow-wrap: anywhere;
+  }
+  /* Tamanho = o clamp de sempre, com TETO em vw: a 200% de texto (rem dobra) o título não passa da
+     largura da tela. Nas telas normais o teto nunca é o menor valor. */
+  .t-d1 {
+    font-size: min(clamp(2.875rem, 0.9rem + 7vw, 6.75rem), 13vw);
+    line-height: 1;
+    letter-spacing: -0.022em;
+  }
+  /* Só os títulos grandes (>= 64px) usam a serifa fina: peso 450 e opsz 48 */
+  @media (min-width: 1200px) {
+    .t-d1,
+    .t-d1i,
+    .t-d4 {
+      font-weight: 450;
+      font-variation-settings: "opsz" var(--d-opsz-grande);
+    }
+  }
+  @media (min-width: 1100px) {
+    .t-d1 {
+      line-height: 0.95;
+    }
+  }
+  .t-d1i {
+    font-size: min(clamp(2.5rem, 1.1rem + 5vw, 5.25rem), 12vw);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+  }
+  .t-d2 {
+    font-size: min(clamp(2.5rem, 1.6rem + 3.2vw, 4rem), 11vw);
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+  }
+  .t-d3 {
+    font-size: min(clamp(1.75rem, 1.25rem + 2.2vw, 2.75rem), 9vw);
+    line-height: 1.14;
+    letter-spacing: -0.012em;
+  }
+  .t-d4 {
+    font-style: italic;
+    font-size: min(clamp(1.75rem, 1rem + 4vw, 4.5rem), 9vw);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+  }
+  @media (min-width: 1100px) {
+    .t-d4 {
+      line-height: 1.08;
+    }
+  }
+  .t-row {
+    font-size: min(clamp(1.75rem, 1rem + 2.2vw, 2.75rem), 9vw);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
   }
 
-  /* Decorative diamond separator from the brand wordmark */
-  .gold-diamond::before {
-    content: "";
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    transform: rotate(45deg);
-    background: var(--brand-gold);
-    margin: 0 0.75rem;
-    vertical-align: middle;
+  .t-lead {
+    font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+    line-height: 1.45;
+    color: var(--fg);
+  }
+  .t-body {
+    font-size: clamp(1.0625rem, 1rem + 0.2vw, 1.1875rem);
+    line-height: 1.6;
+    color: var(--fg-2);
+  }
+  /* texto de apoio: 16px no celular (informação ao paciente), 15px a partir de 760px */
+  .t-sm {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  @media (min-width: 760px) {
+    .t-sm {
+      font-size: 0.9375rem;
+    }
+  }
+  .t-cap {
+    font-size: 0.875rem; /* piso do site para legendas: 14px */
+    line-height: 1.45;
+    letter-spacing: 0.01em;
+    color: var(--fg-2);
+  }
+  .t-label {
+    font-size: 1rem;
+    line-height: 1.2;
+    font-weight: 500;
   }
 
-  /* Surface card */
-  .surface {
-    @apply rounded-3xl border border-brand-ink/[0.07] bg-white shadow-card;
+  /* Itálico pequeno: kicker, folio, numeral, legenda "Fig.", rótulo de campo. */
+  .t-kicker,
+  .t-folio,
+  .it-sm {
+    font-family: var(--font-display-hy), Didot, "Bodoni 72", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-optical-sizing: none;
+    font-variation-settings: "opsz" 11;
+    font-feature-settings: "lnum";
+    color: var(--accent);
+  }
+  .t-kicker {
+    font-size: clamp(1.0625rem, 0.95rem + 0.5vw, 1.5rem);
+    line-height: 1.3;
+    letter-spacing: 0;
+  }
+  .t-folio {
+    font-size: 1.125rem;
+    line-height: 1;
   }
 
-  /* Subtle paper texture for green sections */
-  .texture-grain {
+  /* Numerais: Hanken tabular para dados; Bodoni itálica para sequência. */
+  .nums {
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+  .anywhere {
+    overflow-wrap: anywhere;
+  }
+  /* telas largas (>= 1700px): corpo 18px e abertura 26px; a grade já chega a 1640px de largura */
+  @media (min-width: 1700px) {
+    body {
+      font-size: 1.125rem;
+    }
+    .t-lead {
+      font-size: 1.625rem;
+    }
+  }
+
+  /* Link em texto corrido */
+  .link {
+    color: var(--head);
+    text-decoration: underline;
+    text-decoration-color: var(--ouro);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    transition: text-decoration-thickness var(--d-toque) var(--ease-toque);
+  }
+  @media (hover: hover) {
+    .link:hover {
+      text-decoration-thickness: 2px;
+    }
+  }
+
+  /* Pular para o conteúdo */
+  .skip-link {
+    position: fixed;
+    left: 16px;
+    top: 16px;
+    z-index: var(--z-skip);
+    padding: 12px 20px;
+    border-radius: 999px;
+    background: var(--verde);
+    color: var(--osso);
+    font-weight: 500;
+    transform: translateY(-200%);
+  }
+  .skip-link:focus {
+    transform: none;
+  }
+
+  /* ------------------------------ Botões (4.2) ------------------------------ */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 52px;
+    padding: 0 28px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 1rem;
+    line-height: 1.2;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    transition:
+      background-color var(--d-toque) var(--ease-toque),
+      color var(--d-toque) var(--ease-toque),
+      border-color var(--d-toque) var(--ease-toque),
+      transform var(--d-toque) var(--ease-toque);
+  }
+  .btn svg {
+    flex: none;
+    width: 20px;
+    height: 20px;
+  }
+  .btn:active {
+    transform: scale(0.98);
+  }
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  .btn-sm {
+    min-height: 44px;
+    padding: 0 20px;
+  }
+  .btn-block {
+    display: flex;
+    width: 100%;
+  }
+  .btn-primario {
+    background: var(--verde);
+    color: var(--osso);
+  }
+  .btn-contorno {
+    border-color: var(--verde);
+    background: transparent;
+    color: var(--verde);
+  }
+  .btn-ouro {
+    background: var(--ouro-claro);
+    color: var(--noite);
+  }
+  .btn-contorno-claro {
+    border-color: var(--ouro-claro);
+    background: transparent;
+    color: var(--osso);
+  }
+  .btn-texto {
+    min-height: 44px;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--head);
+    text-decoration: underline;
+    text-decoration-color: var(--ouro);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.25em;
+  }
+  .btn-texto:active {
+    transform: none;
+  }
+  @media (hover: hover) {
+    .btn-primario:hover {
+      background: var(--verde-escuro);
+    }
+    .btn-contorno:hover {
+      background: color-mix(in srgb, var(--verde) 7%, transparent);
+    }
+    .btn-ouro:hover {
+      background: var(--ouro-hover);
+    }
+    .btn-contorno-claro:hover {
+      background: color-mix(in srgb, var(--ouro-claro) 12%, transparent);
+    }
+    .btn-texto:hover {
+      text-decoration-thickness: 2px;
+    }
+  }
+  .btn-fixo {
+    box-shadow: var(--sombra-botao-fixo);
+  }
+  .btn-fixo:focus-visible {
+    box-shadow:
+      0 0 0 2px var(--bg),
+      var(--sombra-botao-fixo);
+  }
+  /* Botão redondo (barra do celular): só ícone, 52px */
+  .btn-icone {
+    width: 52px;
+    padding: 0;
+  }
+  @media (forced-colors: active) {
+    .btn {
+      border-color: ButtonText;
+    }
+  }
+
+  /* ------------------------------ O Fio (3.1) ------------------------------ */
+  /* Divisor: linha de 1px que cresce da esquerda para a direita, uma vez. */
+  .fio-h {
     position: relative;
+    display: block;
+    width: 100%;
+    height: 1px;
+    flex: none;
   }
-  .texture-grain::after {
+  .fio-h::before {
     content: "";
     position: absolute;
     inset: 0;
-    background-image: theme("backgroundImage.grain");
-    opacity: 0.025;
-    mix-blend-mode: overlay;
+    background: var(--rule);
+    transform-origin: 0 50%;
+    transition: transform var(--d-fio) var(--ease-fio) var(--fio-delay, 0ms);
+  }
+  /* Fio duplo de masthead: 1px + 1px a 5px de distância */
+  .fio-h--duplo {
+    height: 6px;
+  }
+  .fio-h--duplo::before {
+    bottom: auto;
+    height: 1px;
+  }
+  .fio-h--duplo::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--rule);
+    transform-origin: 0 50%;
+    transition: transform var(--d-fio) var(--ease-fio) calc(var(--fio-delay, 0ms) + 120ms);
+  }
+  .fio-h--claro::before,
+  .fio-h--claro::after {
+    background: var(--fio-claro);
+  }
+  /* Vertical */
+  .fio-v {
+    position: relative;
+    display: block;
+    width: 1px;
+    align-self: stretch;
+    flex: none;
+  }
+  .fio-v::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--rule);
+    transform-origin: 50% 0;
+    transition: transform var(--d-fio) var(--ease-fio) var(--fio-delay, 0ms);
+  }
+  /* Estado-base VISÍVEL; só com html.js e antes de entrar na tela a linha está recolhida. */
+  /* `reveal-off` (trava de segurança em layout.tsx) mostra tudo se a hidratação falhar. */
+  html.js:not(.reveal-off) .fio-h[data-reveal]:not(.in)::before,
+  html.js:not(.reveal-off) .fio-h[data-reveal]:not(.in)::after,
+  html.js:not(.reveal-off) [data-reveal]:not(.in) .fio-h::before,
+  html.js:not(.reveal-off) [data-reveal]:not(.in) .fio-h::after {
+    transform: scaleX(0);
+  }
+  html.js:not(.reveal-off) .fio-v[data-reveal]:not(.in)::before,
+  html.js:not(.reveal-off) [data-reveal]:not(.in) .fio-v::before {
+    transform: scaleY(0);
+  }
+
+  /* Fio de progresso (celular e tablet): mora dentro do cabeçalho. */
+  .fio-prog {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
     pointer-events: none;
+  }
+  .fio-prog::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--fio);
+  }
+  .fio-prog > i {
+    position: absolute;
+    inset: 0;
+    background: var(--ouro-tinta);
+    transform-origin: 0 50%;
+    transform: scaleX(var(--p, 0));
+  }
+  @supports (animation-timeline: scroll()) {
+    .fio-prog > i {
+      animation: prog linear both;
+      animation-timeline: scroll(root block);
+    }
+  }
+  @keyframes prog {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+  @media (min-width: 1100px) {
+    .fio-prog {
+      display: none;
+    }
+  }
+
+  /* Trilho (desktop): ver FioRail. */
+  .rail {
+    position: fixed;
+    /* telas largas: o trilho acompanha a coluna de conteúdo, não a borda da janela */
+    left: max(var(--pad), calc((100vw - var(--wrap-max)) / 2 + var(--pad)));
+    top: calc(var(--h-header) + 24px);
+    bottom: calc(40px + var(--h-cookie));
+    width: 44px;
+    z-index: var(--z-rail);
+    display: none;
+    transition: opacity var(--d-base) var(--ease-toque);
+    --rail-ink: var(--ouro-tinta);
+    --rail-fio: var(--fio);
+    --rail-bg: var(--osso);
+    --rail-txt: var(--tinta-2);
+  }
+  @media (min-width: 1100px) and (min-height: 521px) {
+    .rail {
+      display: block;
+    }
+  }
+  /* o tom vem de cada peça (data-t, posto por FioRail): cada uma lê a seção sob o seu centro */
+  .rail [data-t="papel"] {
+    --rail-bg: var(--papel);
+  }
+  .rail [data-t="noite"] {
+    --rail-ink: var(--ouro-claro);
+    --rail-bg: var(--noite);
+    --rail-txt: var(--osso);
+  }
+  .rail [data-t="verde"] {
+    --rail-ink: var(--ouro-claro);
+    --rail-bg: var(--verde);
+    --rail-txt: var(--osso);
+  }
+  /* some quando o rodapé entra na tela (o rodapé é de outra composição) */
+  .rail[data-rail-hidden] {
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--d-base) var(--ease-toque),
+      visibility 0s linear var(--d-base);
+  }
+  /* faixa dos losangos: abaixo do numeral e acima do texto vertical "CRO-SP" */
+  .rail-track {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 44px;
+    bottom: 140px;
+  }
+  /* Sem JavaScript o trilho não existe (a página não depende dele). */
+  html:not(.js) .rail {
+    display: none !important;
+  }
+  .rail-line {
+    position: absolute;
+    left: 21px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--rail-fio);
+  }
+  .rail-fill {
+    position: absolute;
+    left: 21px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--ouro);
+    transform-origin: 50% 0;
+    transform: scaleY(var(--rail-p, 0));
+  }
+  .rail-stop {
+    position: absolute;
+    left: 0;
+    width: 44px;
+    height: 44px;
+    margin-top: -22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color var(--d-toque);
+  }
+  .rail-dia {
+    display: block;
+    width: 9px;
+    height: 9px;
+    border: 1px solid var(--rail-ink);
+    background: var(--rail-bg);
+    transform: rotate(45deg);
+    transition:
+      transform var(--d-toque) var(--ease-toque),
+      background-color var(--d-toque) var(--ease-toque);
+  }
+  .rail-stop[aria-current="true"] .rail-dia {
+    background: var(--rail-ink);
+    transform: rotate(45deg) scale(1.25);
+  }
+  .rail-label {
+    position: absolute;
+    left: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 4px 10px;
+    white-space: nowrap;
+    background: var(--rail-bg);
+    color: var(--rail-txt);
+    font-size: 0.8125rem;
+    line-height: 1.3;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--d-toque);
+  }
+  .rail-stop:hover .rail-label,
+  .rail-stop:focus-visible .rail-label {
+    opacity: 1;
+  }
+  .rail-num {
+    position: absolute;
+    left: 12px;
+    top: 0;
+    font-family: var(--font-display-hy), Didot, Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.125rem;
+    line-height: 1;
+    font-variation-settings: "opsz" 11;
+    font-feature-settings: "lnum";
+    color: var(--rail-ink);
+    background: var(--rail-bg);
+  }
+  .rail-cro {
+    position: absolute;
+    left: 14px;
+    bottom: 0;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    max-height: 140px;
+    padding: 6px 2px;
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+    color: var(--rail-txt);
+    /* plaquinha na cor da seção: o texto vertical (140px) nunca some ao cruzar duas faixas */
+    background: var(--rail-bg);
+  }
+
+  /* Arco de sorriso sob o botão final (FioSmile): meia-elipse de borda, largura do botão + 20px de cada lado */
+  .smile {
+    position: relative;
+    width: fit-content;
+    max-width: 100%;
+    padding-bottom: 36px;
+  }
+  .smile-arc {
+    position: absolute;
+    left: -12px;
+    right: -12px;
+    bottom: 0;
+    height: 36px;
+    border: 1.5px solid var(--ouro);
+    border-top: 0;
+    border-radius: 0 0 50% 50% / 0 0 100% 100%;
+    pointer-events: none;
+    clip-path: inset(-2px);
+    transition: clip-path 1600ms var(--ease-fio);
+  }
+  [data-tone="noite"] .smile-arc,
+  [data-tone="verde"] .smile-arc {
+    border-color: var(--ouro-claro);
+  }
+  html.js:not(.reveal-off) [data-reveal]:not(.in) .smile-arc {
+    clip-path: inset(-2px 100% -2px -2px);
+  }
+
+  /* ------------------------ Arco do retrato (3.1 uso 1) ------------------------ */
+  .arch-wrap {
+    padding-top: clamp(14px, 4.2vw, 34px);
+  }
+  .arch {
+    position: relative;
+    aspect-ratio: 1072 / 1100;
+    overflow: visible;
+  }
+  /* base do arco: linha de 1px ligando os pés do fio (um só arco, sem fio duplo) */
+  .arch::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--ouro);
+    pointer-events: none;
+  }
+  .arch-bg {
+    position: absolute;
+    left: 3.358%;
+    right: 3.358%;
+    top: 3.27%;
+    bottom: 0;
+    background: var(--papel);
+    border-radius: 999px 999px 0 0;
+  }
+  .arch-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .arch-svg path {
+    fill: none;
+    stroke: var(--ouro);
+    stroke-width: 3;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0; /* estado-base: arco inteiro (sem animação, sem JS) */
+  }
+  .arch-img {
+    position: absolute;
+    left: 3.358%;
+    bottom: 0;
+    width: 93.28%;
+    height: auto;
+    display: block;
+    filter: var(--foto-grade);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .arch-svg path {
+      animation: desenha var(--d-arco) var(--ease-fio) 0.25s backwards;
+    }
+  }
+  @keyframes desenha {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* Arco decorativo sem foto (PageHero visual="arco") */
+  .arch-line {
+    position: relative;
+    aspect-ratio: 1072 / 1100;
+    width: 100%;
+  }
+  .arch-line svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .arch-line path {
+    fill: none;
+    stroke: var(--ouro);
+    stroke-width: 3;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+  .arch-line::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--ouro);
+  }
+  .arch-line .arch-mono {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 38%;
+    height: auto;
+  }
+
+  /* ------------------------- A luz que atravessa o título (3.2) ------------------------- */
+  @media (prefers-reduced-motion: no-preference) {
+    .luz {
+      --luz-a: var(--verde);
+      --luz-b: var(--luz);
+      background-image: linear-gradient(100deg, var(--luz-a) 0 40%, var(--luz-b) 50%, var(--luz-a) 60% 100%);
+      background-size: 300% 100%;
+      background-position: 100% 0;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      animation: luz var(--d-luz) var(--ease-fio) 0.6s backwards;
+    }
+    [data-tone="noite"] .luz,
+    [data-tone="verde"] .luz {
+      --luz-a: var(--osso);
+      --luz-b: var(--ouro-claro);
+    }
+    .luz .t-kicker {
+      -webkit-text-fill-color: currentColor;
+    }
+  }
+  @keyframes luz {
+    from {
+      background-position: 100% 0;
+    }
+    to {
+      background-position: 0 0;
+    }
+  }
+  /* polimento no ponteiro (só mouse): repete a passada */
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .luz {
+      transition: background-position 0.9s var(--ease-fio);
+    }
+    .luz:hover {
+      background-position: 0 0;
+    }
+  }
+  @media (forced-colors: active) {
+    .luz {
+      background: none;
+      -webkit-text-fill-color: currentColor;
+      color: CanvasText;
+    }
+  }
+
+  /* ------------------------------ Figura (3.3 / 3.4) ------------------------------ */
+  .fig {
+    margin: 0;
+  }
+  .fig-frame {
+    position: relative;
+    overflow: visible;
+  }
+  .fig-frame--filete::before {
+    content: "";
+    position: absolute;
+    inset: 14px -14px -14px 14px;
+    border: 1px solid var(--ouro);
+    pointer-events: none;
+  }
+  /* filete em arco: a mesma moldura do retrato da capa (topo arredondado, filete dourado deslocado) */
+  .fig-frame--arco::before {
+    content: "";
+    position: absolute;
+    inset: 14px -14px -14px 14px;
+    border: 1px solid var(--ouro);
+    border-radius: 999px 999px 0 0;
+    pointer-events: none;
+  }
+  .fig-frame--arco .fig-media {
+    border-radius: 999px 999px 0 0;
+  }
+  .fig-media {
+    position: relative;
+    overflow: hidden;
+    background: var(--papel);
+  }
+  .fig-media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: var(--foto-grade);
+  }
+  .fig-media--natural img {
+    height: auto;
+  }
+  .fig-duotone img {
+    filter: grayscale(1) contrast(1.05) brightness(0.95);
+    transition: filter var(--d-retrato) var(--ease-toque);
+  }
+  .fig-duotone::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--verde);
+    mix-blend-mode: color;
+    opacity: 0.78;
+    pointer-events: none;
+    transition: opacity var(--d-retrato) var(--ease-toque);
+  }
+  @media (hover: hover) {
+    .fig-duotone:hover img {
+      filter: none;
+    }
+    .fig-duotone:hover::after {
+      opacity: 0;
+    }
+  }
+  .fig-frame--filete + .fig-cap {
+    margin-top: 32px;
+  }
+  .fig-cap {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .fig-cap > .t-folio {
+    flex: none;
+  }
+
+  /* ------------------------ Lista editorial (IndexList) ------------------------ */
+  .idx {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .idx-item {
+    position: relative;
+  }
+  .idx-item > .idx-rule {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    --fio-delay: calc(var(--i, 0) * 40ms);
+  }
+  /* desenho rápido e escalonamento curto (<= 8 x 40ms): a lista nunca fica "meio escada" à vista */
+  .idx .fio-h::before {
+    transition-duration: 520ms;
+    transition-delay: calc(var(--i, 0) * 40ms);
+  }
+  .idx-end {
+    display: block;
+  }
+  .idx-sumario .idx-item:first-child > .idx-rule::before {
+    background: var(--verde);
+  }
+  [data-tone="noite"] .idx-sumario .idx-item:first-child > .idx-rule::before,
+  [data-tone="verde"] .idx-sumario .idx-item:first-child > .idx-rule::before {
+    background: var(--ouro-claro);
+  }
+  .idx-link {
+    display: grid;
+    grid-template-columns: 2.25rem minmax(0, auto) minmax(1rem, 1fr) auto;
+    align-items: baseline;
+    column-gap: 12px;
+    min-height: 56px;
+    padding-block: 14px;
+    color: var(--head);
+    text-decoration: none;
+  }
+  .idx-link .idx-n {
+    font-size: 1.125rem;
+  }
+  .idx-dots {
+    align-self: end;
+    height: 0;
+    margin-bottom: 0.45em;
+    border-bottom: 1px dotted var(--ouro);
+  }
+  .idx-link .idx-pg {
+    font-size: 1.125rem;
+  }
+  .idx-link[aria-current="true"],
+  .idx-link:hover,
+  .idx-link:focus-visible {
+    color: var(--head);
+  }
+  .idx-link .idx-t {
+    transition: color var(--d-toque) var(--ease-toque);
+  }
+  @media (hover: hover) {
+    .idx-link:hover .idx-t {
+      color: var(--accent);
+    }
+  }
+  .idx-ind {
+    grid-column: 2 / -1;
+    margin-top: 2px;
+  }
+
+  /* passos */
+  .idx-passos .idx-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 8px;
+    padding-block: 28px;
+  }
+  .idx-passos .idx-num {
+    font-size: clamp(3rem, 2rem + 4vw, 5rem);
+    line-height: 1;
+    font-variation-settings: "opsz" var(--d-opsz);
+  }
+  .idx-passos .idx-sub {
+    max-width: 34rem;
+  }
+  @media (min-width: 760px) {
+    .idx-passos .idx-item {
+      grid-template-columns: clamp(5rem, 14vw, 9rem) minmax(0, 1fr);
+      column-gap: var(--gap);
+      padding-block: 36px;
+    }
+    .idx-passos .idx-num {
+      grid-row: span 2;
+    }
+  }
+
+  /* fatos */
+  .idx-fatos .idx-item {
+    display: flex;
+    gap: 16px;
+    align-items: baseline;
+    padding-block: 14px;
+  }
+  .idx-fatos .idx-item > .idx-rule {
+    display: none;
+  }
+  .idx-dia {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border: 1px solid var(--accent);
+    transform: rotate(45deg) translateY(-1px);
+  }
+
+  /* contatos */
+  .idx-contatos .idx-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 6px;
+    padding-block: 24px;
+    min-width: 0;
+  }
+  @media (min-width: 760px) {
+    .idx-contatos .idx-item {
+      grid-template-columns: minmax(8rem, 2fr) minmax(0, 8fr);
+      column-gap: var(--gap);
+      align-items: baseline;
+    }
+  }
+  .idx-contatos .idx-val {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  /* --------------------------------- FAQ (4.4) --------------------------------- */
+  .faq-item {
+    position: relative;
+    border: 0;
+  }
+  .faq-item > .fio-h {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .faq-q {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 56px;
+    padding-block: 16px;
+    font-size: 1.125rem;
+    line-height: 1.35;
+    font-weight: 500;
+    color: var(--head);
+    cursor: pointer;
+  }
+  .faq-q::-webkit-details-marker {
+    display: none;
+  }
+  .faq-q::marker {
+    content: "";
+  }
+  .faq-q svg {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    color: var(--accent);
+    transition: transform var(--d-base) var(--ease-toque);
+  }
+  .faq-item[open] > .faq-q svg {
+    transform: rotate(45deg);
+  }
+  .faq-a {
+    max-width: 34rem;
+    padding-bottom: 22px;
+  }
+
+  /* -------------------------- Prose (páginas de texto) -------------------------- */
+  .prose-ed {
+    max-width: 62ch;
+    color: var(--fg-2);
+    font-size: clamp(1.0625rem, 1rem + 0.2vw, 1.1875rem);
+    line-height: 1.65;
+  }
+  .prose-ed > * + * {
+    margin-top: 1.1em;
+  }
+  .prose-ed h2 {
+    position: relative;
+    margin-top: 2.6em;
+    padding-top: 1.1em;
+    font-family: var(--font-display-hy), Didot, "Bodoni 72", Georgia, serif;
+    font-weight: var(--d-wght);
+    font-optical-sizing: none;
+    font-variation-settings: "opsz" var(--d-opsz);
+    font-size: clamp(1.75rem, 1.25rem + 2.2vw, 2.75rem);
+    line-height: 1.14;
+    letter-spacing: -0.012em;
+    color: var(--head);
+    border-top: 1px solid var(--rule);
+  }
+  .prose-ed h3 {
+    margin-top: 1.8em;
+    font-size: 1.25rem;
+    line-height: 1.3;
+    font-weight: 500;
+    color: var(--head);
+  }
+  .prose-ed p {
+    color: var(--fg-2);
+  }
+  .prose-ed strong {
+    font-weight: 600;
+    color: var(--head);
+  }
+  .prose-ed ul,
+  .prose-ed ol {
+    padding: 0;
+    list-style: none;
+  }
+  .prose-ed ol {
+    counter-reset: n;
+  }
+  .prose-ed li {
+    position: relative;
+    padding-left: 1.6em;
+    margin-top: 0.55em;
+  }
+  .prose-ed ul > li::before {
+    content: "";
+    position: absolute;
+    left: 0.15em;
+    top: 0.72em;
+    width: 7px;
+    height: 7px;
+    border: 1px solid var(--accent);
+    transform: rotate(45deg);
+  }
+  .prose-ed ol > li {
+    counter-increment: n;
+  }
+  .prose-ed ol > li::before {
+    content: counter(n) ".";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+  .prose-ed a {
+    color: var(--head);
+    text-decoration: underline;
+    text-decoration-color: var(--ouro);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    overflow-wrap: anywhere;
+  }
+  @media (hover: hover) {
+    .prose-ed a:hover {
+      text-decoration-thickness: 2px;
+    }
+  }
+  .prose-ed table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  /* ------------------------------ Bloco de confiança ------------------------------ */
+  .trust dt {
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--fg-2);
+  }
+  .trust dd {
+    margin: 0;
+    color: var(--fg);
+    overflow-wrap: anywhere;
+    min-width: 0;
+  }
+  .trust-linha {
+    position: relative;
+    padding-block: 16px;
+  }
+  .trust-linha > .fio-h {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  /* -------------------------------- Cabeçalho (4.3) -------------------------------- */
+  /* Sticky, no fluxo: cresce com o texto (200%, espaçamento de texto) sem cobrir o conteúdo.
+     É um container (largura): a navegação e o botão aparecem pela LARGURA DISPONÍVEL em rem, não pela
+     largura da janela em px, então com o texto ampliado o cabeçalho vira "Logo + Menu" em vez de
+     transbordar. Em paisagem baixa (altura <= 480px) ele não acompanha a rolagem. */
+  .hdr {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    min-height: var(--h-header);
+    background: var(--osso);
+    --bg: var(--osso);
+    container-type: inline-size;
+    container-name: hdr;
+  }
+  @media (max-height: 480px) {
+    .hdr {
+      position: static;
+    }
+  }
+  .hdr::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--fio);
+  }
+  .hdr-in {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: var(--h-header);
+    padding-block: 6px;
+    padding-inline: var(--pad);
+    padding-left: calc(var(--pad) + var(--rail));
+    max-width: var(--wrap-max);
+    margin-inline: auto;
+  }
+  .hdr-dir {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 8px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    min-height: 44px;
+    color: var(--head);
+    text-decoration: none;
+  }
+  .brand-nome {
+    display: block;
+    font-family: var(--font-display-hy), Didot, "Bodoni 72", Georgia, serif;
+    font-weight: 500;
+    font-optical-sizing: none;
+    font-variation-settings: "opsz" 28;
+    font-size: 1.0625rem;
+    line-height: 1.1;
+    color: var(--head);
+    overflow-wrap: anywhere;
+  }
+  .brand-sub {
+    display: block;
+    font-size: 0.875rem;
+    line-height: 1.2;
+    color: var(--fg-2);
+  }
+  /* sobrenome: só quando a navegação horizontal aparece */
+  .brand-sobrenome {
+    display: none;
+  }
+  .menu-btn {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 0 4px 0 12px;
+    background: transparent;
+    border: 0;
+    color: var(--verde);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+  .menu-btn i {
+    display: block;
+    width: 22px;
+    height: 7px;
+    border-top: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+  }
+  /* sem JavaScript o botão "Menu" não abre nada: some, e o rodapé lista todos os links */
+  html:not(.js) .menu-wrap {
+    display: none;
+  }
+  .hdr-nav {
+    display: none;
+    align-items: center;
+  }
+  .hdr .hdr-cta {
+    display: none;
+  }
+  .nav-link {
+    position: relative;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding-inline: 14px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--tinta-2);
+    text-decoration: none;
+    background-image: linear-gradient(var(--ouro), var(--ouro));
+    background-repeat: no-repeat;
+    background-position: 14px calc(100% - 9px);
+    background-size: 0 1px;
+    transition:
+      background-size var(--d-base) var(--ease-toque),
+      color var(--d-toque);
+  }
+  .nav-link[aria-current="page"] {
+    color: var(--verde);
+    background-size: calc(100% - 28px) 1px;
+  }
+  @media (hover: hover) {
+    .nav-link:hover {
+      color: var(--verde);
+      background-size: calc(100% - 28px) 1px;
+    }
+  }
+  .nav-link .nav-dia {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    margin-right: 8px;
+    border: 1px solid var(--ouro);
+    background: transparent;
+    transform: rotate(45deg);
+  }
+  .hdr .btn {
+    white-space: nowrap;
+  }
+  /* a folha do menu mora dentro do cabeçalho, mas os botões dela podem quebrar o rótulo */
+  .hdr .sheet .btn {
+    white-space: normal;
+  }
+  .nav-link--destaque {
+    color: var(--ouro-tinta);
+  }
+  /* >= 760px de largura útil (47,5rem): aparece o botão de WhatsApp */
+  @container hdr (min-width: 47.5rem) {
+    .hdr .hdr-cta {
+      display: inline-flex;
+    }
+    .hdr-dir {
+      gap: 16px;
+    }
+  }
+  /* >= 1100px de largura útil (68,75rem): navegação horizontal, sobrenome na marca, sem "Menu" */
+  @container hdr (min-width: 68.75rem) {
+    .hdr-nav {
+      display: flex;
+    }
+    .hdr .menu-wrap {
+      display: none;
+    }
+    .hdr-dir {
+      gap: 12px;
+    }
+    .brand-nome {
+      white-space: nowrap;
+    }
+    .brand-sobrenome {
+      display: inline;
+    }
+    .brand-sobrenome-sr {
+      display: none;
+    }
+  }
+  /* 1100 a 1279px: a barra não cabe inteira; sem a linha "Cirurgiã-dentista" e com os itens mais juntos. */
+  /* 1100 a 1439px: o botão mostra o rótulo curto ("Agendar"); o nome inteiro e o rótulo longo só cabem a partir de 1440px */
+  @container hdr (min-width: 68.75rem) and (max-width: 89.9375rem) {
+    .hdr .cta-full {
+      display: none;
+    }
+    .hdr .cta-compact {
+      display: inline;
+    }
+  }
+  @container hdr (min-width: 68.75rem) and (max-width: 79.9375rem) {
+    .hdr .brand-sub {
+      display: none;
+    }
+    /* com "Valores" no menu a barra tem 6 itens: nesta faixa tudo fica mais junto para o nome da
+       Dra. Ana caber inteiro ao lado da navegação (a 1100px sobra ~15px) */
+    .hdr-in {
+      gap: 12px;
+    }
+    .hdr-dir {
+      gap: 8px;
+    }
+    .brand-nome {
+      font-size: 1rem;
+    }
+    .hdr .hdr-cta {
+      padding-inline: 16px;
+    }
+    .nav-link {
+      padding-inline: 7px;
+      background-position: 7px calc(100% - 9px);
+    }
+    .nav-link[aria-current="page"],
+    .nav-link:hover {
+      background-size: calc(100% - 14px) 1px;
+    }
+  }
+
+  /* Menu em folha */
+  .sheet {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: var(--osso);
+    color: var(--tinta);
+    --bg: var(--osso);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .sheet:not([open]) {
+    display: none;
+  }
+  .sheet[open] {
+    opacity: 1;
+    transition: opacity 350ms var(--ease-toque);
+  }
+  @starting-style {
+    .sheet[open] {
+      opacity: 0;
+    }
+  }
+  .sheet::backdrop {
+    background: var(--osso);
+  }
+  html:has(dialog.sheet[open]) {
+    overflow: hidden;
+  }
+  .sheet-top {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--h-header);
+    padding-inline: var(--pad);
+  }
+  .sheet-top::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--fio);
+  }
+  .sheet-link {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 64px;
+    padding-block: 14px;
+    text-decoration: none;
+    color: var(--verde);
+  }
+  .sheet-link .display {
+    font-size: clamp(1.75rem, 8vw, 2.125rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .sheet-link {
+    min-height: 68px;
+  }
+  .sheet-grupo {
+    margin: 28px 0 0;
+  }
+  /* ações do topo da folha: no tablet não esticam até a borda (<= 28rem); em paisagem baixa ficam em uma linha */
+  .sheet-acoes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 28rem;
+    margin-bottom: 16px;
+  }
+  @media (max-height: 480px) {
+    .sheet-acoes {
+      display: grid;
+      grid-template-columns: 1.2fr 1.2fr 1fr;
+      align-items: stretch;
+      max-width: none;
+    }
+    .sheet-acoes > * {
+      min-width: 0;
+      min-height: 52px;
+      padding-inline: 12px;
+      gap: 8px;
+      font-size: 0.9375rem;
+      text-wrap: balance;
+    }
+    .sheet-link {
+      min-height: 56px;
+    }
+  }
+  .sheet-link[aria-current="page"] .display {
+    text-decoration: underline;
+    text-decoration-color: var(--ouro);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.12em;
+  }
+
+  /* ---------------------------- Barra de ações (celular) ---------------------------- */
+  .abar {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: var(--z-bar);
+    display: flex;
+    gap: 10px;
+    padding: 10px var(--pad) calc(10px + env(safe-area-inset-bottom));
+    background: var(--osso);
+    --bg: var(--osso);
+  }
+  .abar::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 1px;
+    background: var(--fio);
+  }
+  .abar {
+    transition:
+      transform var(--d-base) var(--ease-toque),
+      visibility 0s;
+  }
+  .abar[data-hidden] {
+    transform: translateY(100%);
+    visibility: hidden;
+    transition:
+      transform var(--d-base) var(--ease-toque),
+      visibility 0s linear var(--d-base);
+  }
+  .abar {
+    container-type: inline-size;
+    container-name: abar;
+  }
+  .abar .btn:first-child {
+    flex: 1 1 auto;
+    padding-inline: 16px;
+    white-space: nowrap;
+  }
+  /* largura útil < 20rem (320px com o texto normal; qualquer celular com o texto ampliado): o rótulo quebra */
+  @container abar (max-width: 19.99rem) {
+    .abar .btn:first-child {
+      white-space: normal;
+      text-wrap: balance;
+    }
+  }
+  /* nada na barra impõe largura mínima: com o texto a 200% o rótulo quebra em vez de vazar */
+  .abar > * {
+    min-width: 0;
+  }
+  @media (min-width: 760px) {
+    .abar {
+      display: none;
+    }
+  }
+  /* paisagem baixa: uma linha de 44px (56px com o respiro); abaixo de 300px de altura ela
+     deixa de ser fixa (vai ao fim da página) para não comer a tela */
+  @media (max-height: 480px) and (max-width: 759px) {
+    .abar {
+      padding-block: 6px calc(6px + env(safe-area-inset-bottom));
+    }
+    .abar .btn {
+      min-height: 44px;
+    }
+    .abar .btn-icone {
+      width: 44px;
+    }
+  }
+  @media (max-height: 300px) and (max-width: 759px) {
+    .abar {
+      position: static;
+    }
+  }
+
+  /* ------------------------------ Aviso de cookies ------------------------------ */
+  .ck {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: var(--h-bar);
+    z-index: var(--z-cookie);
+    padding: 10px var(--pad);
+    background: var(--osso);
+    --bg: var(--osso);
+  }
+  .ck::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 1px;
+    background: var(--fio);
+  }
+  .ck-txt {
+    font-size: 1rem;
+    line-height: 1.4;
+    color: var(--tinta-2);
+    max-width: 52rem;
+  }
+  .ck-txt a {
+    color: var(--verde);
+    text-decoration: underline;
+    text-decoration-color: var(--ouro);
+    text-underline-offset: 0.2em;
+  }
+  .ck-acoes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 8px;
+  }
+  /* Recusar e Aceitar: IDÊNTICOS (mesma largura, altura, fonte e peso visual). */
+  .ck-btn {
+    min-height: 44px;
+    padding: 0 20px;
+    border: 1px solid var(--verde);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--verde);
+    font-family: inherit;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    line-height: 1.2;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: background-color var(--d-toque) var(--ease-toque);
+  }
+  @media (hover: hover) {
+    .ck-btn:hover {
+      background: color-mix(in srgb, var(--verde) 7%, transparent);
+    }
+  }
+  .ck-btn:active {
+    transform: scale(0.98);
+  }
+  @media (min-width: 760px) {
+    .ck {
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+      padding-block: 14px;
+    }
+    .ck-acoes {
+      flex: none;
+      margin-top: 0;
+      grid-template-columns: repeat(2, 120px);
+    }
+  }
+  /* paisagem baixa (celular de lado): texto e botões na mesma linha, respiro menor */
+  @media (max-height: 480px) {
+    .ck {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding-block: 6px;
+    }
+    .ck-acoes {
+      flex: none;
+      margin-top: 0;
+      grid-template-columns: repeat(2, 104px);
+      gap: 8px;
+    }
+  }
+  /* altura de 300px ou menos (zoom de 400%): 14px e entrelinha justa, para a leitura ficar com mais da metade da tela */
+  @media (max-height: 300px) {
+    .ck {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 6px;
+    }
+    .ck-txt {
+      font-size: 0.875rem;
+      line-height: 1.25;
+    }
+    .ck-acoes {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* ------------------------------ Formulário (Field) ------------------------------ */
+  .fld-label {
+    display: block;
+    margin-bottom: 4px;
+    font-family: var(--font-display-hy), Didot, "Bodoni 72", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-optical-sizing: none;
+    font-variation-settings: "opsz" 11;
+    font-feature-settings: "lnum";
+    font-size: 1.125rem;
+    line-height: 1.3;
+    color: var(--head);
+  }
+  .fld-hint {
+    display: block;
+    margin-top: 4px;
+    font-size: 1rem;
+    line-height: 1.45;
+    color: var(--fg-2);
+  }
+  .fld {
+    display: block;
+    width: 100%;
+    min-height: 52px;
+    padding: 12px 0;
+    border: 0;
+    border-bottom: 1px solid var(--linha);
+    border-radius: 0;
+    background: transparent;
+    color: var(--fg);
+    font-family: inherit;
+    font-size: 1.0625rem; /* 17px: evita o zoom do iOS */
+    line-height: 1.4;
+    transition: border-color var(--d-toque);
+  }
+  .fld::placeholder {
+    color: var(--fg-2);
+    opacity: 1;
+  }
+  .fld:focus {
+    outline: none;
+    border-bottom: 2px solid var(--verde);
+    padding-bottom: 11px;
+  }
+  .fld:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 4px;
+    box-shadow: none;
+  }
+  .fld[aria-invalid="true"] {
+    border-bottom: 2px solid var(--erro);
+    padding-bottom: 11px;
+  }
+  .fld:disabled {
+    opacity: 0.6;
+  }
+  textarea.fld {
+    min-height: 7rem;
+    resize: vertical;
+  }
+  select.fld {
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 36px;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2322513A' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 9l7 7 7-7'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 4px center;
+    background-size: 20px 20px;
+  }
+  .fld-erro {
+    margin-top: 6px;
+    font-size: 1rem;
+    line-height: 1.4;
+    color: var(--erro);
+  }
+  .fld-resumo {
+    padding: 14px 16px 14px 18px;
+    border-left: 2px solid var(--erro);
+    background: color-mix(in srgb, var(--erro) 5%, var(--bg));
+    color: var(--fg);
+  }
+  .fld-resumo:focus {
+    outline: none;
+  }
+  .fld-resumo:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+  .chip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 20px;
+    border: 1px solid var(--verde);
+    border-radius: 999px;
+    color: var(--verde);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+      background-color var(--d-toque),
+      color var(--d-toque);
+  }
+  .chip input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .chip:has(input:checked) {
+    background: var(--verde);
+    color: var(--osso);
+  }
+  .chip:has(input:focus-visible) {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--bg);
+  }
+  .chk {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    min-height: 44px;
+    cursor: pointer;
+  }
+  .chk input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 44px;
+    height: 44px;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .chk-box {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    margin: 10px 14px 10px 0;
+    border: 1px solid var(--linha);
+    background: transparent;
+    color: var(--osso);
+  }
+  .chk-box svg {
+    width: 16px;
+    height: 16px;
+    opacity: 0;
+  }
+  .chk input:checked + .chk-box {
+    background: var(--verde);
+    border-color: var(--verde);
+  }
+  .chk input:checked + .chk-box svg {
+    opacity: 1;
+  }
+  .chk input:focus-visible + .chk-box {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+  .chk-txt {
+    padding-top: 10px;
+  }
+
+  /* ----------------------------- Migalhas / breadcrumb ----------------------------- */
+  .crumb a,
+  .crumb [aria-current="page"] {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  /* "Início" e links curtos: alvo de pelo menos 44x44 */
+  .crumb a {
+    min-width: 44px;
+    justify-content: center;
+  }
+  .crumb a {
+    color: var(--fg-2);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.2em;
+    transition: text-decoration-color var(--d-toque);
+  }
+  @media (hover: hover) {
+    .crumb a:hover {
+      text-decoration-color: var(--ouro);
+      color: var(--head);
+    }
+  }
+
+  /* Rodapé (estrutura). Fica aqui, na folha global, e não em um CSS Module: a 404 e as páginas de erro
+     montam o rodapé fora do layout das rotas e o módulo não chegava lá (rodapé sem estilo). */
+  .ft-root {
+    position: relative;
+    overflow: hidden;
+    /* fio dourado de 1px: separa o fecho (noite) do rodapé (noite) */
+    border-top: 1px solid var(--fio-claro);
+  }
+  .ft-nome {
+    margin: 0;
+    font-size: min(clamp(1.75rem, 1.2rem + 1.2vw, 2.5rem), 9vw);
+    line-height: 1.1;
+  }
+  .ft-mark {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: none;
+    opacity: 0.06;
+    pointer-events: none;
+  }
+  @media (min-width: 1100px) {
+    .ft-mark {
+      display: block;
+    }
+  }
+  .ft-pad {
+    padding-block: clamp(48px, 6vw, 96px);
+  }
+  .ft-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: var(--gap);
+    row-gap: 40px;
+  }
+  .ft-brand {
+    min-width: 0;
+  }
+  .ft-lists {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--gap);
+    row-gap: 28px;
+    min-width: 0;
+  }
+  .ft-wide {
+    grid-column: 1 / -1;
+  }
+  /* 320px: duas colunas deixam só ~130px e "Preencher formulário" quebraria; uma coluna */
+  @media (max-width: 359px) {
+    .ft-lists {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  .ft-wide ul {
+    columns: 2;
+    column-gap: var(--gap);
+  }
+  .ft-wide li {
+    break-inside: avoid;
+  }
+  /* link-texto de ação dentro das listas do rodapé: alinhado à esquerda, mesmo quando o rótulo quebra */
+  .ft-lists .btn-texto,
+  .ft-contacts .btn-texto {
+    justify-content: flex-start;
+    gap: 8px;
+    text-align: left;
+  }
+  .ft-contacts {
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  /* Tratamentos: lista no tablet e no desktop; no celular um <details> recolhido */
+  .ft-wide-mobile {
+    display: block;
+    border-top: 1px solid var(--fio-claro);
+  }
+  .ft-wide-mobile summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 56px;
+    cursor: pointer;
+    list-style: none;
+  }
+  .ft-wide-mobile summary::-webkit-details-marker {
+    display: none;
+  }
+  /* indicador: 20px, ouro claro sobre noite (>= 3:1), gira ao abrir */
+  .ft-ind {
+    flex: none;
+    display: block;
+    width: 20px;
+    height: 20px;
+    color: var(--ouro-claro);
+    transition: transform var(--d-base) var(--ease-toque);
+  }
+  .ft-ind svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+  }
+  .ft-wide-mobile[open] .ft-ind {
+    transform: rotate(45deg);
+  }
+  .ft-wide-desktop {
+    display: none;
+  }
+  .ft-legal-row {
+    position: relative;
+    margin-top: clamp(40px, 5vw, 72px);
+  }
+  .ft-legal {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+  .ft-legal .foot-link {
+    min-height: 44px;
+    font-size: 0.875rem;
+  }
+  .ft-legal-note {
+    margin: 8px 0 0;
+    max-width: 48rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--fg-2);
+  }
+  @media (min-width: 760px) {
+    .ft-wide-mobile {
+      display: none;
+    }
+    .ft-wide-desktop {
+      display: block;
+    }
+    .ft-contacts .foot-link,
+    .ft-contacts .link {
+      min-height: 32px;
+    }
+    .ft-grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+    .ft-brand {
+      grid-column: 1 / 6;
+    }
+    .ft-lists {
+      grid-column: 6 / 13;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .ft-wide ul {
+      columns: 1;
+    }
+  }
+  @media (min-width: 1100px) {
+    .ft-lists {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .ft-wide {
+      grid-column: auto;
+    }
+  }
+  .foot-link {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--nevoa);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    min-width: 0;
+  }
+  @media (hover: hover) {
+    .foot-link:hover {
+      color: var(--osso);
+      text-decoration: underline;
+      text-decoration-color: var(--ouro-claro);
+      text-underline-offset: 0.25em;
+    }
+  }
+
+  /* ========================================================================
+     LEGADO /admin — não usar no site público.
+     Mantido só para o painel continuar compilando e legível.
+     ======================================================================== */
+  .surface {
+    @apply rounded-3xl border border-brand-ink/[0.07] bg-white shadow-card;
   }
 }
 
+/* ==========================================================================
+   UTILITÁRIOS
+   ========================================================================== */
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-  .text-pretty {
-    text-wrap: pretty;
-  }
-  /* Section vertical rhythm */
-  .section-y {
-    @apply py-20 sm:py-24 lg:py-32;
-  }
-  /* Hide scrollbar where intentional (mobile nav) */
+  /* Esconde a barra de rolagem de propósito (usado pelo /admin). */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+}
+
+/* ==========================================================================
+   MOVIMENTO REDUZIDO (2.6): fios inteiros e parados, sem brilho, sem transição.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  .fio-h::before,
+  .fio-h::after,
+  .fio-v::before {
+    transform: none !important;
+  }
+  .smile-arc {
+    clip-path: none !important;
+    transition: none !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  @supports (animation-timeline: scroll()) {
+    /* o fio de progresso acompanha a rolagem (não é movimento autônomo) */
+    .fio-prog > i {
+      animation: prog linear both !important;
+      animation-timeline: scroll(root block) !important;
+    }
+  }
+}
+
+/* Complementos dos componentes (rótulo curto da barra, numerais) */
+@layer components {
+  .cta-compact {
+    display: none;
+  }
+  /* < 340px: botões com padding de 16px e respiro de 8px, para o rótulo do vocabulário caber sem quebrar */
+  @media (max-width: 339px) {
+    .btn:not(.btn-icone) {
+      padding-inline: 16px;
+      gap: 8px;
+    }
+  }
+  @media (max-width: 339px) {
+    .abar .cta-full {
+      display: none;
+    }
+    .abar .cta-compact {
+      display: inline;
+    }
+  }
+  /* <= 380px: botões laterais de 44px e rótulo inteiro ("Agendar pelo WhatsApp") no botão principal */
+  @media (max-width: 380px) {
+    .abar {
+      gap: 8px;
+    }
+    .abar .btn-icone {
+      width: 44px;
+      min-height: 44px;
+      align-self: center;
+    }
+    .abar .btn:first-child {
+      padding-inline: 12px;
+      gap: 8px;
+      font-size: 0.9375rem;
+    }
+    .ck {
+      padding-block: 8px;
+    }
+    .ck-acoes {
+      margin-top: 6px;
+      gap: 8px;
+    }
+    .ck-btn {
+      min-height: 44px;
+    }
+  }
+  .num {
+    font-feature-settings: "lnum";
+    line-height: 1;
+  }
+  .num-sm {
+    font-size: 1.125rem;
+  }
+  .num-md {
+    font-size: 1.75rem;
+  }
+  .num-lg {
+    font-size: clamp(5rem, 12vw, 9rem);
+    font-variation-settings: "opsz" var(--d-opsz-grande);
+    color: var(--ouro-numeral);
+  }
+  .num-xl {
+    font-size: clamp(9rem, 26vw, 18rem);
+    font-variation-settings: "opsz" var(--d-opsz-grande);
+    color: var(--ouro-numeral);
   }
 }

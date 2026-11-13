@@ -1,33 +1,36 @@
 import type { Metadata } from "next";
-import { CalendarDays, MessageCircle } from "lucide-react";
-import { siteConfig } from "@/lib/site-config";
-import { buildMetadata, breadcrumbSchema, faqSchema } from "@/lib/seo";
-import { whatsappLink, waMessages } from "@/lib/whatsapp";
+import { locale, localeTexto } from "@/lib/site-config";
+import { breadcrumbSchema, buildMetadata, faqSchema, medicalWebPageSchema } from "@/lib/seo";
+import { respostas } from "@/lib/content";
+import { waMessages } from "@/lib/whatsapp";
 import { JsonLd } from "@/components/seo/json-ld";
-import { PageHero } from "@/components/sections/page-hero";
+import { Container } from "@/components/ui/container";
+import { Section } from "@/components/ui/section";
+import { AgendarCTA, WhatsAppCTA } from "@/components/ui/cta";
 import { FAQSection } from "@/components/sections/faq-section";
 import { CTASection } from "@/components/sections/cta-section";
-import { TrackedButtonLink } from "@/components/ui/tracked-button-link";
-import { Reveal } from "@/components/ui/reveal";
+import { ApoioCabeca } from "@/components/sections/apoio-cabeca";
+import { ApoioHero } from "@/components/sections/apoio-hero";
+import { ApoioTempo } from "@/components/sections/apoio-tempo";
+import { ApoioPassos } from "@/components/sections/apoio-passos";
+import { ApoioQA } from "@/components/sections/apoio-qa";
+import { ApoioDeclaracao } from "@/components/sections/apoio-declaracao";
+import { ApoioAutoria } from "@/components/sections/apoio-autoria";
+
+const PATH = "/primeira-consulta";
+const TITLE = `Primeira consulta no dentista | Dra. Ana Beatriz, ${locale.bairro}`;
 
 export const metadata: Metadata = buildMetadata({
-  title:
-    "Como é a primeira consulta odontológica em [Cidade] — Dra. Ana Beatriz",
-  description:
-    "Entenda como funciona a primeira consulta com a Dra. Ana Beatriz Lemos Souza em [Cidade]: escuta, exame clínico, diagnóstico claro e orçamento transparente. Sem julgamento e no seu tempo.",
-  path: "/primeira-consulta",
-  keywords: [
-    "primeira consulta odontológica [cidade]",
-    "avaliação dentista [bairro]",
-    "como funciona consulta dentista [cidade]",
-  ],
+  absoluteTitle: TITLE,
+  description: `Como é a primeira consulta com a Dra. Ana Beatriz, na ${localeTexto("bairroRegiao")}: conversa, exame clínico, diagnóstico e plano de cuidado.`,
+  path: PATH,
 });
 
 const steps = [
   {
     title: "Acolhimento e conversa",
     description:
-      "Um momento para entender a sua história, a sua rotina e o que te trouxe até aqui. Você fala no seu tempo, sem pressa.",
+      "Um momento para entender a sua história, a sua rotina e o que trouxe você até aqui. Você fala sem pressa.",
   },
   {
     title: "Exame clínico detalhado",
@@ -48,56 +51,49 @@ const steps = [
 
 const practicalQuestions = [
   {
-    q: "Quanto tempo dura?",
-    a: "Em média de 40 a 60 minutos.",
-  },
-  {
     q: "Preciso levar algo?",
-    a: "Um documento e, se tiver, radiografias ou exames recentes. Se não tiver, o que for necessário é solicitado na consulta.",
+    a: "Um documento e, se tiver, radiografias ou exames recentes. Se não tiver, o que for necessário é pedido na própria consulta.",
   },
-  {
-    q: "O orçamento sai no dia?",
-    a: "Sim. Após a avaliação, a Dra. Ana apresenta o plano e o orçamento de forma transparente.",
-  },
-  {
-    q: "Quais as formas de pagamento?",
-    a: "O atendimento é particular, com pagamento via Pix, cartão de débito e cartão de crédito.",
-  },
-  {
-    q: "Atende crianças?",
-    a: "Sim, a partir de 7 anos.",
-  },
-  {
-    q: "Atende convênio?",
-    a: "Não. Os atendimentos são exclusivamente particulares.",
-  },
+  { q: "Atende crianças?", a: respostas.idade },
+  { q: "Atende convênio?", a: respostas.convenio },
 ];
 
+/** A mesma lista vai ao <FAQ> (via FAQSection) e ao JSON-LD; nenhuma pergunta repete a da home. */
 const faqs = [
-  {
-    q: "Preciso levar exames antigos?",
-    a: "Se você tiver radiografias ou exames recentes, leve — ajudam no diagnóstico. Se não tiver, não tem problema: o que for necessário é solicitado na própria consulta.",
-  },
   {
     q: "Já saio com o tratamento feito?",
     a: "A primeira consulta é focada em avaliar e planejar. Procedimentos costumam ser agendados nas consultas seguintes, respeitando o seu tempo e as suas prioridades.",
   },
   {
-    q: "Como funciona o orçamento?",
+    q: "Por que não dá para saber o valor antes?",
     a: "O orçamento é apresentado após a avaliação, quando já se sabe o que de fato é necessário. Por se tratar de saúde, não é possível dar valores precisos antes de examinar cada caso.",
+  },
+  {
+    q: "O que a Dra. Ana examina?",
+    a: "Os dentes, as gengivas e a mordida, com registro fotográfico ou radiografia quando indicado. Depois, ela explica o que encontrou em linguagem simples.",
+  },
+  {
+    q: "E se eu estiver com medo?",
+    a: "Conte isso logo no início. A primeira consulta pode ser apenas uma conversa e avaliação, e nada é feito sem a sua autorização e sem que você esteja confortável.",
+  },
+  {
+    q: "Posso conversar antes de marcar?",
+    a: `Sim. Você pode falar pelo WhatsApp para tirar dúvidas e entender como funciona antes de agendar, sem compromisso. ${respostas.orientacaoWhatsapp}`,
   },
 ];
 
-const medicalSchema = {
-  "@context": "https://schema.org",
-  "@type": "MedicalWebPage",
-  name: "Como é a primeira consulta odontológica — Dra. Ana Beatriz Lemos Souza",
+const medicalSchema = medicalWebPageSchema({
+  path: PATH,
+  name: TITLE,
   description:
-    "Como funciona a primeira consulta com a Dra. Ana Beatriz: escuta, exame clínico, diagnóstico claro e orçamento transparente.",
-  url: `${siteConfig.url}/primeira-consulta`,
-  inLanguage: "pt-BR",
-};
+    "Como funciona a primeira consulta com a Dra. Ana Beatriz: conversa, exame clínico, diagnóstico explicado e plano de tratamento.",
+});
 
+/**
+ * /primeira-consulta (DESIGN.md 5.7): osso (abertura com o tempo da consulta) · verde (4 passos em
+ * linha do tempo) · osso (perguntas práticas em duas colunas) · papel (declaração) · osso (dúvidas) ·
+ * papel (fecho com waMessages.firstVisit).
+ */
 export default function PrimeiraConsultaPage() {
   return (
     <>
@@ -107,143 +103,78 @@ export default function PrimeiraConsultaPage() {
           faqSchema(faqs),
           breadcrumbSchema([
             { name: "Início", path: "/" },
-            { name: "Primeira consulta", path: "/primeira-consulta" },
+            { name: "Primeira consulta", path: PATH },
           ]),
         ]}
       />
 
-      <PageHero
-        eyebrow="Primeira consulta"
+      <ApoioHero
+        kicker="Primeira consulta"
         title="Sua primeira consulta, sem julgamento e no seu tempo"
-        description="Você não precisa chegar sabendo qual tratamento precisa — a avaliação existe justamente para isso. A primeira consulta é uma conversa cuidadosa para entender a sua saúde bucal e organizar prioridades com clareza."
-        breadcrumbs={[
-          { name: "Início", href: "/" },
-          { name: "Primeira consulta" },
-        ]}
+        lede="Você não precisa chegar sabendo qual tratamento precisa. A avaliação existe justamente para isso: uma conversa cuidadosa para entender a sua saúde bucal e organizar as prioridades com clareza."
+        breadcrumbs={[{ name: "Início", href: "/" }, { name: "Primeira consulta" }]}
+        actions={
+          <>
+            <WhatsAppCTA location="first_visit_hero" message={waMessages.firstVisit} />
+            <AgendarCTA location="first_visit_hero" />
+          </>
+        }
+        mobileMark={<ApoioTempo mini />}
+        aside={<ApoioTempo legenda={respostas.duracao} />}
+      />
+
+      <Section tone="verde" id="passo-a-passo" aria-labelledby="passo-a-passo-titulo">
+        <Container>
+          <ApoioCabeca id="passo-a-passo-titulo" kicker="Passo a passo" title="O que acontece na primeira consulta">
+            Cada etapa tem um propósito: acolher você, entender o seu caso e construir um caminho
+            claro, sempre com o seu consentimento.
+          </ApoioCabeca>
+          <div className="mt-12">
+            <ApoioPassos items={steps} />
+          </div>
+        </Container>
+      </Section>
+
+      <Section tone="osso" id="perguntas-praticas" aria-labelledby="perguntas-praticas-titulo">
+        <Container>
+          <ApoioCabeca id="perguntas-praticas-titulo" kicker="Antes de agendar" title="Perguntas práticas, respondidas" />
+          <div className="mt-12">
+            <ApoioQA items={practicalQuestions} />
+          </div>
+        </Container>
+      </Section>
+
+      <ApoioDeclaracao
+        id="sem-pressa"
+        tone="papel"
+        kicker="Sem pressão"
+        title="Você não precisa chegar com tudo decidido"
       >
-        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-          <TrackedButtonLink
-            href="/agendamento"
-            variant="primary"
-            size="md"
-            event="scheduling_intent"
-            eventParams={{ location: "first_visit_hero" }}
-          >
-            <CalendarDays className="size-4" strokeWidth={1.7} />
-            Agendar minha primeira consulta
-          </TrackedButtonLink>
-          <TrackedButtonLink
-            href={whatsappLink(waMessages.firstVisit)}
-            external
-            variant="whatsapp"
-            size="md"
-            event="whatsapp_click"
-            eventParams={{ location: "first_visit_hero" }}
-          >
-            <MessageCircle className="size-4" strokeWidth={1.7} />
-            Tirar dúvidas no WhatsApp
-          </TrackedButtonLink>
-        </div>
-      </PageHero>
-
-      {/* O que acontece na primeira consulta */}
-      <section className="section-y bg-brand-bone">
-        <div className="container">
-          <div className="max-w-2xl">
-            <Reveal>
-              <p className="eyebrow flex items-center gap-3">
-                <span className="inline-block h-px w-7 bg-brand-gold/70" /> Passo a passo
-              </p>
-              <h2 className="mt-4 text-display-sm">O que acontece na primeira consulta</h2>
-              <p className="mt-5 text-pretty text-lg leading-relaxed text-brand-ink/75">
-                Cada etapa tem um propósito: te acolher, entender o seu caso e
-                construir um caminho claro, sempre com o seu consentimento.
-              </p>
-            </Reveal>
-          </div>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {steps.map((step, i) => (
-              <Reveal key={step.title} delay={i * 0.08}>
-                <div className="surface h-full p-6">
-                  <span className="flex size-11 items-center justify-center rounded-full border border-brand-gold/40 font-display text-lg text-brand-gold-ink">
-                    0{i + 1}
-                  </span>
-                  <h3 className="mt-4 font-display text-xl text-brand-green">{step.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-brand-ink/70">{step.description}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Perguntas práticas, respondidas */}
-      <section className="section-y bg-gradient-to-b from-brand-beige/40 to-brand-bone">
-        <div className="container">
-          <div className="max-w-2xl">
-            <Reveal>
-              <p className="eyebrow flex items-center gap-3">
-                <span className="inline-block h-px w-7 bg-brand-gold/70" /> Antes de agendar
-              </p>
-              <h2 className="mt-4 text-display-sm">Perguntas práticas, respondidas</h2>
-              <p className="mt-5 text-pretty text-lg leading-relaxed text-brand-ink/75">
-                As dúvidas mais comuns de quem vai marcar a primeira consulta,
-                respondidas de forma direta.
-              </p>
-            </Reveal>
-          </div>
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {practicalQuestions.map((item, i) => (
-              <Reveal key={item.q} delay={i * 0.06}>
-                <div className="rounded-3xl border border-brand-ink/[0.07] bg-white p-6 shadow-card">
-                  <p className="font-display text-lg font-semibold text-brand-green">{item.q}</p>
-                  <p className="mt-3 text-sm leading-relaxed text-brand-ink/75">{item.a}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Você não precisa chegar com tudo decidido */}
-      <section className="section-y bg-brand-bone">
-        <div className="container">
-          <div className="mx-auto max-w-prose2">
-            <Reveal>
-              <p className="eyebrow flex items-center gap-3">
-                <span className="inline-block h-px w-7 bg-brand-gold/70" /> Sem pressão
-              </p>
-              <h2 className="mt-4 text-display-sm">Você não precisa chegar com tudo decidido</h2>
-            </Reveal>
-            <Reveal delay={0.08}>
-              <div className="mt-6 space-y-5 text-pretty text-lg leading-relaxed text-brand-ink/75">
-                <p>
-                  A ideia não é empurrar tratamento, é organizar prioridades. A
-                  primeira consulta serve para escutar você, entender o que está
-                  acontecendo e mostrar, com honestidade, o que merece atenção
-                  primeiro.
-                </p>
-                <p>
-                  Antes de qualquer procedimento, você entende o que foi
-                  encontrado, quais caminhos existem e o que faz sentido para o
-                  seu caso. As decisões são tomadas em conjunto, no seu tempo e
-                  dentro daquilo que é possível para a sua rotina aqui em{" "}
-                  {siteConfig.region}.
-                </p>
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
+        <p>
+          A ideia não é empurrar tratamento, é organizar prioridades. A primeira consulta serve para
+          escutar você, entender o que está acontecendo e mostrar, com honestidade, o que merece
+          atenção primeiro.
+        </p>
+        <p>
+          Antes de qualquer procedimento, você entende o que foi encontrado, quais caminhos existem
+          e o que faz sentido para o seu caso. As decisões são tomadas em conjunto, no seu tempo.
+        </p>
+      </ApoioDeclaracao>
 
       <FAQSection
         items={faqs}
+        tone="osso"
         eyebrow="Dúvidas sobre a primeira consulta"
         title="Perguntas frequentes"
         whatsappMessage={waMessages.firstVisit}
       />
 
-      <CTASection />
+      <CTASection
+        tone="papel"
+        message={waMessages.firstVisit}
+      />
+
+      <ApoioAutoria tone="osso" />
     </>
   );
 }

@@ -1,31 +1,35 @@
 import type { MetadataRoute } from "next";
-import { siteConfig } from "@/lib/site-config";
+import { absoluteUrl } from "@/lib/seo";
 import { treatmentSlugs } from "@/lib/treatments";
+import { CONTENT_UPDATED, PRIVACY_POLICY_VERSION, TERMS_VERSION } from "@/lib/content";
 
+/**
+ * Sem `changeFrequency` e `priority`: o Google os ignora. O <loc> de cada página sai de
+ * `absoluteUrl` (a mesma função do canonical em `buildMetadata`), então os dois são idênticos
+ * (a home, sem barra final). `lastmod` = data de atualização editorial (content.ts) ou a versão
+ * do documento legal. Datas fixas: o build é determinístico. Só mude a constante quando o texto
+ * mudar de verdade.
+ */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = siteConfig.url;
-  // Data fixa para build determinístico — atualize manualmente se desejar.
-  const lastModified = new Date("2026-06-08");
+  const lastModified = new Date(CONTENT_UPDATED);
 
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: `${base}/`, lastModified, changeFrequency: "monthly", priority: 1 },
-    { url: `${base}/sobre`, lastModified, changeFrequency: "yearly", priority: 0.8 },
-    { url: `${base}/tratamentos`, lastModified, changeFrequency: "monthly", priority: 0.9 },
-    { url: `${base}/urgencia-odontologica`, lastModified, changeFrequency: "monthly", priority: 0.9 },
-    { url: `${base}/primeira-consulta`, lastModified, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${base}/medo-de-dentista`, lastModified, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${base}/agendamento`, lastModified, changeFrequency: "monthly", priority: 0.9 },
-    { url: `${base}/valores`, lastModified, changeFrequency: "yearly", priority: 0.7 },
-    { url: `${base}/contato`, lastModified, changeFrequency: "yearly", priority: 0.7 },
-    { url: `${base}/politica-de-privacidade`, lastModified, changeFrequency: "yearly", priority: 0.3 },
-    { url: `${base}/termos-de-uso`, lastModified, changeFrequency: "yearly", priority: 0.3 },
+    { url: absoluteUrl("/"), lastModified },
+    { url: absoluteUrl("/sobre"), lastModified },
+    { url: absoluteUrl("/tratamentos"), lastModified },
+    { url: absoluteUrl("/urgencia-odontologica"), lastModified },
+    { url: absoluteUrl("/primeira-consulta"), lastModified },
+    { url: absoluteUrl("/medo-de-dentista"), lastModified },
+    { url: absoluteUrl("/agendamento"), lastModified },
+    { url: absoluteUrl("/valores"), lastModified },
+    { url: absoluteUrl("/contato"), lastModified },
+    { url: absoluteUrl("/politica-de-privacidade"), lastModified: new Date(PRIVACY_POLICY_VERSION) },
+    { url: absoluteUrl("/termos-de-uso"), lastModified: new Date(TERMS_VERSION) },
   ];
 
   const treatmentRoutes: MetadataRoute.Sitemap = treatmentSlugs.map((slug) => ({
-    url: `${base}/tratamentos/${slug}`,
+    url: absoluteUrl(`/tratamentos/${slug}`),
     lastModified,
-    changeFrequency: "monthly",
-    priority: 0.8,
   }));
 
   return [...staticRoutes, ...treatmentRoutes];

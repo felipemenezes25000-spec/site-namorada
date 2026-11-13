@@ -1,185 +1,115 @@
-import Image from "next/image";
-import { ArrowRight, ShieldCheck, MapPin, HeartHandshake, CalendarCheck, Sparkles, Navigation, Phone } from "lucide-react";
-import { siteConfig } from "@/lib/site-config";
+import type { ReactNode } from "react";
+import { locale, localeTexto, siteConfig } from "@/lib/site-config";
+import { Section } from "@/components/ui/section";
+import { Container } from "@/components/ui/container";
+import { DisplayHeading } from "@/components/ui/display-heading";
+import { ArchPortrait } from "@/components/ui/arch-portrait";
 import { ButtonLink } from "@/components/ui/button";
-import { TrackedButtonLink } from "@/components/ui/tracked-button-link";
-import { HeroWhatsAppButton } from "./hero-whatsapp-button";
+import { PhoneCTA, WhatsAppCTA } from "@/components/ui/cta";
+import { ArrowIcon } from "@/components/ui/icons";
+import { FioRule } from "@/components/brand/fio-rule";
+import styles from "./hero.module.css";
 
 /**
- * Hero como Server Component: o H1 (LCP) é renderizado estático e visível —
- * sem gate de opacidade dependente de hidratação. A entrada é puramente CSS
- * (animate-fade-up + delay), que funciona sem JS e respeita prefers-reduced-motion
- * (desativado em globals.css). Apenas o CTA de WhatsApp é um client component leve.
+ * Capa da home (DESIGN.md 5.1, momento 1). SERVIDOR, sem JavaScript para aparecer:
+ * masthead com fio duplo (CRO e bairro), H1 monumental com a linha-chamada em itálico
+ * dentro do mesmo título, retrato recortado passando na frente do arco do Fio, texto de
+ * apoio, botão de WhatsApp dominante, "Ver tratamentos" e o telefone.
+ *
+ * Nada começa invisível: só o arco se desenha (2,4s) e a luz atravessa o título uma
+ * vez (1,8s), ambos em CSS com `animation-fill-mode: backwards`, e só com movimento
+ * permitido. Com `prefers-reduced-motion` tudo já está no estado final.
+ *
+ * Composição: celular em uma coluna (H1, texto com a lista do que se atende, o botão de
+ * WhatsApp e o link "Ver tratamentos", e só então o retrato: quem é, o que faz e o botão ficam
+ * na primeira tela; o retrato "espia" por baixo);
+ * tablet estreito (760 a 959px) com o H1 em largura total e texto + retrato lado a lado;
+ * a partir de 960px H1 + texto à esquerda e o retrato ocupando as duas linhas à direita. `children` entra no mesmo momento da capa
+ * (a declaração com as três colunas).
  */
-export function Hero() {
+export function Hero({ children }: { children?: ReactNode }) {
   return (
-    <section className="relative overflow-hidden bg-brand-bone pt-28 sm:pt-32 lg:pt-40">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(120%_90%_at_85%_-10%,#dde8e1_0%,transparent_55%),radial-gradient(90%_70%_at_-10%_10%,#efe7da80_0%,transparent_50%)]"
-      />
-      <div className="container grid items-center gap-14 pb-20 lg:grid-cols-12 lg:gap-10 lg:pb-28">
-        {/* Texto */}
-        <div className="lg:col-span-6">
-          <p
-            className="eyebrow flex items-center gap-3 animate-fade-up"
-            style={{ animationDelay: "0.05s" }}
-          >
-            <span className="inline-block h-px w-7 bg-brand-gold/70" />
-            {siteConfig.title} · {siteConfig.cro}
-          </p>
-
-          {/* H1 estático = LCP imediato (sem animação que atrase o paint) */}
-          <h1 className="mt-6 text-display-xl text-balance">
-            Dentista particular em{" "}
-            <span className="whitespace-nowrap italic text-brand-gold-ink">{siteConfig.neighborhood}</span>{" "}
-            com atendimento acolhedor, claro e sem pressão.
-          </h1>
-
-          <p
-            className="mt-6 max-w-prose2 text-pretty text-base leading-relaxed text-brand-ink/75 animate-fade-up sm:text-lg"
-            style={{ animationDelay: "0.14s" }}
-          >
-            Consulta de 40 a 60 minutos com avaliação completa, explicação simples
-            e plano de tratamento individualizado. Prevenção, restaurações,
-            clareamento, cirurgia oral e urgências odontológicas.
-          </p>
-
-          <div
-            className="mt-9 flex flex-col gap-3 animate-fade-up sm:flex-row sm:flex-wrap"
-            style={{ animationDelay: "0.22s" }}
-          >
-            <HeroWhatsAppButton />
-            <ButtonLink href="/tratamentos" variant="secondary" size="lg">
-              Ver tratamentos
-              <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={1.7} />
-            </ButtonLink>
-            <ButtonLink href={siteConfig.address.mapsDirectionsUrl} variant="secondary" size="lg" external>
-              <Navigation className="size-4" strokeWidth={1.7} />
-              Como chegar
-            </ButtonLink>
+    <Section
+      tone="osso"
+      id="capa"
+      spacing="none"
+      aria-labelledby="capa-titulo"
+      className={styles.hero}
+    >
+      <Container>
+        <div className={styles.grid}>
+          <div className={styles.mast}>
+            <div className={styles.mastRow}>
+              <p className={styles.mastLeft}>
+                Cirurgiã-dentista · {siteConfig.cro}
+              </p>
+              <p className={styles.mastRight}>
+                <span className={styles.mastShort}>{locale.bairro}</span>
+                <span className={styles.mastLong}>
+                  {locale.bairro} · {localeTexto("regiaoZona")}
+                </span>
+              </p>
+            </div>
+            <FioRule double reveal={false} />
           </div>
 
-          <p
-            className="mt-4 text-sm text-brand-ink/70 animate-fade-up"
-            style={{ animationDelay: "0.26s" }}
+          <DisplayHeading
+            level={1}
+            size="d1"
+            id="capa-titulo"
+            kicker={<span className={styles.kicker}>Dentista particular na {locale.regiao}</span>}
+            className={styles.title}
           >
-            Prefere ligar?{" "}
-            <TrackedButtonLink
-              href={`tel:+${siteConfig.phone}`}
-              variant="ghost"
-              size="sm"
-              event="phone_click"
-              eventParams={{ location: "home_hero" }}
-              className="inline-flex font-semibold text-brand-green"
-            >
-              <Phone className="size-3.5" strokeWidth={1.7} />
-              {siteConfig.phoneDisplay}
-            </TrackedButtonLink>
-          </p>
+            Atendimento acolhedor, claro e sem&nbsp;pressão.
+          </DisplayHeading>
 
-          <ul
-            className="mt-10 flex flex-wrap items-center gap-x-7 gap-y-3 text-sm text-brand-ink/75 animate-fade-up"
-            style={{ animationDelay: "0.3s" }}
-          >
-            <li className="flex items-center gap-2">
-              <HeartHandshake className="size-4 text-brand-green" strokeWidth={1.6} />
-              Consulta sem linha de produção
-            </li>
-            <li className="flex items-center gap-2">
-              <ShieldCheck className="size-4 text-brand-green" strokeWidth={1.6} />
-              Diagnóstico antes de qualquer decisão
-            </li>
-            <li className="flex items-center gap-2">
-              <MapPin className="size-4 text-brand-green" strokeWidth={1.6} />
-              {siteConfig.neighborhood}, {siteConfig.city}
-            </li>
-          </ul>
+          <div className={styles.text}>
+            <p className={`t-body ${styles.lead}`}>
+              Consulta de 40 a 60 minutos com avaliação completa, explicação simples e plano de
+              tratamento individualizado.
+              <span className={styles.leadMore}>
+                {" "}
+                Prevenção, restaurações, clareamento, cirurgia oral e urgências odontológicas.
+              </span>
+            </p>
 
-          {/* Microprovas — respostas rápidas às primeiras dúvidas do paciente */}
-          <ul
-            className="mt-6 flex flex-wrap gap-2 text-xs font-medium text-brand-green animate-fade-up"
-            style={{ animationDelay: "0.36s" }}
-          >
-            {[
-              siteConfig.cro,
-              "Atendimento particular",
-              "Crianças a partir de 7 anos",
-              "Pix, débito e crédito",
-            ].map((item) => (
-              <li
-                key={item}
-                className="rounded-full border border-brand-gold/30 bg-brand-gold/[0.06] px-3 py-1"
+            <div className={styles.actions}>
+              <WhatsAppCTA location="hero" className={styles.wa} />
+              {/* celular: link de texto logo abaixo do botão, ainda na primeira tela */}
+              <ButtonLink href="#tratamentos" variant="texto" size="md" className={styles.verMobile}>
+                Ver tratamentos
+                <ArrowIcon />
+              </ButtonLink>
+              <ButtonLink
+                href="#tratamentos"
+                variant="contorno"
+                size="md"
+                className={`${styles.ver} ${styles.deskOnly}`}
               >
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Visual */}
-        <div
-          className="relative animate-fade-in lg:col-span-6"
-          style={{ animationDelay: "0.2s" }}
-        >
-          <div className="relative mx-auto max-w-md lg:max-w-none">
-            {/* arco dourado — eco da curva da mandíbula da logo */}
-            <svg
-              aria-hidden
-              viewBox="0 0 400 400"
-              className="pointer-events-none absolute -inset-4 -z-0 h-[108%] w-[108%] text-brand-gold/25"
-            >
-              <path d="M40 120 C 40 300, 360 300, 360 120" fill="none" stroke="currentColor" strokeWidth="1.5" />
-            </svg>
-
-            <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-brand-green/5 shadow-lift">
-              <Image
-                src="/dra-ana.webp"
-                alt={`Foto profissional da ${siteConfig.doctorName}`}
-                fill
-                priority
-                sizes="(min-width: 1024px) 36rem, (min-width: 640px) 28rem, 90vw"
-                className="object-cover"
-              />
+                Ver tratamentos
+                <ArrowIcon />
+              </ButtonLink>
             </div>
 
-            {/* chip flutuante superior */}
-            <div className="surface absolute -top-4 right-4 hidden items-center gap-2.5 rounded-2xl px-4 py-2.5 sm:flex lg:-right-5">
-              <span className="flex size-9 items-center justify-center rounded-full bg-brand-gold/15 text-brand-gold-ink">
-                <CalendarCheck className="size-4" strokeWidth={1.8} />
-              </span>
-              <span className="text-sm font-medium text-brand-green">
-                Plano de tratamento com clareza
-              </span>
-            </div>
+            <p className={`t-body ${styles.phone} ${styles.deskOnly}`}>
+              Prefere telefone? <PhoneCTA as="texto" location="home_hero" />
+            </p>
+          </div>
 
-            {/* chip "odontologia sem dor" — destaque lateral esquerdo */}
-            <div className="surface absolute top-1/2 left-4 hidden -translate-y-1/2 items-center gap-2.5 rounded-2xl px-4 py-2.5 sm:flex lg:-left-6">
-              <span className="flex size-9 items-center justify-center rounded-full bg-brand-green/10 text-brand-green">
-                <Sparkles className="size-4" strokeWidth={1.8} />
-              </span>
-              <span className="text-sm font-medium text-brand-green">
-                Odontologia sem dor
-              </span>
-            </div>
+          <div className={styles.fig}>
+            <ArchPortrait />
+          </div>
 
-            {/* chip credencial */}
-            <div className="surface absolute -bottom-5 left-4 right-4 mx-auto flex max-w-xs items-center gap-3 rounded-2xl px-4 py-3 sm:-left-6 sm:right-auto">
-              <span className="flex size-10 items-center justify-center rounded-full bg-brand-green/10 text-brand-green">
-                <ShieldCheck className="size-5" strokeWidth={1.7} />
-              </span>
-              <span className="leading-tight">
-                <span className="block font-display text-base text-brand-green">
-                  {siteConfig.doctorName}
-                </span>
-                <span className="block text-xs text-brand-ink/65">
-                  {siteConfig.title} · {siteConfig.cro}
-                </span>
-              </span>
-            </div>
+          {/* celular: o telefone vem depois do retrato (fora da primeira tela) */}
+          <div className={styles.more}>
+            <p className={`t-body ${styles.phone}`}>
+              Prefere telefone? <PhoneCTA as="texto" location="home_hero" />
+            </p>
           </div>
         </div>
-      </div>
-    </section>
+
+        {children}
+      </Container>
+    </Section>
   );
 }

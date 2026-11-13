@@ -1,0 +1,90 @@
+.root {
+  position: relative;
+  overflow: hidden;
+}
+.grid {
+  position: relative;
+  z-index: 1;
+  row-gap: 32px;
+}
+.head,
+.body {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.title {
+  margin: 0;
+  max-width: 18ch;
+  color: var(--head);
+  text-wrap: balance;
+}
+.grande {
+  font-family: var(--font-display), Didot, "Bodoni 72", Georgia, serif;
+  font-style: italic;
+  font-weight: var(--d-wght);
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" var(--d-opsz);
+  font-size: clamp(2.125rem, 0.9rem + 5.6vw, 6rem);
+  line-height: 1.06;
+  letter-spacing: -0.015em;
+  max-width: 16ch;
+  margin: 0;
+}
+.text {
+  max-width: 34rem;
+  color: var(--fg-2);
+}
+.text > p {
+  margin: 0;
+}
+.text > p + p {
+  margin-top: 1.1em;
+}
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  margin-top: 28px;
+}
+.actions > * {
+  width: 100%;
+}
+.marca {
+  position: absolute;
+  right: -40px;
+  bottom: -30px;
+  z-index: 0;
+  display: none;
+  opacity: 0.1;
+  pointer-events: none;
+}
+@media (min-width: 760px) {
+  .head {
+    grid-column: 1 / 7;
+  }
+  .body {
+    grid-column: 7 / 13;
+    align-self: end;
+  }
+  .gridGrande .head {
+    grid-column: 1 / -1;
+  }
+  .gridGrande .body {
+    grid-column: 1 / 8;
+    margin-top: clamp(8px, 2vw, 24px);
+  }
+  .actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .actions > * {
+    width: auto;
+  }
+  .marca {
+    display: block;
+    right: var(--pad);
+    bottom: calc(var(--sec-y) * 0.5);
+  }
+}

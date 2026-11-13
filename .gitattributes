@@ -9,3 +9,6 @@
 *.webp binary
 *.woff binary
 *.woff2 binary
+*.avif binary
+*.gif binary
+*.pdf binary

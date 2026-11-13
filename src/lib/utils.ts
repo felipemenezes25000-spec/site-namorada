@@ -1,5 +1,21 @@
 import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { extendTailwindMerge } from "tailwind-merge";
+
+/**
+ * O tailwind-merge não conhece as classes de tamanho `text-display-*` e as
+ * tratava como COR de texto: `cn("text-display-md", "text-brand-bone")` descartava
+ * o tamanho (bug do H2 de "Como funciona"). Registramos os tamanhos no grupo
+ * `font-size` para que tamanho e cor convivam.
+ * (As classes novas `.t-*` de globals.css não são utilitários do Tailwind: o
+ * merge não as toca, nem deve.)
+ */
+const twMerge = extendTailwindMerge({
+  extend: {
+    classGroups: {
+      "font-size": [{ text: ["display-xl", "display-lg", "display-md", "display-sm"] }],
+    },
+  },
+});
 
 /** Merge Tailwind classes with conflict resolution. */
 export function cn(...inputs: ClassValue[]) {

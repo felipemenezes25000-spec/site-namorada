@@ -1,0 +1,152 @@
+/* /agendamento: uma cena osso. Celular: título, formulário, WhatsApp, "o que esperar", identificação
+   (a ordem visual vem de `order`; o HTML segue título, formulário, identificação, WhatsApp, lista).
+   A partir de 1024px: coluna principal em 7 colunas, painel e lista em 5, fixos ao rolar. */
+
+.sec {
+  padding-top: var(--s-5);
+  padding-bottom: var(--sec-y);
+}
+.trilha {
+  display: none;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: var(--s-6);
+  min-width: 0;
+}
+/* Abaixo de 1024px os dois invólucros somem da árvore de caixas: seus filhos entram na grade. */
+.main,
+.lado {
+  display: contents;
+}
+
+.intro {
+  order: 0;
+  position: relative;
+  min-width: 0;
+}
+/* Assinatura: arco do fio com o monograma. Só no desktop, ao lado do título. */
+.assinatura {
+  display: none;
+}
+.titulo {
+  margin: var(--s-2) 0 0;
+  max-width: 16ch;
+}
+.lede {
+  margin: var(--s-4) 0 0;
+  max-width: 34rem;
+  text-wrap: balance;
+}
+
+.wa {
+  order: 2;
+  min-width: 0;
+  padding: var(--s-5) var(--s-5) var(--s-6);
+  background: var(--bg);
+}
+.waTitulo {
+  margin: 0;
+}
+.waTexto {
+  margin: var(--s-3) 0 0;
+  max-width: 24rem;
+}
+.waBotao {
+  margin-top: var(--s-5);
+}
+
+.form {
+  order: 1;
+  min-width: 0;
+}
+
+.rest {
+  order: 3;
+  min-width: 0;
+}
+.restTitulo {
+  margin: 0;
+}
+.passos {
+  margin: var(--s-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.passo {
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, 1fr);
+  align-items: baseline;
+  column-gap: var(--s-2);
+  padding-block: var(--s-4);
+}
+
+.trust {
+  order: 4;
+  min-width: 0;
+}
+
+@media (min-width: 760px) {
+  .sec {
+    padding-top: var(--s-2);
+  }
+  .trilha {
+    display: block;
+    margin-bottom: var(--s-4);
+  }
+  .layout {
+    row-gap: var(--s-7);
+  }
+  .wa {
+    padding: var(--s-6) var(--s-6) var(--s-7);
+  }
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gap);
+    align-items: start;
+  }
+  .main {
+    display: block;
+    grid-column: 1 / 8;
+    min-width: 0;
+  }
+  .form {
+    margin-top: var(--s-7);
+  }
+  .trust {
+    margin-top: var(--s-8);
+  }
+  .lado {
+    display: block;
+    grid-column: 8 / 13;
+    min-width: 0;
+    position: sticky;
+    top: calc(var(--h-header) + var(--s-5));
+  }
+  .rest {
+    margin-top: var(--s-7);
+  }
+}
+
+/* identificação em 2 x 2 (4 fatos) */
+@media (min-width: 760px) {
+  .trust {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* O título ocupa a coluna inteira abaixo de 1360px: a assinatura só entra quando sobra espaço. */
+@media (min-width: 1360px) {
+  .assinatura {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: var(--s-9);
+  }
+}

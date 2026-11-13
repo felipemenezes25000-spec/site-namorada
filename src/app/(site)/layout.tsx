@@ -1,33 +1,19 @@
 import { dentistSchema, websiteSchema } from "@/lib/seo";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
-import { WhatsAppFloatingButton } from "@/components/layout/whatsapp-floating-button";
-import { MobileActionBar } from "@/components/layout/mobile-action-bar";
+import { SiteShell } from "@/components/layout/site-shell";
 import { JsonLd } from "@/components/seo/json-ld";
 
 /**
  * Layout das páginas públicas (marketing).
  * O painel /admin fica FORA deste grupo e não herda header/rodapé/WhatsApp.
+ * A moldura (cabeçalho, rodapé, barra do celular...) está em SiteShell.
  */
 export default function SiteLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
-      <a
-        href="#conteudo"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-brand-green focus:px-5 focus:py-2 focus:text-sm focus:text-brand-bone"
-      >
-        Ir para o conteúdo
-      </a>
       <JsonLd data={[dentistSchema(), websiteSchema()]} />
-      <Header />
-      <main id="conteudo">{children}</main>
-      <Footer />
-      {/* Espaçador para o conteúdo não ficar sob a barra fixa de ações (mobile). */}
-      <div aria-hidden className="h-[60px] md:hidden" />
-      <WhatsAppFloatingButton />
-      <MobileActionBar />
+      <SiteShell>{children}</SiteShell>
     </>
   );
 }

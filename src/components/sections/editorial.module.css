@@ -1,0 +1,586 @@
+/* Seções editoriais da home abaixo do sumário (Sobre, Declaração, Implante e
+   buco-maxilo, Como funciona, Localização, Dúvidas). Mobile primeiro; a grade de 12
+   colunas (.grid12) entra a partir de 760px. Zero cartões, zero sombras, zero caixa-alta. */
+
+/* ------------------------------ A doutora ------------------------------ */
+.aboutFig {
+  grid-column: 1 / -1;
+  margin: 0 0 40px;
+  max-width: 440px;
+  min-width: 0;
+}
+.arch {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border: 1px solid var(--ouro);
+  border-radius: 999px 999px 0 0;
+  background: var(--papel);
+}
+.arch img {
+  object-fit: cover;
+  object-position: 50% 22%;
+}
+.figCap {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-top: 14px;
+}
+.figCap :global(.t-folio) {
+  flex: none;
+  min-width: 3.2em;
+  white-space: nowrap;
+}
+/* celular: um parágrafo só, o resto está em /sobre */
+@media (max-width: 639px) {
+  .aboutMore {
+    display: none;
+  }
+}
+.aboutText {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.aboutTitle {
+  margin: 12px 0 0;
+  max-width: 20ch;
+}
+.aboutText > p {
+  max-width: 36rem;
+  margin: 22px 0 0;
+}
+.facts {
+  margin-top: 28px;
+  max-width: 36rem;
+}
+.more {
+  margin-top: 32px;
+}
+@media (min-width: 760px) {
+  .aboutFig {
+    grid-column: 1 / 6;
+    margin: 0;
+    max-width: none;
+    align-self: start;
+  }
+  .aboutText {
+    grid-column: 7 / 13;
+  }
+}
+@media (min-width: 1100px) {
+  .aboutFig {
+    position: sticky;
+    top: calc(var(--h-header) + 32px);
+  }
+}
+
+/* ------------------------------ Declaração (noite) ------------------------------ */
+.decl {
+  position: relative;
+  overflow: hidden;
+}
+.declInner {
+  position: relative;
+  z-index: 1;
+}
+.quote {
+  margin: 0;
+  max-width: 19ch;
+  font-family: var(--font-display), Didot, "Bodoni 72", Georgia, serif;
+  font-style: italic;
+  font-weight: var(--d-wght);
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" var(--d-opsz);
+  font-size: clamp(2.125rem, 0.9rem + 5.6vw, 6rem);
+  line-height: 1.06;
+  letter-spacing: -0.015em;
+  color: var(--head);
+  text-wrap: balance;
+}
+.quoteBy {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: clamp(28px, 4vw, 56px);
+}
+.quoteBy .rule {
+  display: block;
+  width: 56px;
+  height: 1px;
+  background: var(--accent);
+}
+.declMark {
+  position: absolute;
+  right: -40px;
+  bottom: -30px;
+  z-index: 0;
+  display: none;
+  opacity: 0.1;
+  pointer-events: none;
+}
+@media (min-width: 760px) {
+  .declMark {
+    display: block;
+    right: var(--pad);
+    bottom: calc(var(--sec-y) * 0.5);
+  }
+}
+
+/* ------------------------------ Implante e buco-maxilo ------------------------------ */
+.areaHead {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.areaTitle {
+  margin: 12px 0 0;
+  max-width: 22ch;
+}
+.areaLede {
+  max-width: 38rem;
+  margin: 22px 0 0;
+}
+.areas {
+  margin-top: clamp(40px, 5vw, 72px);
+}
+.area {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 18px;
+  padding-block: 32px 36px;
+}
+.areaNum {
+  font-size: 1.125rem;
+  line-height: 1;
+}
+.areaName {
+  margin: 0;
+  max-width: 16ch;
+}
+.areaBody {
+  min-width: 0;
+}
+.areaBody p {
+  max-width: 34rem;
+  margin: 14px 0 0;
+}
+.areaCap {
+  margin-top: 16px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--fg);
+}
+.areasCta {
+  margin-top: clamp(32px, 4vw, 48px);
+}
+@media (min-width: 1100px) {
+  .areasSec {
+    padding-bottom: clamp(5rem, 7vw, 6rem);
+  }
+}
+.areaActions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.areaActions > :global(.btn),
+.areasCta > :global(.btn) {
+  width: 100%;
+}
+.areaLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  width: fit-content;
+  color: var(--head);
+  font-weight: 500;
+}
+.areaLink > span {
+  text-decoration: underline;
+  text-decoration-color: var(--ouro);
+  text-underline-offset: 0.3em;
+}
+@media (min-width: 760px) {
+  .area {
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+    column-gap: var(--gap);
+    padding-block: 40px 44px;
+  }
+  .areaActions {
+    grid-column: 2;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .areaActions > :global(.btn),
+  .areasCta > :global(.btn) {
+    width: auto;
+  }
+}
+@media (min-width: 1100px) {
+  .area {
+    grid-template-columns: 5rem minmax(0, 6fr) minmax(0, 5fr);
+  }
+  .areaActions {
+    grid-column: 3;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: end;
+  }
+  .areaActions > :global(.btn),
+  .areasCta > :global(.btn) {
+    min-width: 240px;
+  }
+}
+
+/* ------------------------------ Como funciona (verde) ------------------------------ */
+.howHead {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.howList {
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin-top: 40px;
+}
+.howActions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 40px;
+}
+.howActions > a {
+  width: 100%;
+}
+.howHead :global(.t-d2) {
+  max-width: 14ch;
+}
+@media (min-width: 1100px) {
+  .howHead :global(.t-d2) {
+    max-width: none;
+    font-size: clamp(3rem, 5vw, 4.25rem);
+  }
+}
+.howHead > p {
+  max-width: 28rem;
+  margin: 22px 0 0;
+}
+@media (min-width: 760px) {
+  .howActions {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .howActions > a {
+    width: auto;
+  }
+}
+@media (min-width: 1100px) {
+  .howHead {
+    grid-column: 1 / 7;
+    align-self: start;
+    position: sticky;
+    top: calc(var(--h-header) + 32px);
+  }
+  .howList {
+    grid-column: 8 / 13;
+    margin-top: 0;
+  }
+}
+
+/* ------------------------------ Localização ------------------------------ */
+.locHead {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.locHead :global(.t-d2) {
+  max-width: 17ch;
+}
+.locHead > p {
+  max-width: 36rem;
+  margin: 22px 0 0;
+}
+.locInfo {
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin-top: 40px;
+}
+.locRow {
+  padding-block: 20px 22px;
+}
+.locValue {
+  margin-top: 4px;
+  color: var(--fg);
+  overflow-wrap: anywhere;
+}
+.locBtns {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 28px;
+}
+.locBtns > a {
+  width: 100%;
+  white-space: nowrap;
+}
+.map {
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin-top: 36px;
+}
+@media (min-width: 760px) {
+  .locBtns {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .locBtns > a {
+    width: auto;
+  }
+}
+@media (min-width: 1100px) {
+  .locHead {
+    grid-column: 1 / 8;
+  }
+  .locInfo {
+    grid-column: 1 / 6;
+    grid-row: 2;
+    margin-top: 56px;
+  }
+  .map {
+    grid-column: 6 / 13;
+    grid-row: 2;
+    margin-top: 56px;
+  }
+}
+
+/* ------------------------------ Dúvidas ------------------------------ */
+.faqHead {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.faqHead :global(.t-d2) {
+  max-width: 12ch;
+}
+.faqHead > p {
+  max-width: 26rem;
+  margin: 22px 0 0;
+}
+.faqAsk {
+  margin-top: 28px;
+}
+.faqList {
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin-top: 36px;
+}
+.faqRest {
+  margin-top: 8px;
+}
+.faqRestSum {
+  display: inline-flex;
+  align-items: center;
+  min-height: 56px;
+  cursor: pointer;
+  list-style: none;
+}
+.faqRestSum::-webkit-details-marker {
+  display: none;
+}
+.faqRestClose {
+  display: none;
+}
+.faqRest[open] .faqRestOpen {
+  display: none;
+}
+.faqRest[open] .faqRestClose {
+  display: inline;
+}
+@media (min-width: 1100px) {
+  .faqHead {
+    grid-column: 1 / 6;
+    align-self: start;
+    position: sticky;
+    top: calc(var(--h-header) + 32px);
+  }
+  .faqList {
+    grid-column: 7 / 13;
+    margin-top: 0;
+  }
+}
+
+/* ------------------------------ Tipografia e ritmo (B-15, B-16) ------------------------------ */
+.faqHead :global(.t-d2),
+.howHead :global(.t-d2),
+.locHead :global(.t-d2),
+.areaTitle,
+.aboutTitle {
+  text-wrap: balance;
+}
+.aboutText > p,
+.areaLede,
+.areaBody p,
+.howHead > p,
+.locHead > p,
+.faqHead > p {
+  text-wrap: pretty;
+}
+/* celular: respiro vertical menor entre as seções (48px em vez de 64px) */
+@media (max-width: 759px) {
+  .secM {
+    padding-block: var(--s-6) var(--s-7);
+  }
+}
+
+/* ------------------------------ A doutora: enquadramento fechado (B-27) ------------------------------ */
+/* Foto de meio corpo no consultório (outra foto, não a da capa), enquadrada do rosto para baixo. */
+.archImg {
+  object-position: 50% 22%;
+}
+@media (max-width: 759px) {
+  .aboutFig {
+    max-width: 230px;
+    margin-bottom: 28px;
+  }
+  .aboutText > p {
+    margin-top: 16px;
+  }
+  .facts {
+    margin-top: 20px;
+  }
+  /* celular: dois fatos à vista; os outros dois seguem no HTML (B-16) */
+  .facts :global(.idx-item):nth-child(n + 3) {
+    display: none;
+  }
+  .areaLede,
+  .howHead > p:nth-of-type(2),
+  .locHead > p:nth-of-type(2),
+  .faqHead > p:nth-of-type(2) {
+    display: none;
+  }
+  .more {
+    margin-top: 24px;
+  }
+  .more > a {
+    width: 100%;
+  }
+}
+
+/* ------------------------------ Áreas no celular e variante em linha (B-16, B-28) ------------------------------ */
+@media (max-width: 759px) {
+  .areas {
+    margin-top: 28px;
+  }
+  .area {
+    row-gap: 12px;
+    padding-block: 22px 24px;
+  }
+  .areaBody p {
+    margin-top: 10px;
+  }
+  .areaCap {
+    margin-top: 10px;
+  }
+}
+.areaLine {
+  display: flex;
+  flex-direction: column;
+  margin: clamp(28px, 4vw, 48px) 0 0;
+  padding: 0;
+  list-style: none;
+  border-block: 1px solid var(--ouro);
+}
+.areaLineItem {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+.areaLineItem + .areaLineItem {
+  border-top: 1px solid var(--fio);
+}
+.areaLineDia {
+  display: none;
+}
+.areaLineLink {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 64px;
+  padding-block: 12px;
+  color: var(--head);
+}
+.areaLineName {
+  margin: 0;
+  text-wrap: balance;
+}
+@media (min-width: 760px) {
+  .areaLine {
+    flex-direction: row;
+    align-items: stretch;
+  }
+  .areaLineItem + .areaLineItem {
+    border-top: 0;
+  }
+  .areaLineItem {
+    flex: 1 1 0;
+  }
+  .areaLineDia {
+    display: block;
+    flex: none;
+    width: 9px;
+    height: 9px;
+    margin-inline: clamp(16px, 3vw, 40px);
+    border: 1px solid var(--ouro);
+    transform: rotate(45deg);
+  }
+}
+
+/* ------------------------------ Como funciona no celular: um passo por bloco curto (B-16) ------------------------------ */
+@media (max-width: 759px) {
+  .howList {
+    margin-top: 28px;
+  }
+  .howList :global(.idx-passos .idx-item) {
+    grid-template-columns: 2.75rem minmax(0, 1fr);
+    column-gap: 12px;
+    row-gap: 4px;
+    padding-block: 16px;
+  }
+  .howList :global(.idx-passos .idx-num) {
+    grid-row: span 2;
+    font-size: 2rem;
+    line-height: 1.1;
+  }
+  .howList :global(.idx-passos h3) {
+    font-size: 1.25rem;
+    line-height: 1.2;
+  }
+  .howList :global(.idx-passos .idx-sub) {
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+  .howActions {
+    margin-top: 20px;
+  }
+  .howHead > p {
+    margin-top: 16px;
+  }
+}
+
+/* ------------------------------ Localização no celular (B-16) ------------------------------ */
+@media (max-width: 759px) {
+  .locInfo {
+    margin-top: 24px;
+  }
+  .locRow {
+    padding-block: 14px 16px;
+  }
+  .locBtns {
+    margin-top: 20px;
+  }
+  .map {
+    margin-top: 24px;
+  }
+}

@@ -56,6 +56,8 @@ alter table public.appointment_leads add column if not exists utm_term text;
 alter table public.appointment_leads add column if not exists utm_content text;
 alter table public.appointment_leads add column if not exists landing_page text;
 alter table public.appointment_leads add column if not exists referrer text;
+-- Consentimento próprio para dado de saúde (queixa e radiografia), LGPD art. 11, I.
+alter table public.appointment_leads add column if not exists health_consent boolean;
 
 create index if not exists appointment_leads_status_idx
   on public.appointment_leads (status);

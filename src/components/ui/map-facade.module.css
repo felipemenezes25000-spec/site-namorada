@@ -1,0 +1,71 @@
+/*
+ * MapFacade: arco com o endereço e o botão "Ver mapa". O iframe do Google só existe depois do
+ * clique. As cores vêm das variáveis do tom da seção (--fg, --bg, --accent): serve a seção clara
+ * e a noite sem mudar nada. Altura mínima 220px.
+ */
+.root {
+  position: relative;
+  min-width: 0;
+  height: 100%;
+}
+.arco {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: max(220px, var(--mf-min, 20rem));
+  overflow: hidden;
+  border: 1px solid var(--ouro);
+  border-radius: 999px 999px 0 0;
+  background: color-mix(in srgb, var(--fg) 5%, var(--bg));
+  color: var(--fg);
+  text-align: center;
+}
+.conteudo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-6) var(--s-5) var(--s-5);
+  min-width: 0;
+  max-width: 100%;
+}
+.pino {
+  color: var(--accent);
+  flex: none;
+}
+.rua {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.local {
+  margin: 0;
+  color: var(--fg-2);
+  overflow-wrap: anywhere;
+}
+.aviso {
+  margin: 0;
+  max-width: 24rem;
+  color: var(--fg-2);
+  text-wrap: pretty;
+}
+.quadro {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  /* absorve a paleta do site: verde, osso e ouro (o mapa do Google vem azul e colorido) */
+  filter: grayscale(1) sepia(0.25) hue-rotate(95deg) saturate(0.6) contrast(0.95);
+}
+.acoes {
+  margin-top: var(--s-4);
+}
+@media (min-width: 1100px) {
+  .arco {
+    min-height: max(220px, var(--mf-min-desk, 32rem));
+  }
+}

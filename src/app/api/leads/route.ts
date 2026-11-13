@@ -1,56 +1,143 @@
 import { NextResponse } from "next/server";
-import { appointmentSchema } from "@/lib/validations";
+import { buildAppointmentSchema } from "@/lib/validations";
+import { treatmentOptions } from "@/lib/lead-treatments";
 import { getServerSupabase, isSupabaseConfigured } from "@/lib/supabase";
 import { sendLeadNotification, isEmailConfigured } from "@/lib/email";
 import { rateLimit, clientIp } from "@/lib/rate-limit";
-import type { NewAppointmentLead } from "@/types/lead";
+import type { LeadsResponse, NewAppointmentLead } from "@/types/lead";
+import { PRIVACY_POLICY_VERSION } from "@/lib/content";
 
 export const runtime = "nodejs";
+// Teto da função: com os prazos de 8 s abaixo, o paciente nunca fica preso num "carregando".
+export const maxDuration = 15;
 
-/** Versão vigente da Política de Privacidade aceita no formulário (prova de consentimento). */
-const PRIVACY_POLICY_VERSION = "2026-06-08";
+/*
+ * Contrato de resposta (JSON, sempre com Cache-Control: no-store):
+ *   200 { ok: true, persisted: boolean, emailed: boolean }   lead gravado e/ou enviado por e-mail
+ *   400 { ok: false, error: "invalid_json" }
+ *   403 { ok: false, error: "forbidden" }                     origem diferente do site
+ *   413 { ok: false, error: "payload_too_large" }
+ *   422 { ok: false, error: "validation", fieldErrors: { [campo]: string[] }, formErrors: string[] }
+ *       Mensagens em português. O tipo compartilhado com o formulário é LeadsResponse (types/lead.ts).
+ *   429 { ok: false, error: "rate_limited", retryAfter: number }   + cabeçalho Retry-After (segundos)
+ *       Dois níveis: 30 requisições / 10 min por IP (qualquer corpo, contra abuso) e
+ *       5 leads VÁLIDOS / 10 min por IP. Erro de preenchimento (422) não gasta o segundo
+ *       limite, então quem erra o formulário (ou divide o IP de operadora) não perde o lead.
+ *   503 { ok: false, error: "delivery_failed" }               lead NÃO gravado e NÃO enviado: mostrar o atalho de WhatsApp
+ *
+ * Opcional no corpo: `formStartedAt` (ms desde 1970, quando o paciente abriu o formulário).
+ * Se vier e o envio ocorrer em menos de MIN_FILL_MS, tratamos como robô: 200 { ok:true, persisted:false,
+ * emailed:false, trap:true }, sem gravar. O formulário não deve contar conversão quando `trap` vier true.
+ * Campo ausente ou com relógio no futuro NÃO é suspeito (relógio errado de celular não pode custar um lead).
+ * Nenhum dado pessoal é escrito em log.
+ */
+const NO_STORE = { "Cache-Control": "no-store" } as const;
+const MAX_BODY_BYTES = 20_000;
+const MIN_FILL_MS = 3000;
+const EXTERNAL_TIMEOUT_MS = 8000;
+const TRAP_BODY = { ok: true, persisted: false, emailed: false, trap: true } as const;
+
+/** Resolve com `fallback` se `promise` passar de `ms` (a chamada externa nunca prende o paciente). */
+function withTimeout<T>(promise: Promise<T>, ms: number, fallback: T): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<T>((resolve) => {
+    timer = setTimeout(() => resolve(fallback), ms);
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+}
+
+const appointmentSchema = buildAppointmentSchema(treatmentOptions);
+
+function reply(body: LeadsResponse, status = 200, headers: Record<string, string> = {}) {
+  return NextResponse.json(body, { status, headers: { ...NO_STORE, ...headers } });
+}
 
 export async function POST(request: Request) {
-  // 1) Mesma origem (mitiga CSRF/abuso cross-site).
+  // 1) Origem: navegadores mandam Origin (POST) e Sec-Fetch-Site, e os dois têm de apontar para o
+  //    próprio site. Clientes que não são navegadores (curl) podem omitir ambos; para eles valem o
+  //    limite de taxa e a validação. É defesa contra uso a partir de outro site, não autenticação.
   const origin = request.headers.get("origin");
   const host = request.headers.get("host");
   if (origin && host) {
     try {
       if (new URL(origin).host !== host) {
-        return NextResponse.json({ ok: false, error: "forbidden" }, { status: 403 });
+        return reply({ ok: false, error: "forbidden" }, 403);
       }
     } catch {
-      return NextResponse.json({ ok: false, error: "forbidden" }, { status: 403 });
+      return reply({ ok: false, error: "forbidden" }, 403);
     }
   }
 
-  // 2) Rate limit por IP: 5 envios / 10 min.
+  const fetchSite = request.headers.get("sec-fetch-site");
+  if (!origin && fetchSite && fetchSite !== "same-origin" && fetchSite !== "none") {
+    return reply({ ok: false, error: "forbidden" }, 403);
+  }
+
+  // 2) Limite amplo por IP, antes de ler o corpo (contra laço/abuso). O limite estrito de
+  //    leads válidos vem depois da validação.
   const ip = clientIp(request.headers);
-  const limit = rateLimit(`leads:${ip}`, 5, 10 * 60 * 1000);
+  const limit = rateLimit(`leads-any:${ip}`, 30, 10 * 60 * 1000);
   if (!limit.ok) {
-    return NextResponse.json(
-      { ok: false, error: "rate_limited" },
-      { status: 429, headers: { "Retry-After": String(limit.retryAfter) } },
+    return reply(
+      { ok: false, error: "rate_limited", retryAfter: limit.retryAfter },
+      429,
+      { "Retry-After": String(limit.retryAfter) },
     );
+  }
+
+  const declared = Number(request.headers.get("content-length") ?? 0);
+  if (declared > MAX_BODY_BYTES) {
+    return reply({ ok: false, error: "payload_too_large" }, 413);
   }
 
   let body: Record<string, unknown>;
   try {
-    body = (await request.json()) as Record<string, unknown>;
+    const raw = await request.text();
+    if (Buffer.byteLength(raw, "utf8") > MAX_BODY_BYTES) return reply({ ok: false, error: "payload_too_large" }, 413);
+    const parsedJson: unknown = JSON.parse(raw);
+    if (!parsedJson || typeof parsedJson !== "object" || Array.isArray(parsedJson)) {
+      return reply({ ok: false, error: "invalid_json" }, 400);
+    }
+    body = parsedJson as Record<string, unknown>;
   } catch {
-    return NextResponse.json({ ok: false, error: "invalid_json" }, { status: 400 });
+    return reply({ ok: false, error: "invalid_json" }, 400);
   }
 
   // 3) Honeypot: se preenchido, finge sucesso sem persistir.
   if (typeof body.website === "string" && body.website.trim() !== "") {
-    return NextResponse.json({ ok: true, persisted: false });
+    return reply(TRAP_BODY);
+  }
+
+  // 3b) Armadilha de tempo: preenchimento humano leva mais que MIN_FILL_MS.
+  const startedAt = Number(body.formStartedAt);
+  if (Number.isFinite(startedAt) && startedAt > 0) {
+    const elapsed = Date.now() - startedAt;
+    if (elapsed >= 0 && elapsed < MIN_FILL_MS) {
+      return reply(TRAP_BODY);
+    }
   }
 
   const parsed = appointmentSchema.safeParse(body);
   if (!parsed.success) {
-    return NextResponse.json(
-      { ok: false, error: "validation", issues: parsed.error.flatten() },
-      { status: 422 },
+    const flat = parsed.error.flatten();
+    return reply(
+      {
+        ok: false,
+        error: "validation",
+        fieldErrors: flat.fieldErrors,
+        formErrors: flat.formErrors,
+      },
+      422,
+    );
+  }
+
+  // 3c) Limite estrito: só leads válidos gastam as 5 vagas / 10 min.
+  const strict = rateLimit(`leads:${ip}`, 5, 10 * 60 * 1000);
+  if (!strict.ok) {
+    return reply(
+      { ok: false, error: "rate_limited", retryAfter: strict.retryAfter },
+      429,
+      { "Retry-After": String(strict.retryAfter) },
     );
   }
 
@@ -82,6 +169,12 @@ export async function POST(request: Request) {
         landingPage: attr?.landingPage || null,
       })
     : Promise.resolve({ ok: false, reason: "not_configured" });
+  // Falha de envio nunca derruba a resposta: o resultado só conta se o e-mail sair.
+  const emailSettled = withTimeout(
+    emailPromise.catch(() => ({ ok: false, reason: "send_failed" })),
+    EXTERNAL_TIMEOUT_MS,
+    { ok: false, reason: "timeout" },
+  );
 
   const lead: NewAppointmentLead = {
     full_name: data.fullName,
@@ -95,6 +188,7 @@ export async function POST(request: Request) {
     lgpd_consent: data.lgpdConsent,
     lgpd_consent_at: new Date().toISOString(),
     privacy_policy_version: PRIVACY_POLICY_VERSION,
+    health_consent: data.healthConsent === true,
     gclid: clickId,
     utm_source: attr?.utmSource || null,
     utm_medium: attr?.utmMedium || null,
@@ -112,18 +206,39 @@ export async function POST(request: Request) {
     try {
       const supabase = getServerSupabase();
       if (supabase) {
-        const { error } = await supabase.from("appointment_leads").insert(lead);
-        if (error) console.error("[leads] supabase insert error:", error.message);
+        let { error } = await supabase
+          .from("appointment_leads")
+          .insert(lead)
+          .abortSignal(AbortSignal.timeout(EXTERNAL_TIMEOUT_MS));
+        // Banco ainda sem a coluna health_consent (migração pendente): grava sem ela, para não
+        // perder o lead. A coluna é criada por supabase/schema.sql.
+        if (error && (error.code === "PGRST204" || error.code === "42703")) {
+          const { health_consent: _semColuna, ...semSaude } = lead;
+          void _semColuna;
+          ({ error } = await supabase
+            .from("appointment_leads")
+            .insert(semSaude)
+            .abortSignal(AbortSignal.timeout(EXTERNAL_TIMEOUT_MS)));
+        }
+        // Só o código do erro: a mensagem do Postgres pode citar valores do lead.
+        if (error) console.error("[leads] supabase insert error:", error.code ?? "unknown");
         else persisted = true;
       }
     } catch (err) {
-      console.error("[leads] supabase unexpected error:", err);
+      console.error("[leads] supabase unexpected error:", err instanceof Error ? err.name : "unknown");
     }
   }
 
   // Espera o e-mail terminar (já disparou em paralelo).
-  const emailResult = await emailPromise;
-  const emailed = "ok" in emailResult && emailResult.ok;
+  const emailResult = await emailSettled;
+  const emailed = "ok" in emailResult && emailResult.ok === true;
 
-  return NextResponse.json({ ok: true, persisted, emailed });
+  // Nem gravado nem enviado: o lead se perderia. Erro explícito para o formulário
+  // oferecer o atalho de WhatsApp em vez de mostrar um falso sucesso.
+  if (!persisted && !emailed) {
+    console.error("[leads] lead não entregue (sem banco e sem e-mail)");
+    return reply({ ok: false, error: "delivery_failed" }, 503);
+  }
+
+  return reply({ ok: true, persisted, emailed });
 }

@@ -1,0 +1,19 @@
+/* Fecho das páginas de tratamento: no celular o arco do sorriso ficava solto entre os botões. */
+@media (max-width: 759px) {
+  .fecho :global(.smile-arc) {
+    display: none;
+  }
+}
+
+/* aviso informativo e autoria, no fim do conteúdo (dentro de "Leia também") */
+.aviso {
+  max-width: 44rem;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--fg);
+}
+.autoria {
+  margin-top: var(--s-3);
+  color: var(--fg);
+}

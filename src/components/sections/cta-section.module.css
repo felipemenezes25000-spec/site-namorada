@@ -1,0 +1,76 @@
+/* Fecho de página: título monumental em itálico à esquerda, pedido e botões à direita,
+   alinhados pela base (align-items: end no desktop). O arco de sorriso (FioSmile) fica sob o
+   botão de WhatsApp e não desloca nada: botão e parágrafo começam no mesmo x. */
+.head {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.title {
+  margin: 12px 0 0;
+  max-width: 9ch;
+  font-style: italic;
+  font-size: clamp(3.5rem, 2rem + 8.4vw, 7.5rem);
+  line-height: 0.96;
+  letter-spacing: -0.02em;
+}
+.action {
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin-top: 28px;
+}
+.desc {
+  max-width: 30rem;
+  margin: 0;
+}
+.buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  margin-top: 28px;
+}
+.buttons :global(.smile) {
+  width: 100%;
+}
+.wa {
+  min-height: 60px;
+  width: 100%;
+  padding-inline: 34px;
+  font-size: 1.0625rem;
+  white-space: nowrap;
+}
+.alt {
+  min-height: 60px;
+  white-space: nowrap;
+}
+
+@media (min-width: 760px) {
+  .head {
+    grid-column: 1 / 8;
+  }
+  .action {
+    grid-column: 8 / 13;
+    margin-top: 0;
+    align-self: end;
+  }
+  .buttons {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 6px 18px;
+  }
+  .buttons :global(.smile) {
+    width: fit-content;
+  }
+  .wa {
+    width: auto;
+  }
+}
+@media (min-width: 1100px) {
+  .head {
+    grid-column: 1 / 7;
+  }
+  .action {
+    grid-column: 7 / 13;
+  }
+}

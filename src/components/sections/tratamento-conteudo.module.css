@@ -1,0 +1,289 @@
+/* "O tratamento": três faixas com legenda na margem; "Como funciona": título preso + passos.
+   Regra única de coluna: a leitura começa na coluna 7 da grade de 12 (>= 1100px) e vai até o gutter
+   direito; entre 760 e 1099px começa na coluna 5. */
+/* celular: seções mais baixas que o padrão de 64px (a página tem de caber em cerca de 8 telas) */
+@media (max-width: 759px) {
+  .sec {
+    padding-block: var(--s-7);
+  }
+}
+.rows {
+  display: block;
+}
+.row {
+  --row-pad: clamp(var(--s-5), 3vw, var(--s-7));
+  position: relative;
+  padding-block: var(--row-pad);
+  row-gap: var(--s-3);
+}
+.row:first-child {
+  padding-top: 0;
+}
+.row:last-child {
+  padding-bottom: 0;
+}
+/* o fio da legenda desce até o topo do conteúdo: fica na mesma linha do primeiro fio da lista (dy = 0) */
+.rule {
+  grid-column: 1 / -1;
+  position: absolute;
+  inset: var(--row-pad) 0 auto 0;
+  width: 100%;
+}
+.row:first-child .rule {
+  display: none;
+}
+.legend {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.legend {
+  padding-top: var(--s-3);
+}
+.legend h2 {
+  margin: 0;
+  max-width: 16ch;
+  text-wrap: balance;
+}
+.body {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.decl,
+.limDecl {
+  margin: 0;
+  padding-top: var(--s-3);
+  max-width: 26ch;
+}
+.limRest {
+  max-width: 36rem;
+  margin: var(--s-4) 0 0;
+}
+.rest {
+  max-width: 40rem;
+  margin: var(--s-4) 0 0;
+}
+.lone {
+  max-width: 40rem;
+  margin: 0;
+  padding-top: var(--s-3);
+}
+.li {
+  display: flex;
+  gap: var(--s-4);
+  align-items: baseline;
+  padding-block: var(--s-3);
+  color: var(--fg);
+  font-size: clamp(1.0625rem, 1rem + 0.2vw, 1.1875rem);
+  line-height: 1.5;
+}
+.lead .li {
+  font-size: clamp(1.125rem, 1.05rem + 0.7vw, 1.5rem);
+  line-height: 1.4;
+}
+.li .dia {
+  flex: none;
+}
+/* duas colunas com fio vertical (Para quem é indicado, em alguns tratamentos) */
+.duas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+.duas .lead .li {
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+}
+@media (min-width: 760px) {
+  .legend {
+    grid-column: 1 / 5;
+  }
+  .body {
+    grid-column: 5 / 13;
+  }
+  .duas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: calc(var(--gap) * 2);
+  }
+  .segunda {
+    position: relative;
+  }
+  .segunda::before {
+    content: "";
+    position: absolute;
+    left: calc(var(--gap) * -1);
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--ouro);
+  }
+}
+@media (min-width: 1100px) {
+  .legend {
+    grid-column: 1 / 7;
+  }
+  .body {
+    grid-column: 7 / 13;
+  }
+  /* a coluna da legenda fica quase vazia ao lado da faixa: declaração e listas mais compactas, para a
+     faixa não passar de ~340px; a legenda desce junto, presa ao topo, enquanto a faixa está na tela */
+  .legend h2 {
+    position: sticky;
+    top: calc(var(--h-header) + var(--s-5));
+  }
+  .decl,
+  .limDecl {
+    max-width: 30ch;
+    font-size: clamp(1.75rem, 1.1rem + 1.4vw, 2.5rem);
+    line-height: 1.15;
+  }
+  .lead .li {
+    font-size: clamp(1.0625rem, 0.9rem + 0.7vw, 1.25rem);
+    padding-block: var(--s-2);
+  }
+}
+
+/* passos em coluna */
+.passosHead {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.passosHead h2 {
+  margin: var(--s-3) 0 0;
+  max-width: 12ch;
+}
+.passosHead p {
+  max-width: 28rem;
+  margin: 22px 0 0;
+}
+.passosCta {
+  display: none;
+}
+.passosCta .passosBtn {
+  margin-top: var(--s-5);
+}
+@media (min-width: 760px) {
+  .passosCta {
+    display: block;
+  }
+}
+.passosList {
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin-top: clamp(16px, 4vw, 40px);
+}
+/* o fio final da lista de passos ocupa a largura toda (a regra global o prende à 1ª coluna) */
+.passosList :global(.idx-passos .idx-end) {
+  display: block;
+  padding: 0;
+}
+.passosList :global(.idx-passos .idx-item:nth-last-child(2)) {
+  padding-bottom: 20px;
+}
+@media (min-width: 760px) {
+  .passosHead {
+    grid-column: 1 / 5;
+  }
+  .passosList {
+    grid-column: 5 / 13;
+    margin-top: 0;
+  }
+}
+@media (min-width: 1100px) {
+  .passosHead {
+    grid-column: 1 / 6;
+    position: sticky;
+    top: calc(var(--h-header) + 36px);
+    align-self: start;
+  }
+  .passosList {
+    grid-column: 7 / 13;
+  }
+}
+
+/* passos em linha (largura total) */
+.linhaHead {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.linhaHead h2 {
+  margin: var(--s-3) 0 0;
+}
+.linhaAside {
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin-top: 20px;
+}
+.linhaAside p {
+  max-width: 28rem;
+  margin: 0;
+}
+.linhaAside .passosCta {
+  margin-top: 0;
+}
+@media (min-width: 1100px) {
+  .linhaHead {
+    grid-column: 1 / 7;
+  }
+  .linhaAside {
+    grid-column: 7 / 13;
+    margin-top: 0;
+    align-self: end;
+  }
+}
+.linha {
+  list-style: none;
+  margin: clamp(28px, 4vw, 56px) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: var(--gap);
+}
+.passo {
+  position: relative;
+  min-width: 0;
+  padding-block: 28px var(--s-5);
+}
+.passo > .fio {
+  position: absolute;
+  inset: 0 0 auto 0;
+  width: 100%;
+  --fio-delay: calc(var(--i, 0) * 60ms);
+}
+.passoNum {
+  font-size: clamp(3.5rem, 2.5rem + 4vw, 6rem);
+  line-height: 0.9;
+  color: var(--ouro-numeral);
+}
+.passo h3 {
+  margin: var(--s-4) 0 0;
+  font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+}
+.passo p {
+  max-width: 28rem;
+  margin: var(--s-3) 0 0;
+}
+@media (min-width: 760px) {
+  .linha {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1100px) {
+  .linha {
+    grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr));
+  }
+}
+
+/* altura provisória das seções ainda não desenhadas (content-visibility: auto do globals.css, de
+   especificidade maior): perto da real, para a altura da página no celular não inflar com 720px */
+main section[data-tone].secDetalhes.secDetalhes {
+  contain-intrinsic-size: auto 800px;
+}
+main section[data-tone].secPassos.secPassos {
+  contain-intrinsic-size: auto 360px;
+}
+@media (min-width: 760px) {
+  main section[data-tone].secDetalhes.secDetalhes {
+    contain-intrinsic-size: auto 1800px;
+  }
+  main section[data-tone].secPassos.secPassos {
+    contain-intrinsic-size: auto 1000px;
+  }
+}

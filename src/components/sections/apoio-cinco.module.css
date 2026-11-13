@@ -1,0 +1,36 @@
+.root {
+  max-width: 440px;
+  margin-left: auto;
+}
+.numeral {
+  display: flex;
+  align-items: baseline;
+  margin: 0;
+  font-size: clamp(9rem, 5rem + 16vw, 16rem);
+  line-height: 0.9;
+  font-variation-settings: "opsz" var(--d-opsz);
+  color: var(--accent);
+}
+.unidade {
+  margin: 12px 0 0;
+}
+.fio {
+  margin-top: 24px;
+}
+.legenda {
+  max-width: 30rem;
+  margin: 16px 0 0;
+  color: var(--fg);
+}
+.miniRoot {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin: 0 0 14px;
+}
+.mini {
+  font-size: 4rem;
+}
+.miniRoot .unidade {
+  margin: 0;
+}
